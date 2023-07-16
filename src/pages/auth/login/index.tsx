@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { classNames } from 'primereact/utils';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Checkbox } from 'primereact/checkbox';
 import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
 // application libraries
 import AppConfig from '../../../components/layout/AppConfig';
 import { LayoutContext } from '../../../components/layout/context/layoutcontext';
@@ -24,6 +25,15 @@ const LoginPage: Page = () => {
     const containerClassName = classNames(
         'surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden',
         { 'p-input-filled': layoutConfig.inputStyle === 'filled' }
+    );
+
+    const toast = useRef(null);
+
+    const showToast = useCallback(
+        (color: 'success' | 'warning' | 'error', title: string | null, message: string, ttl?: number) => {
+            toast.current.show({ severity: color, summary: title ?? '', detail: message, life: ttl ?? 3000 });
+        },
+        []
     );
 
     const formik = useFormik({
@@ -46,28 +56,21 @@ const LoginPage: Page = () => {
             login({ email: values.email, password: values.password })
                 .then(response => {
                     if (!response) {
-                        throw new Error('Invalid response!');
+                        showToast('error', 'Unsuccessful!', 'Server not working!');
+                    } else if (response.statusCode !== 200) {
+                        showToast('error', 'Unsuccessful!', response.message);
+                    } else {
+                        showToast('success', 'Success!', response.message);
+
+                        createLogin(response.data.user, response.data.access_type, response.data.access_token);
+
+                        router.push('/');
                     }
-
-                    if (response.statusCode !== 200) {
-                        throw new Error(response.message);
-                    }
-
-                    createLogin(response.data.user, response.data.access_type, response.data.access_token);
-
-                    router.push('/');
                 })
                 .catch(error => {
-                    console.error(error);
+                    console.error('error', error);
 
-                    // toast(
-                    //     error instanceof Error
-                    //         ? error.message
-                    //         : typeof error == String
-                    //         ? error
-                    //         : 'Something went wrong!',
-                    //     'error'
-                    // );
+                    showToast('error', 'Error creating login!', 'Something went wrong!!');
                 })
                 .finally(() => {
                     setSubmitting(false);
@@ -138,21 +141,24 @@ const LoginPage: Page = () => {
                                     Forgot password?
                                 </a>
                             </div>
-                            <Button type="submit" label="Sign In" className="w-full p-3 text-xl"></Button>
+                            <Button type="submit" className="w-full p-3 text-xl center">
+                                Sign In
+                            </Button>
                         </div>
                     </form>
                 </div>
             </div>
+            <Toast ref={toast} />
         </div>
     );
 };
 
 LoginPage.getLayout = function getLayout(page) {
     return (
-        <React.Fragment>
+        <>
             {page}
             <AppConfig simple />
-        </React.Fragment>
+        </>
     );
 };
 

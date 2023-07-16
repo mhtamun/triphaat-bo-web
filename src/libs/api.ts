@@ -1,14 +1,12 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { getCookie } from './cookie';
-import { apiBaseUrl } from '../config/env';
 
 const instance = axios.create({
-    baseURL: apiBaseUrl,
     timeout: 300000,
-    validateStatus: (status) => status === 200,
+    validateStatus: status => status === 200,
 });
 
-instance.defaults.onDownloadProgress = (progressEvent) => {
+instance.defaults.onDownloadProgress = progressEvent => {
     // increment((progressEvent.loaded / progressEvent.total) * 100);
 };
 
@@ -16,7 +14,7 @@ instance.interceptors.request.use(
     function (config) {
         // Do something before request is sent
 
-        // console.debug('request', config);
+        console.debug('request', config);
 
         return config;
     },
@@ -64,7 +62,10 @@ instance.interceptors.response.use(
 const getHeaders = (contentType?: string | null) => {
     return {
         'Content-Type': !contentType ? 'application/json' : contentType,
-        Authorization: `Bearer ${getCookie('accessToken')}`,
+        Authorization:
+            !getCookie('accessType') || !getCookie('accessToken')
+                ? undefined
+                : `${getCookie('accessType')} ${getCookie('accessToken')}`,
     };
 };
 

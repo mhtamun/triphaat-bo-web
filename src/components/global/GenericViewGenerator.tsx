@@ -37,12 +37,10 @@ const DeleteItemComponent = ({
             confirmCallback={() => {
                 setConfirmationModalOpen(!isConfirmationModalOpen);
                 callDeleteApi(_.replace(deleteApiUri, deleteIdentifier, datumId))
-                    .then((response) => {
+                    .then(response => {
                         if (!response) {
                             showToast('error', 'Unsuccessful!', 'Server not working!');
-                        }
-
-                        if (response.statusCode !== 200) {
+                        } else if (response.statusCode !== 200) {
                             showToast('error', 'Unsuccessful!', response.message);
                         } else {
                             showToast('success', 'Success!', response.message);
@@ -50,7 +48,7 @@ const DeleteItemComponent = ({
                             onSuccess();
                         }
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         console.error('error', error);
 
                         showToast('error', 'Unsuccessful!', 'Something went wrong!');
@@ -101,12 +99,10 @@ const EditItemComponent = ({
                     // console.debug({ data });
 
                     callPutApi(_.replace(putApiUri, putIdentifier, datumId), data)
-                        .then((response) => {
+                        .then(response => {
                             if (!response) {
                                 showToast('error', 'Unsuccessful!', 'Server not working!');
-                            }
-
-                            if (response.statusCode !== 200) {
+                            } else if (response.statusCode !== 200) {
                                 showToast('error', 'Unsuccessful!', response.message);
                             } else {
                                 showToast('success', 'Success!', response.message);
@@ -114,7 +110,7 @@ const EditItemComponent = ({
                                 onSuccess(data);
                             }
                         })
-                        .catch((error) => {
+                        .catch(error => {
                             console.error('error', error);
 
                             showToast('error', 'Unsuccessful!', 'Something went wrong!');
@@ -164,12 +160,10 @@ const AddNewItemComponent = ({
                     // console.debug({ data });
 
                     callPostApi(postApiUri, data)
-                        .then((response) => {
+                        .then(response => {
                             if (!response) {
                                 showToast('error', 'Unsuccessful!', 'Server not working!');
-                            }
-
-                            if (response.statusCode !== 200) {
+                            } else if (response.statusCode !== 200) {
                                 showToast('error', 'Unsuccessful!', response.message);
                             } else {
                                 showToast('success', 'Success!', response.message);
@@ -177,7 +171,7 @@ const AddNewItemComponent = ({
                                 onSuccess(data);
                             }
                         })
-                        .catch((error) => {
+                        .catch(error => {
                             console.error('error', error);
 
                             showToast('error', 'Unsuccessful!', 'Something went wrong!');
@@ -277,7 +271,7 @@ function GenericViewGenerator({
 
     const getAllData = (getApiUri: string, handleDataCallback?: (data: any) => any) => {
         callGetApi(getApiUri)
-            .then((response) => {
+            .then(response => {
                 if (!response) throw { message: 'Server not working!' };
 
                 if (response.statusCode !== 200) throw { message: response.message };
@@ -289,7 +283,7 @@ function GenericViewGenerator({
                 if (!_.isUndefined(getAllSuccessCallback) && !_.isNull(getAllSuccessCallback))
                     getAllSuccessCallback(response.data);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('error', error);
 
                 showToast('error', 'Unsuccessful!', error.message ?? 'Something went wrong!');
@@ -303,7 +297,7 @@ function GenericViewGenerator({
         handleDataCallback?: (data: any) => any
     ) => {
         callGetApi(_.replace(getOneApiUri, getOneIdentifier, value))
-            .then((response) => {
+            .then(response => {
                 if (!response) throw { message: 'Server not working!' };
 
                 if (response.statusCode !== 200) throw { message: response.message };
@@ -313,7 +307,7 @@ function GenericViewGenerator({
                 if (!_.isUndefined(getOneSuccessCallback) && !_.isNull(getOneSuccessCallback))
                     getOneSuccessCallback(response.data);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('error', error);
 
                 showToast('error', 'Unsuccessful!', error.message);
@@ -328,7 +322,7 @@ function GenericViewGenerator({
                 text: 'Edit',
                 icon: 'pi pi-pencil',
                 color: 'warning',
-                callback: (id) => {
+                callback: id => {
                     // console.debug({ id });
 
                     getDatum(getOneApiUri, getOneIdentifier, id.toString(), getOneDataModificationCallback);
@@ -341,7 +335,7 @@ function GenericViewGenerator({
                 text: 'Delete',
                 icon: 'pi pi-trash',
                 color: 'danger',
-                callback: (id) => {
+                callback: id => {
                     // console.debug({ id });
 
                     setDatumId(id);
@@ -414,13 +408,13 @@ function GenericViewGenerator({
                     !fields || _.size(fields) === 0 || !postApiUri ? null : (
                         <AddNewItemComponent
                             isFormModalOpen={isAddFormModalOpen}
-                            setFormModalOpen={(value) => {
+                            setFormModalOpen={value => {
                                 setAddFormModalOpen(value);
                             }}
                             postApiUri={postApiUri}
                             fields={fields}
                             nonEdibleFields={nonEdibleFields}
-                            onSuccess={(data) => {
+                            onSuccess={data => {
                                 // console.debug({ data });
 
                                 getAllData(getAllApiUri, getAllDataModificationCallback);
@@ -438,7 +432,7 @@ function GenericViewGenerator({
                     (!fields && !editFields) || !putApiUri || !putIdentifier || !datum ? null : (
                         <EditItemComponent
                             isFormModalOpen={isEditFormModalOpen}
-                            setFormModalOpen={(value) => {
+                            setFormModalOpen={value => {
                                 setEditFormModalOpen(value);
                             }}
                             putApiUri={putApiUri}
@@ -447,7 +441,7 @@ function GenericViewGenerator({
                             datum={datum}
                             fields={!editFields ? fields : editFields}
                             nonEdibleFields={nonEdibleFields}
-                            onSuccess={(data) => {
+                            onSuccess={data => {
                                 getAllData(getAllApiUri, getAllDataModificationCallback);
 
                                 if (!_.isUndefined(editExistingCallback) && !_.isNull(editExistingCallback))
