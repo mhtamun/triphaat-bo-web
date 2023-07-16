@@ -7,9 +7,9 @@ import _ from 'lodash';
 // application
 import { getAuthorized } from '../../../../libs/auth';
 import GenericViewGenerator from '../../../../components/global/GenericViewGenerator';
-import { getModuleNames, getPermissionTypes } from '../../../../api';
+import { getModuleNames, getPermissionTypes } from '../../../../apis';
 
-export const getServerSideProps: GetServerSideProps = async (context) =>
+export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, () => {
         const roleId = context.query.id;
 
@@ -28,7 +28,7 @@ const Page = ({ roleId }: { roleId: string }) => {
 
     useEffect(() => {
         getModuleNames()
-            .then((response) => {
+            .then(response => {
                 if (!response) {
                     // showToast('error', 'Unsuccessful!', 'Server not working!');
                 }
@@ -41,7 +41,7 @@ const Page = ({ roleId }: { roleId: string }) => {
                     setModules(response.data);
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('error', error);
 
                 // showToast('error', 'Unsuccessful!', 'Something went wrong!');
@@ -49,7 +49,7 @@ const Page = ({ roleId }: { roleId: string }) => {
             .finally(() => {});
 
         getPermissionTypes()
-            .then((response) => {
+            .then(response => {
                 if (!response) {
                     // showToast('error', 'Unsuccessful!', 'Server not working!');
                 }
@@ -62,7 +62,7 @@ const Page = ({ roleId }: { roleId: string }) => {
                     setPermissionTypes(response.data);
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('error', error);
 
                 // showToast('error', 'Unsuccessful!', 'Something went wrong!');
@@ -82,8 +82,8 @@ const Page = ({ roleId }: { roleId: string }) => {
                             uri: `/api/v1/roles/${roleId}/permissions`,
                             ignoredColumns: ['id', 'createdAt', 'updatedAt', 'isDeleted'],
                             actionIdentifier: 'id',
-                            onDataModify: (data) =>
-                                _.map(data, (datum) => ({
+                            onDataModify: data =>
+                                _.map(data, datum => ({
                                     ...datum,
                                     role: datum.role.name,
                                 })),

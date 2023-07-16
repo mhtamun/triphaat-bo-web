@@ -7,16 +7,16 @@ import _ from 'lodash';
 // application
 import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
-import { getRoles } from '../../api';
+import { getRoles } from '../../apis';
 
-export const getServerSideProps: GetServerSideProps = async (context) => getAuthorized(context);
+export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context);
 
 const Page = () => {
     const [roles, setRoles] = useState(null);
 
     useEffect(() => {
         getRoles()
-            .then((response) => {
+            .then(response => {
                 if (!response) {
                     // showToast('error', 'Unsuccessful!', 'Server not working!');
                 }
@@ -29,7 +29,7 @@ const Page = () => {
                     setRoles(response.data);
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error('error', error);
 
                 // showToast('error', 'Unsuccessful!', 'Something went wrong!');
@@ -58,8 +58,8 @@ const Page = () => {
                                 'isDeleted',
                             ],
                             actionIdentifier: 'id',
-                            onDataModify: (data) =>
-                                _.map(data, (datum) => ({
+                            onDataModify: data =>
+                                _.map(data, datum => ({
                                     ...datum,
                                     role: datum.role.name,
                                 })),

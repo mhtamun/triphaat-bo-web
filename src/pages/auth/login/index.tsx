@@ -11,7 +11,7 @@ import { Button } from 'primereact/button';
 import AppConfig from '../../../components/layout/AppConfig';
 import { LayoutContext } from '../../../components/layout/context/layoutcontext';
 import { Page } from '../../../types/types';
-import { login } from '../../../api/auth';
+import { login } from '../../../apis/';
 import { createLogin } from '../../../libs/auth';
 // third party libraries
 import { useFormik } from 'formik';
@@ -44,7 +44,7 @@ const LoginPage: Page = () => {
             setSubmitting(true);
 
             login({ email: values.email, password: values.password })
-                .then((response) => {
+                .then(response => {
                     if (!response) {
                         throw new Error('Invalid response!');
                     }
@@ -57,7 +57,7 @@ const LoginPage: Page = () => {
 
                     router.push('/');
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.error(error);
 
                     // toast(
@@ -122,7 +122,7 @@ const LoginPage: Page = () => {
                                 <div className="flex align-items-center">
                                     <Checkbox
                                         id="remember-me"
-                                        onChange={(e) => formik.setFieldValue('checked', e.checked)}
+                                        onChange={e => formik.setFieldValue('checked', e.checked)}
                                         checked={formik.values.checked}
                                         className="mr-2"
                                     ></Checkbox>
