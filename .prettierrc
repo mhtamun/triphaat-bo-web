@@ -1,7 +1,7 @@
 {
-    "arrowParens": "always",
+    "arrowParens": "avoid",
     "bracketSpacing": true,
-    "embeddedLanguageFormatting": "auto",
+    "endOfLine": "auto",
     "htmlWhitespaceSensitivity": "css",
     "insertPragma": false,
     "jsxBracketSameLine": false,
@@ -14,6 +14,5 @@
     "singleQuote": true,
     "tabWidth": 4,
     "trailingComma": "es5",
-    "useTabs": false,
-    "react/jsx-max-props-per-line": [1, { "when": "always" }]
-  }
+    "useTabs": false
+}

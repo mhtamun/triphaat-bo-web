@@ -1,12 +1,12 @@
 {
-    "name": "sakai-react-typescript",
-    "version": "9.1.2",
-    "private": false,
+    "name": "triphaat-bo-web",
+    "version": "1.0.0",
+    "private": true,
     "scripts": {
-        "start:dev": "rm -Rf .next && next dev -p 4567",
+        "lint": "next lint",
+        "start:dev": "rm -Rf .next && next dev -p 8081",
         "build": "next build",
-        "start": "next start -p 4567",
-        "lint": "next lint"
+        "start": "next start -p 8081"
     },
     "dependencies": {
         "@types/node": "18.15.11",
