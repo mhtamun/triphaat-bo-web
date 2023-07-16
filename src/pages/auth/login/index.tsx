@@ -53,7 +53,7 @@ const LoginPage: Page = () => {
         onSubmit: (values, { setSubmitting }) => {
             setSubmitting(true);
 
-            login({ email: values.email, password: values.password })
+            login({ email: values.email, password: values.password, type: 'ADMIN' })
                 .then(response => {
                     if (!response) {
                         showToast('error', 'Unsuccessful!', 'Server not working!');
