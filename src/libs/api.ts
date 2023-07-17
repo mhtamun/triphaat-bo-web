@@ -1,7 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { getCookie } from './cookie';
+import { apiBaseUrl as baseURL } from '../config/env';
 
 const instance = axios.create({
+    baseURL,
     timeout: 300000,
     validateStatus: status => status === 200,
 });

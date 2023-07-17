@@ -80,7 +80,7 @@ const Page = ({ roleId }: { roleId: string }) => {
                         subtitle="Manage permission here!"
                         viewAll={{
                             uri: `/api/v1/roles/${roleId}/permissions`,
-                            ignoredColumns: ['id', 'createdAt', 'updatedAt', 'isDeleted'],
+                            ignoredColumns: ['id', 'roleId', 'createdAt', 'updatedAt'],
                             actionIdentifier: 'id',
                             onDataModify: data =>
                                 _.map(data, datum => ({
@@ -99,8 +99,8 @@ const Page = ({ roleId }: { roleId: string }) => {
                             {
                                 type: 'number',
                                 name: 'roleId',
-                                placeholder: '',
-                                title: '',
+                                placeholder: 'Select role ID',
+                                title: 'Role ID',
                                 initialValue: parseInt(roleId),
                                 validate: (values: any) => {
                                     if (!values.roleId) return 'Required!';

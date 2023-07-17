@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
 
-export const getServerSideProps: GetServerSideProps = async (context) => getAuthorized(context);
+export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context);
 
 const Page = () => {
     const router = useRouter();
@@ -25,10 +25,10 @@ const Page = () => {
                         subtitle="Manage role here!"
                         viewAll={{
                             uri: `/api/v1/roles`,
-                            ignoredColumns: ['id', 'createdAt', 'updatedAt', 'isDeleted'],
+                            ignoredColumns: ['id', 'type', 'permissions', 'createdAt', 'updatedAt'],
                             actionIdentifier: 'id',
-                            onDataModify: (data) =>
-                                _.map(data, (datum) => ({
+                            onDataModify: data =>
+                                _.map(data, datum => ({
                                     ...datum,
                                     permissions: null,
                                 })),
@@ -47,7 +47,7 @@ const Page = () => {
                                 color: 'info',
                                 icon: PrimeIcons.ARROW_RIGHT,
                                 text: 'Permissions',
-                                callback: (identifier) => {
+                                callback: identifier => {
                                     router.push(`/roles/${identifier}/permissions`);
                                 },
                             },
@@ -61,6 +61,18 @@ const Page = () => {
                                 initialValue: null,
                                 validate: (values: any) => {
                                     if (!values.name) return 'Name required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'hidden',
+                                name: 'type',
+                                placeholder: '',
+                                title: '',
+                                initialValue: 'ADMIN',
+                                validate: (values: any) => {
+                                    if (!values.type) return 'Name required!';
 
                                     return null;
                                 },
