@@ -105,9 +105,13 @@ const EditItemComponent = ({
                             } else if (response.statusCode !== 200) {
                                 showToast('error', 'Unsuccessful!', response.message);
                             } else {
-                                showToast('success', 'Success!', response.message);
+                                callback();
+
+                                setFormModalOpen(false);
 
                                 onSuccess(data);
+
+                                showToast('success', 'Success!', response.message);
                             }
                         })
                         .catch(error => {
@@ -115,11 +119,7 @@ const EditItemComponent = ({
 
                             showToast('error', 'Unsuccessful!', 'Something went wrong!');
                         })
-                        .finally(() => {
-                            callback();
-
-                            setFormModalOpen(false);
-                        });
+                        .finally(() => {});
                 }}
             />
         </Modal>
@@ -166,9 +166,13 @@ const AddNewItemComponent = ({
                             } else if (response.statusCode !== 200) {
                                 showToast('error', 'Unsuccessful!', response.message);
                             } else {
-                                showToast('success', 'Success!', response.message);
+                                callback();
+
+                                setFormModalOpen(false);
 
                                 onSuccess(data);
+
+                                showToast('success', 'Success!', response.message);
                             }
                         })
                         .catch(error => {
@@ -176,11 +180,7 @@ const AddNewItemComponent = ({
 
                             showToast('error', 'Unsuccessful!', 'Something went wrong!');
                         })
-                        .finally(() => {
-                            callback();
-
-                            setFormModalOpen(false);
-                        });
+                        .finally(() => {});
                 }}
             />
         </Modal>

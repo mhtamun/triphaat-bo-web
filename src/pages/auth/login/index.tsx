@@ -40,8 +40,8 @@ const LoginPage: Page = () => {
         enableReinitialize: false,
 
         initialValues: {
-            email: 'mhtamun@gmail.com',
-            password: '123456',
+            email: 'maruf@tripociate.com',
+            password: 'soLTVf9390l5JLgh',
             checked: false,
         },
 

@@ -25,6 +25,11 @@ const AppMenu = () => {
                         },
                     ],
                 },
+                {
+                    icon: 'pi pi-gift',
+                    label: 'Vendor Management',
+                    to: '/vendors',
+                },
             ],
         },
     ];
