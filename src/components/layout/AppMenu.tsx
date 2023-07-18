@@ -10,10 +10,10 @@ const AppMenu = () => {
         {
             label: 'Menu',
             items: [
-                { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' },
+                { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' },
                 {
-                    label: 'User Management',
                     icon: 'pi pi-fw pi-user',
+                    label: 'User Management',
                     items: [
                         {
                             label: 'Roles',
@@ -26,9 +26,19 @@ const AppMenu = () => {
                     ],
                 },
                 {
-                    icon: 'pi pi-gift',
+                    icon: 'pi pi-fw pi-th-large',
                     label: 'Vendor Management',
                     to: '/vendors',
+                },
+                {
+                    icon: 'pi pi-fw pi-image',
+                    label: 'Trip Management',
+                    items: [
+                        {
+                            label: 'Locations',
+                            to: '/trips/locations',
+                        },
+                    ],
                 },
             ],
         },

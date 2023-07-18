@@ -13,7 +13,7 @@ export interface IField {
     options?: { value: number | string; label: string }[];
     isDisabled?: boolean;
     show?: boolean;
-    validate: (values: any) => string | null;
+    validate?: (values: any) => string | null;
 }
 
 export default function GenericFormGenerator({
@@ -59,10 +59,10 @@ export default function GenericFormGenerator({
               )
             : _.pick(
                   datum,
-                  _.map(fields, (field) => field.name)
+                  _.map(fields, field => field.name)
               ),
 
-        validate: (values) => {
+        validate: values => {
             return _.reduce(
                 fields,
                 (errors, field) => {
@@ -95,8 +95,8 @@ export default function GenericFormGenerator({
             });
 
             // Check information type value or not showing value not to submit in the form
-            const tempFalseFields = _.filter(fields, (field) => field.type === 'information' || field.show === false);
-            _.map(tempFalseFields, (field) => {
+            const tempFalseFields = _.filter(fields, field => field.type === 'information' || field.show === false);
+            _.map(tempFalseFields, field => {
                 hiddenFields.push(field.name);
             });
 
@@ -285,7 +285,7 @@ export default function GenericFormGenerator({
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            {formFields.map((formField) => {
+            {formFields.map(formField => {
                 // console.debug({ formField });
 
                 return getField(formField);
