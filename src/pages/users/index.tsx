@@ -79,7 +79,7 @@ const Page = () => {
             title: '',
             initialValue: 'ADMIN',
             validate: (values: any) => {
-                if (!values.type) return 'Name required!';
+                if (!values.type) return 'Required!';
 
                 return null;
             },

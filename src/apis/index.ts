@@ -10,4 +10,8 @@ export const getModuleNames = () => callGetApi(apiBaseUrl + '/api/v1/permission-
 
 export const getPermissionTypes = () => callGetApi(apiBaseUrl + '/api/v1/permission-types');
 
-export const getRoles = () => callGetApi(apiBaseUrl + '/api/v1/types/ADMIN/roles');
+export const getRoles = () => callGetApi(apiBaseUrl + '/api/v1/roles');
+
+export const getVendors = () => callGetApi(apiBaseUrl + '/api/v1/vendors');
+
+export const getLocations = () => callGetApi(apiBaseUrl + '/api/v1/locations');

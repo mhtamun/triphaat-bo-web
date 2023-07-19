@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable as Table } from 'primereact/datatable';
@@ -37,7 +37,7 @@ const DataTable = ({
     const columnHeads = [];
 
     if (!_.isUndefined(data) && !_.isNull(data) && _.size(data) > 0) {
-        _.map(_.keys(_.omit(data[0], [...ignoredColumns])), (key) => {
+        _.map(_.keys(_.omit(data[0], [...ignoredColumns])), key => {
             columnHeads.push({
                 key,
                 label: _.upperCase(key),
@@ -59,7 +59,7 @@ const DataTable = ({
     // console.debug({ actions });
 
     if (_.size(actions) > 0) {
-        mappedData = _.map(data, (datum) => ({
+        mappedData = _.map(data, datum => ({
             ...datum,
             actions: (
                 <>
@@ -70,7 +70,7 @@ const DataTable = ({
                             severity={action.color}
                             className={index !== 0 ? 'ml-2' : ''}
                             rounded={!action.text}
-                            onClick={(e) => {
+                            onClick={e => {
                                 e.preventDefault();
 
                                 action.callback(datum[actionIdentifier]);
@@ -124,48 +124,44 @@ const DataTable = ({
         );
     };
 
-    const header =
-        !subtitle && !title ? null : (
-            <div>
-                <h5 className="m-0">{title ?? ''}</h5>
-                <p className="m-0">{subtitle ?? ''}</p>
-            </div>
-        );
+    // const header =
+    //     !subtitle && !title ? null : (
+    //         <div>
+    //             <h5 className="m-0">{title ?? ''}</h5>
+    //             <p className="m-0">{subtitle ?? ''}</p>
+    //         </div>
+    //     );
 
     const footer = `Showing ${_.size(data)} items.`;
 
     return (
-        <div className="grid crud-demo">
-            <div className="col-12">
-                <div className="card">
-                    {!addNewItemButtonText || !addNewItemCallback ? null : (
-                        <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
-                    )}
-                    <Table
-                        value={mappedData}
-                        emptyMessage={emptyListText ?? 'No data found!'}
-                        header={header}
-                        footer={footer}
-                        columnResizeMode="expand"
-                        resizableColumns
-                        showGridlines
-                        scrollable
-                    >
-                        {_.map(columnHeads, (item) => {
-                            return (
-                                <Column
-                                    key={item.key}
-                                    field={item.key}
-                                    header={item.label}
-                                    sortable={!_.isEqual(item.key, 'actions')}
-                                    headerStyle={item.headerStyle}
-                                ></Column>
-                            );
-                        })}
-                    </Table>
-                </div>
-            </div>
-        </div>
+        <Card title={title ?? ''} subTitle={subtitle ?? ''}>
+            {!addNewItemButtonText || !addNewItemCallback ? null : (
+                <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+            )}
+            <Table
+                value={mappedData}
+                emptyMessage={emptyListText ?? 'No data found!'}
+                // header={header}
+                footer={footer}
+                columnResizeMode="expand"
+                resizableColumns
+                showGridlines
+                scrollable
+            >
+                {_.map(columnHeads, item => {
+                    return (
+                        <Column
+                            key={item.key}
+                            field={item.key}
+                            header={item.label}
+                            sortable={!_.isEqual(item.key, 'actions')}
+                            headerStyle={item.headerStyle}
+                        ></Column>
+                    );
+                })}
+            </Table>
+        </Card>
     );
 };
 

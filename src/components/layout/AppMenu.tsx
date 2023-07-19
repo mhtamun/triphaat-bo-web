@@ -38,6 +38,10 @@ const AppMenu = () => {
                             label: 'Locations',
                             to: '/trips/locations',
                         },
+                        {
+                            label: 'Trips',
+                            to: '/trips',
+                        },
                     ],
                 },
             ],
