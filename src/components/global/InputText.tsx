@@ -1,7 +1,7 @@
 import React, { FocusEvent } from 'react';
 import { InputText } from 'primereact/inputtext';
 
-const Input = (props: {
+const InputField = (props: {
     type?: string;
     name: string;
     title: string;
@@ -51,4 +51,4 @@ const Input = (props: {
     );
 };
 
-export default Input;
+export default InputField;

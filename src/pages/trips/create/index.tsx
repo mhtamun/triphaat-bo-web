@@ -133,6 +133,112 @@ const Page = () => {
                             },
                         },
                         {
+                            type: 'textarea',
+                            name: 'smallDescription',
+                            placeholder: 'Enter small description for this trip!',
+                            title: 'Small Description',
+                            initialValue: null,
+                            validate: (values: any) => {
+                                if (!values.smallDescription) return 'Required!';
+
+                                return null;
+                            },
+                        },
+                        {
+                            type: 'richtext',
+                            name: 'bigDescription',
+                            placeholder: 'Enter big description for this trip!',
+                            title: 'Big Description',
+                            initialValue: null,
+                            validate: (values: any) => {
+                                if (!values.bigDescription) return 'Required!';
+
+                                return null;
+                            },
+                        },
+                        {
+                            type: 'number',
+                            name: 'durationInDays',
+                            placeholder: 'Enter duration in days this trip!',
+                            title: 'Duration In Days',
+                            initialValue: null,
+                            validate: (values: any) => {
+                                if (!values.durationInDays) return 'Required!';
+
+                                return null;
+                            },
+                        },
+                        {
+                            type: 'number',
+                            name: 'durationInNights',
+                            placeholder: 'Enter duration in nights for this trip!',
+                            title: 'Duration In Nights',
+                            initialValue: null,
+                            validate: (values: any) => {
+                                if (!values.durationInNights) return 'Required!';
+
+                                return null;
+                            },
+                        },
+                        {
+                            type: 'date',
+                            name: 'startDate',
+                            placeholder: 'Enter start date for this trip!',
+                            title: 'Start Date',
+                            initialValue: null,
+                            validate: (values: any) => {
+                                if (!values.startDate) return 'Required!';
+
+                                return null;
+                            },
+                        },
+                        {
+                            type: 'date',
+                            name: 'endDate',
+                            placeholder: 'Enter end date for this trip!',
+                            title: 'End Date',
+                            initialValue: null,
+                            validate: (values: any) => {
+                                if (!values.endDate) return 'Required!';
+
+                                return null;
+                            },
+                        },
+                        {
+                            type: 'number',
+                            name: 'numberOfSeats',
+                            placeholder: 'Enter number of seats for this trip!',
+                            title: 'Number of Seats (Maximum)',
+                            initialValue: null,
+                            validate: (values: any) => {
+                                if (!values.numberOfSeats) return 'Required!';
+
+                                return null;
+                            },
+                        },
+                        {
+                            type: 'select-sync',
+                            name: 'isVisaRequired',
+                            placeholder: 'Select VISA requirements!',
+                            title: 'Visa Requirements',
+                            initialValue: false,
+                            options: [
+                                {
+                                    value: true,
+                                    label: 'Visa Required',
+                                },
+                                {
+                                    value: false,
+                                    label: 'Visa Not Required',
+                                },
+                            ],
+                            validate: (values: any) => {
+                                if (!values.status) return 'Required!';
+
+                                return null;
+                            },
+                        },
+                        {
                             type: 'select-sync',
                             name: 'status',
                             placeholder: 'Select status!',

@@ -4,6 +4,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Button } from 'primereact/button';
+import { PrimeIcons } from 'primereact/api';
 import _ from 'lodash';
 
 // application
@@ -36,7 +37,7 @@ const Page = () => {
                         subtitle="Manage trips here!"
                         viewAll={{
                             uri: `/api/v1/trips`,
-                            ignoredColumns: ['id', 'createdAt', 'updatedAt'],
+                            ignoredColumns: ['id', 'smallDescription', 'bigDescription', 'createdAt', 'updatedAt'],
                             actionIdentifier: 'id',
                             onDataModify: data =>
                                 _.map(data, datum => ({
@@ -44,6 +45,16 @@ const Page = () => {
                                     trips: null,
                                 })),
                         }}
+                        customActions={[
+                            {
+                                color: 'info',
+                                icon: PrimeIcons.ARROW_RIGHT,
+                                text: 'Detail',
+                                callback: identifier => {
+                                    router.push(`/trips/${identifier}`);
+                                },
+                            },
+                        ]}
                     />
                 ),
                 []

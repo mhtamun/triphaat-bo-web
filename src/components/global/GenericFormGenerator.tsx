@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
-import { InputField, SelectSyncField } from '../index';
+import { InputField, SelectSyncField, TextareaField, EditorField } from '../index';
 
 export interface IField {
     type: string;
@@ -179,6 +179,34 @@ export default function GenericFormGenerator({
                 />
             );
 
+        if (field.type === 'textarea')
+            return (
+                <TextareaField
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    value={formik.values[field.name] ?? ''}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    isDisabled={field.isDisabled}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'richtext')
+            return (
+                <EditorField
+                    key={field.name}
+                    name={field.name}
+                    placeholder={field.placeholder}
+                    title={field.title}
+                    value={formik.values[field.name]}
+                    setFieldValue={formik.setFieldValue}
+                    setFieldTouched={formik.setFieldTouched}
+                    errorMessage={errorMessage}
+                />
+            );
+
         if (
             field.type === 'select-sync' &&
             !_.isUndefined(field.options) &&
@@ -261,7 +289,7 @@ export default function GenericFormGenerator({
     //     }
     // }
 
-    let submitButton = <Button type="submit" label="Submit"></Button>;
+    let submitButton = <Button type="submit" label={!submitButtonText ? 'Submit' : submitButtonText}></Button>;
 
     // if (_.isUndefined(onShowSubmitButton) || _.isNull(onShowSubmitButton))
     //     submitButton = (

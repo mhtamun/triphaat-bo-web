@@ -15,3 +15,5 @@ export const getRoles = () => callGetApi(apiBaseUrl + '/api/v1/roles');
 export const getVendors = () => callGetApi(apiBaseUrl + '/api/v1/vendors');
 
 export const getLocations = () => callGetApi(apiBaseUrl + '/api/v1/locations');
+
+export const getTrip = (id: string) => callGetApi(apiBaseUrl + '/api/v1/trips/' + id);

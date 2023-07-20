@@ -2,7 +2,7 @@ import React from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import _ from 'lodash';
 
-const SelectSync = (props: {
+const SelectSyncField = (props: {
     name: string;
     title: string;
     placeholder?: string;
@@ -30,7 +30,7 @@ const SelectSync = (props: {
                 disabled={isDisabled}
                 className={!errorMessage ? '' : 'p-invalid'}
                 aria-describedby={`${name}-help`}
-                onChange={(e) => {
+                onChange={e => {
                     // console.debug({ e });
 
                     setFieldValue(e.target.name, e.target.value ?? null);
@@ -45,4 +45,4 @@ const SelectSync = (props: {
     );
 };
 
-export default SelectSync;
+export default SelectSyncField;
