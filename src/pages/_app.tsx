@@ -19,7 +19,7 @@ export default function MyApp({ Component, pageProps }: Props) {
     } else {
         return (
             <LayoutProvider>
-                <Layout>
+                <Layout title={pageProps.title ?? ''}>
                     <Component {...pageProps} />
                 </Layout>
             </LayoutProvider>

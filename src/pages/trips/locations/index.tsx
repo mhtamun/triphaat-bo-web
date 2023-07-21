@@ -9,7 +9,7 @@ import { getAuthorized } from '../../../libs/auth';
 import GenericViewGenerator from '../../../components/global/GenericViewGenerator';
 import { getGeneralStatusOptions } from '../../../utils';
 
-export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context);
+export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context, 'Location Management');
 
 const Page = () => {
     return (

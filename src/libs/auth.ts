@@ -55,7 +55,11 @@ export const getServerSideCookie = (req: any): ICookie | null => {
     return parseCookie(req.headers.cookie);
 };
 
-export const getAuthorized = async (context: GetServerSidePropsContext, callback?: (cookies: any) => any) => {
+export const getAuthorized = async (
+    context: GetServerSidePropsContext,
+    title: string,
+    callback?: (cookies: any) => any
+) => {
     const { req } = context;
     const cookies = getServerSideCookie(req);
 
@@ -73,6 +77,6 @@ export const getAuthorized = async (context: GetServerSidePropsContext, callback
     if (callback) props = await callback(cookies);
 
     return {
-        props: props ?? {},
+        props: { title, ...props } ?? { title },
     };
 };

@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
 
-export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context);
+export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context, 'Role Management');
 
 const Page = () => {
     const router = useRouter();

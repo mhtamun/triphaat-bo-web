@@ -10,7 +10,7 @@ import GenericViewGenerator from '../../../../components/global/GenericViewGener
 import { getModuleNames, getPermissionTypes } from '../../../../apis';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, () => {
+    getAuthorized(context, 'Permission Management', () => {
         const roleId = context.query.id;
 
         // console.debug({ roleId });

@@ -6,7 +6,7 @@ import { GetServerSideProps } from 'next';
 // application
 import { getAuthorized } from '../libs/auth';
 
-export const getServerSideProps: GetServerSideProps = async (context) => getAuthorized(context);
+export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context, 'Dashboard');
 
 const IndexPage = () => {
     return (

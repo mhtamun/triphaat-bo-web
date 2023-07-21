@@ -14,7 +14,7 @@ import { getGeneralStatusOptions } from '../../../utils';
 import { callPostApi } from '../../../libs/api';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, () => {
+    getAuthorized(context, 'Trip Management', () => {
         const tripId = context.query.id;
 
         // console.debug({ roleId });

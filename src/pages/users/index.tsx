@@ -9,7 +9,7 @@ import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
 import { getRoles } from '../../apis';
 
-export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context);
+export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context, 'User Management');
 
 const Page = () => {
     const [roles, setRoles] = useState(null);

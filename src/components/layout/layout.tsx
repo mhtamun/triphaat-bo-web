@@ -11,9 +11,9 @@ import AppTopbar from './AppTopbar';
 import AppConfig from './AppConfig';
 import { LayoutContext } from './context/layoutcontext';
 import PrimeReact from 'primereact/api';
-import { ChildContainerProps, LayoutState, AppTopbarRef } from '../types/types';
+import { ChildContainerProps, LayoutState, AppTopbarRef } from '../../types/types';
 
-const Layout = ({ children }: ChildContainerProps) => {
+const Layout = ({ title, children }: ChildContainerProps) => {
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
     const topbarRef = useRef<AppTopbarRef>(null);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -21,7 +21,7 @@ const Layout = ({ children }: ChildContainerProps) => {
     const router = useRouter();
     const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] = useEventListener({
         type: 'click',
-        listener: (event) => {
+        listener: event => {
             const isOutsideClicked = !(
                 sidebarRef.current?.isSameNode(event.target as Node) ||
                 sidebarRef.current?.contains(event.target as Node) ||
@@ -32,12 +32,12 @@ const Layout = ({ children }: ChildContainerProps) => {
             if (isOutsideClicked) {
                 hideMenu();
             }
-        }
+        },
     });
 
     const [bindProfileMenuOutsideClickListener, unbindProfileMenuOutsideClickListener] = useEventListener({
         type: 'click',
-        listener: (event) => {
+        listener: event => {
             const isOutsideClicked = !(
                 topbarRef.current?.topbarmenu?.isSameNode(event.target as Node) ||
                 topbarRef.current?.topbarmenu?.contains(event.target as Node) ||
@@ -48,11 +48,16 @@ const Layout = ({ children }: ChildContainerProps) => {
             if (isOutsideClicked) {
                 hideProfileMenu();
             }
-        }
+        },
     });
 
     const hideMenu = () => {
-        setLayoutState((prevLayoutState: LayoutState) => ({ ...prevLayoutState, overlayMenuActive: false, staticMenuMobileActive: false, menuHoverActive: false }));
+        setLayoutState((prevLayoutState: LayoutState) => ({
+            ...prevLayoutState,
+            overlayMenuActive: false,
+            staticMenuMobileActive: false,
+            menuHoverActive: false,
+        }));
         unbindMenuOutsideClickListener();
         unblockBodyScroll();
     };
@@ -74,7 +79,10 @@ const Layout = ({ children }: ChildContainerProps) => {
         if (document.body.classList) {
             document.body.classList.remove('blocked-scroll');
         } else {
-            document.body.className = document.body.className.replace(new RegExp('(^|\\b)' + 'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+            document.body.className = document.body.className.replace(
+                new RegExp('(^|\\b)' + 'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'),
+                ' '
+            );
         }
     };
 
@@ -113,24 +121,14 @@ const Layout = ({ children }: ChildContainerProps) => {
         'layout-overlay-active': layoutState.overlayMenuActive,
         'layout-mobile-active': layoutState.staticMenuMobileActive,
         'p-input-filled': layoutConfig.inputStyle === 'filled',
-        'p-ripple-disabled': !layoutConfig.ripple
+        'p-ripple-disabled': !layoutConfig.ripple,
     });
 
     return (
-        <React.Fragment>
+        <>
             <Head>
-                <title>Sakai by PrimeReact | Free Admin Template for NextJS</title>
-                <meta charSet="UTF-8" />
-                <meta name="description" content="The ultimate collection of design-agnostic, flexible and accessible React UI Components." />
-                <meta name="robots" content="index, follow" />
-                <meta name="viewport" content="initial-scale=1, width=device-width" />
-                <meta property="og:type" content="website"></meta>
-                <meta property="og:title" content="Sakai by PrimeReact | Free Admin Template for NextJS"></meta>
-                <meta property="og:url" content="https://www.primefaces.org/sakai-react"></meta>
-                <meta property="og:description" content="The ultimate collection of design-agnostic, flexible and accessible React UI Components." />
-                <meta property="og:image" content="https://www.primefaces.org/static/social/sakai-nextjs.png"></meta>
-                <meta property="og:ttl" content="604800"></meta>
-                <link rel="icon" href={`/favicon.ico`} type="image/x-icon"></link>
+                <title>{title} | BACK-OFFICE - triphaat.com</title>
+                <link rel="icon" href={`/favicon.png`} type="image/x-icon"></link>
             </Head>
 
             <div className={containerClass}>
@@ -145,7 +143,7 @@ const Layout = ({ children }: ChildContainerProps) => {
                 <AppConfig />
                 <div className="layout-mask"></div>
             </div>
-        </React.Fragment>
+        </>
     );
 };
 

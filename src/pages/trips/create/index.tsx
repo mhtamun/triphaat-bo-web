@@ -12,7 +12,7 @@ import { getLocations, getVendors } from '../../../apis';
 import { getGeneralStatusOptions } from '../../../utils';
 import { callGetApi, callDeleteApi, callPutApi, callPostApi } from '../../../libs/api';
 
-export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context);
+export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context, 'Create A Trip');
 
 const Page = () => {
     const [vendors, setVendors] = useState(null);
