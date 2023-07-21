@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { Toast } from 'primereact/toast';
+import { Card } from 'primereact/card';
+import { Toolbar } from 'primereact/toolbar';
+import { Button } from 'primereact/button';
 import { DataTable, ModalConfirmation, Modal, GenericFormGenerator } from '../index';
 import { callGetApi, callDeleteApi, callPutApi, callPostApi } from '../../libs/api';
 import _ from 'lodash';
@@ -376,28 +379,71 @@ function GenericViewGenerator({
         []
     );
 
+    const leftToolbarTemplate = () => {
+        return (
+            <>
+                {
+                    <Button
+                        label={addNewItemButtonText ?? 'New'}
+                        icon="pi pi-plus"
+                        severity="success"
+                        className=" mr-2"
+                        onClick={
+                            !postApiUri
+                                ? undefined
+                                : () => {
+                                      setAddFormModalOpen(true);
+                                  }
+                        }
+                    />
+                }
+                {/* <Button
+                        label="Delete"
+                        icon="pi pi-trash"
+                        severity="danger"
+                        onClick={confirmDeleteSelected}
+                        disabled={!selectedProducts || !selectedProducts.length}
+                    /> */}
+            </>
+        );
+    };
+
+    const rightToolbarTemplate = () => {
+        return (
+            <>
+                {/* <FileUpload
+                    mode="basic"
+                    accept="image/*"
+                    maxFileSize={1000000}
+                    chooseLabel="Import"
+                    className="mr-2 inline-block"
+                />
+                <Button label="Export" icon="pi pi-upload" severity="help" onClick={exportCSV} /> */}
+            </>
+        );
+    };
+
     return (
         <>
             {useMemo(
                 () =>
                     !data ? null : (
                         <>
-                            <DataTable
-                                data={data}
-                                ignoredColumns={ignoredColumns}
-                                actionIdentifier={actionIdentifier}
-                                actions={actions}
-                                title={title}
-                                subtitle={subtitle}
-                                addNewItemButtonText={addNewItemButtonText ?? 'Add new item'}
-                                addNewItemCallback={
-                                    !postApiUri
-                                        ? undefined
-                                        : () => {
-                                              setAddFormModalOpen(true);
-                                          }
-                                }
-                            />
+                            <Card title={title ?? ''} subTitle={subtitle ?? ''}>
+                                {!postApiUri ? null : (
+                                    <Toolbar
+                                        className="mb-4"
+                                        left={leftToolbarTemplate}
+                                        right={rightToolbarTemplate}
+                                    ></Toolbar>
+                                )}
+                                <DataTable
+                                    data={data}
+                                    ignoredColumns={ignoredColumns}
+                                    actionIdentifier={actionIdentifier}
+                                    actions={actions}
+                                />
+                            </Card>
                         </>
                     ),
                 // eslint-disable-next-line react-hooks/exhaustive-deps
