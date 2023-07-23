@@ -90,12 +90,17 @@ const Page = ({ tripId }: { tripId: string }) => {
 
     return (
         <>
-            <Card title={trip?.name}>
+            <Card title={trip?.name} className="mb-3"></Card>
+            <Card title="Trip Detail" className="mb-3">
                 {useMemo(
                     () =>
                         !trip ? null : (
                             <GenericFormGenerator
-                                datum={trip}
+                                datum={{
+                                    ...trip,
+                                    startDate: trip.startDate.split('T')[0],
+                                    endDate: trip.endDate.split('T')[0],
+                                }}
                                 fields={[
                                     {
                                         type: 'select-sync',
@@ -323,108 +328,278 @@ const Page = ({ tripId }: { tripId: string }) => {
                         ),
                     [trip]
                 )}
-                {/* <h4>Trip Variant</h4> */}
-                {useMemo(
-                    () =>
-                        !trip ? null : (
-                            <GenericViewGenerator
-                                name={'Variant'}
-                                title="Trip Variant"
-                                subtitle="Manage variants here!"
-                                viewAll={{
-                                    uri: `/api/v1/variants`,
-                                    ignoredColumns: ['id', 'createdAt', 'updatedAt'],
-                                    actionIdentifier: 'id',
-                                    onDataModify: data =>
-                                        _.map(data, datum => ({
-                                            ...datum,
-                                            trips: null,
-                                        })),
-                                }}
-                                addNew={{
-                                    uri: `/api/v1/variants`,
-                                }}
-                                viewOne={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
-                                editExisting={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
-                                removeOne={{
-                                    uri: '/api/v1/variants/{id}',
-                                    identifier: '{id}',
-                                }}
-                                fields={[
-                                    {
-                                        type: 'hidden',
-                                        name: 'tripId',
-                                        placeholder: '',
-                                        title: '',
-                                        initialValue: trip.id,
-                                        validate: (values: any) => {
-                                            if (!values.type) return 'Required!';
-
-                                            return null;
-                                        },
-                                    },
-                                    {
-                                        type: 'text',
-                                        name: 'reasons',
-                                        placeholder: 'Enter reasons for this variant!',
-                                        title: 'Reasons',
-                                        initialValue: null,
-                                        validate: (values: any) => {
-                                            if (!values.reasons) return 'Required!';
-
-                                            return null;
-                                        },
-                                    },
-                                    {
-                                        type: 'number',
-                                        name: 'costPrice',
-                                        placeholder: 'Enter cost price!',
-                                        title: 'Cost Price',
-                                        initialValue: null,
-                                        validate: (values: any) => {
-                                            if (!values.costPrice) return 'Required!';
-
-                                            return null;
-                                        },
-                                    },
-                                    {
-                                        type: 'number',
-                                        name: 'price',
-                                        placeholder: 'Enter price!',
-                                        title: 'Price',
-                                        initialValue: null,
-                                        validate: (values: any) => {
-                                            if (!values.price) return 'Required!';
-
-                                            return null;
-                                        },
-                                    },
-                                    {
-                                        type: 'number',
-                                        name: 'offerPrice',
-                                        placeholder: 'Enter offer price!',
-                                        title: 'Offer Price',
-                                        initialValue: null,
-                                    },
-                                    {
-                                        type: 'select-sync',
-                                        name: 'status',
-                                        placeholder: 'Select status!',
-                                        title: 'Status',
-                                        initialValue: 'ACTIVE',
-                                        options: getGeneralStatusOptions(),
-                                        validate: (values: any) => {
-                                            if (!values.status) return 'Required!';
-
-                                            return null;
-                                        },
-                                    },
-                                ]}
-                            />
-                        ),
-                    [trip]
-                )}
             </Card>
+            {useMemo(
+                () => (
+                    <GenericViewGenerator
+                        name={'Variant'}
+                        title="Trip Variant"
+                        subtitle="Manage trip variants here!"
+                        viewAll={{
+                            uri: `/api/v1/variants`,
+                            ignoredColumns: ['id', 'createdAt', 'updatedAt'],
+                            actionIdentifier: 'id',
+                            onDataModify: data =>
+                                _.map(data, datum => ({
+                                    ...datum,
+                                    trips: null,
+                                })),
+                        }}
+                        addNew={{
+                            uri: `/api/v1/variants`,
+                            buttonText: 'Add Variant',
+                        }}
+                        viewOne={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
+                        editExisting={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
+                        removeOne={{
+                            uri: '/api/v1/variants/{id}',
+                            identifier: '{id}',
+                        }}
+                        fields={[
+                            {
+                                type: 'hidden',
+                                name: 'tripId',
+                                placeholder: '',
+                                title: '',
+                                initialValue: tripId,
+                                validate: (values: any) => {
+                                    if (!values.type) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'text',
+                                name: 'reasons',
+                                placeholder: 'Enter reasons for this variant!',
+                                title: 'Reasons',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.reasons) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'number',
+                                name: 'costPrice',
+                                placeholder: 'Enter cost price!',
+                                title: 'Cost Price',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.costPrice) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'number',
+                                name: 'price',
+                                placeholder: 'Enter price!',
+                                title: 'Price',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.price) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'number',
+                                name: 'offerPrice',
+                                placeholder: 'Enter offer price!',
+                                title: 'Offer Price',
+                                initialValue: null,
+                            },
+                            {
+                                type: 'select-sync',
+                                name: 'status',
+                                placeholder: 'Select status!',
+                                title: 'Status',
+                                initialValue: 'ACTIVE',
+                                options: getGeneralStatusOptions(),
+                                validate: (values: any) => {
+                                    if (!values.status) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                        ]}
+                    />
+                ),
+                [trip]
+            )}
+            <div className="mb-3"></div>
+            {useMemo(
+                () => (
+                    <GenericViewGenerator
+                        name={'Image'}
+                        title="Trip Image"
+                        subtitle="Manage trip images here!"
+                        viewAll={{
+                            uri: `/api/v1/images`,
+                            ignoredColumns: ['id', 'createdAt', 'updatedAt'],
+                            actionIdentifier: 'id',
+                            onDataModify: data =>
+                                _.map(data, datum => ({
+                                    ...datum,
+                                    trips: null,
+                                })),
+                        }}
+                        addNew={{
+                            uri: `/api/v1/images`,
+                            buttonText: 'Add Image',
+                        }}
+                        viewOne={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+                        editExisting={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+                        removeOne={{
+                            uri: '/api/v1/images/{id}',
+                            identifier: '{id}',
+                        }}
+                        fields={[
+                            {
+                                type: 'hidden',
+                                name: 'tripId',
+                                placeholder: '',
+                                title: '',
+                                initialValue: tripId,
+                                validate: (values: any) => {
+                                    if (!values.type) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'text',
+                                name: 'url',
+                                placeholder: 'Enter image URL for this trip!',
+                                title: 'Reasons',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.url) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'text',
+                                name: 'title',
+                                placeholder: 'Enter title for this image!',
+                                title: 'Title',
+                                initialValue: null,
+                            },
+                            {
+                                type: 'text',
+                                name: 'description',
+                                placeholder: 'Enter description for this image!',
+                                title: 'Description',
+                                initialValue: null,
+                            },
+
+                            {
+                                type: 'select-sync',
+                                name: 'status',
+                                placeholder: 'Select status!',
+                                title: 'Status',
+                                initialValue: 'ACTIVE',
+                                options: getGeneralStatusOptions(),
+                                validate: (values: any) => {
+                                    if (!values.status) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                        ]}
+                    />
+                ),
+                [trip]
+            )}
+            <div className="mb-3"></div>
+            {useMemo(
+                () => (
+                    <GenericViewGenerator
+                        name={'Video'}
+                        title="Trip Video"
+                        subtitle="Manage trip videos here!"
+                        viewAll={{
+                            uri: `/api/v1/videos`,
+                            ignoredColumns: ['id', 'createdAt', 'updatedAt'],
+                            actionIdentifier: 'id',
+                            onDataModify: data =>
+                                _.map(data, datum => ({
+                                    ...datum,
+                                    trips: null,
+                                })),
+                        }}
+                        addNew={{
+                            uri: `/api/v1/videos`,
+                            buttonText: 'Add Video',
+                        }}
+                        viewOne={{ uri: '/api/v1/videos/{id}', identifier: '{id}' }}
+                        editExisting={{ uri: '/api/v1/videos/{id}', identifier: '{id}' }}
+                        removeOne={{
+                            uri: '/api/v1/videos/{id}',
+                            identifier: '{id}',
+                        }}
+                        fields={[
+                            {
+                                type: 'hidden',
+                                name: 'tripId',
+                                placeholder: '',
+                                title: '',
+                                initialValue: tripId,
+                                validate: (values: any) => {
+                                    if (!values.type) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'text',
+                                name: 'url',
+                                placeholder: 'Enter image URL for this trip!',
+                                title: 'Reasons',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.url) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'text',
+                                name: 'title',
+                                placeholder: 'Enter title for this image!',
+                                title: 'Title',
+                                initialValue: null,
+                            },
+                            {
+                                type: 'text',
+                                name: 'description',
+                                placeholder: 'Enter description for this image!',
+                                title: 'Description',
+                                initialValue: null,
+                            },
+
+                            {
+                                type: 'select-sync',
+                                name: 'status',
+                                placeholder: 'Select status!',
+                                title: 'Status',
+                                initialValue: 'ACTIVE',
+                                options: getGeneralStatusOptions(),
+                                validate: (values: any) => {
+                                    if (!values.status) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                        ]}
+                    />
+                ),
+                [trip]
+            )}
+            <div className="mb-3"></div>
         </>
     );
 };
