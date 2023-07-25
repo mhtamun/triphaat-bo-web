@@ -382,28 +382,10 @@ function GenericViewGenerator({
     const leftToolbarTemplate = () => {
         return (
             <>
-                {
-                    <Button
-                        label={addNewItemButtonText ?? 'New'}
-                        icon="pi pi-plus"
-                        severity="success"
-                        className=" mr-2"
-                        onClick={
-                            !postApiUri
-                                ? undefined
-                                : () => {
-                                      setAddFormModalOpen(true);
-                                  }
-                        }
-                    />
-                }
-                {/* <Button
-                        label="Delete"
-                        icon="pi pi-trash"
-                        severity="danger"
-                        onClick={confirmDeleteSelected}
-                        disabled={!selectedProducts || !selectedProducts.length}
-                    /> */}
+                <div>
+                    <h5 className="m-0">{title ?? ''}</h5>
+                    <p className="m-0">{subtitle ?? ''}</p>
+                </div>
             </>
         );
     };
@@ -411,14 +393,19 @@ function GenericViewGenerator({
     const rightToolbarTemplate = () => {
         return (
             <>
-                {/* <FileUpload
-                    mode="basic"
-                    accept="image/*"
-                    maxFileSize={1000000}
-                    chooseLabel="Import"
-                    className="mr-2 inline-block"
+                <Button
+                    label={addNewItemButtonText ?? 'New'}
+                    icon="pi pi-plus"
+                    severity="success"
+                    className=" mr-2"
+                    onClick={
+                        !postApiUri
+                            ? undefined
+                            : () => {
+                                  setAddFormModalOpen(true);
+                              }
+                    }
                 />
-                <Button label="Export" icon="pi pi-upload" severity="help" onClick={exportCSV} /> */}
             </>
         );
     };
@@ -429,21 +416,19 @@ function GenericViewGenerator({
                 () =>
                     !data ? null : (
                         <>
-                            <Card title={title ?? ''} subTitle={subtitle ?? ''}>
-                                {!postApiUri ? null : (
-                                    <Toolbar
-                                        className="mb-4"
-                                        left={leftToolbarTemplate}
-                                        right={rightToolbarTemplate}
-                                    ></Toolbar>
-                                )}
-                                <DataTable
-                                    data={data}
-                                    ignoredColumns={ignoredColumns}
-                                    actionIdentifier={actionIdentifier}
-                                    actions={actions}
-                                />
-                            </Card>
+                            {!postApiUri ? null : (
+                                <Toolbar
+                                    className="mb-4"
+                                    left={leftToolbarTemplate}
+                                    right={rightToolbarTemplate}
+                                ></Toolbar>
+                            )}
+                            <DataTable
+                                data={data}
+                                ignoredColumns={ignoredColumns}
+                                actionIdentifier={actionIdentifier}
+                                actions={actions}
+                            />
                         </>
                     ),
                 // eslint-disable-next-line react-hooks/exhaustive-deps
