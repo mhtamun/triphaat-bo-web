@@ -9,8 +9,8 @@ export interface IField {
     name: string;
     title: string;
     placeholder: string;
-    initialValue: string | number | null;
-    options?: { value: number | string; label: string }[];
+    initialValue: string | number | boolean | null;
+    options?: { value: boolean | number | string; label: string }[];
     isDisabled?: boolean;
     show?: boolean;
     validate?: (values: any) => string | null;
@@ -146,9 +146,9 @@ export default function GenericFormGenerator({
     // }
 
     function getField(field: IField) {
-        // console.debug({
-        //     field,
-        // });
+        console.debug({
+            field,
+        });
 
         const errorMessage: string = !formik.touched[field.name]
             ? ''
@@ -167,6 +167,7 @@ export default function GenericFormGenerator({
         )
             return (
                 <InputField
+                    key={field.name}
                     type={field.type}
                     name={field.name}
                     title={field.title}
@@ -182,6 +183,7 @@ export default function GenericFormGenerator({
         if (field.type === 'textarea')
             return (
                 <TextareaField
+                    key={field.name}
                     name={field.name}
                     title={field.title}
                     placeholder={field.placeholder}
@@ -207,19 +209,15 @@ export default function GenericFormGenerator({
                 />
             );
 
-        if (
-            field.type === 'select-sync' &&
-            !_.isUndefined(field.options) &&
-            !_.isNull(field.options) &&
-            _.size(field.options) > 0
-        )
+        if (field.type === 'select-sync')
             return (
                 <SelectSyncField
+                    key={field.name}
                     name={field.name}
                     title={field.title}
                     placeholder={field.placeholder}
                     value={formik.values[field.name] ?? ''}
-                    options={field.options}
+                    options={field.options ?? []}
                     setFieldValue={formik.setFieldValue}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}

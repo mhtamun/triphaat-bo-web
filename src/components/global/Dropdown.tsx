@@ -6,13 +6,15 @@ const SelectSyncField = (props: {
     name: string;
     title: string;
     placeholder?: string;
-    value: string;
-    options: { value: number | string; label: string }[];
+    value?: string;
+    options: { value: boolean | number | string; label: string }[];
     setFieldValue: (name: string, value: any) => void;
     isDisabled?: boolean;
     errorMessage?: string;
 }) => {
     const { name, title, placeholder, value, options, setFieldValue, isDisabled = false, errorMessage = '' } = props;
+
+    // console.debug({ name, title, placeholder, value, options });
 
     return (
         <div className="field p-fluid">
