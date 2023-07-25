@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
+import { Card } from 'primereact/card';
 import _ from 'lodash';
 
 // application
@@ -13,13 +14,13 @@ export const getServerSideProps: GetServerSideProps = async context => getAuthor
 
 const Page = () => {
     return (
-        <>
+        <Card title="Locations" subTitle="Manage locations here!">
             {useMemo(
                 () => (
                     <GenericViewGenerator
                         name={'Location'}
-                        title="Locations"
-                        subtitle="Manage locations here!"
+                        // title="Locations"
+                        // subtitle="Manage locations here!"
                         viewAll={{
                             uri: `/api/v1/locations`,
                             ignoredColumns: ['id', 'createdAt', 'updatedAt'],
@@ -96,7 +97,7 @@ const Page = () => {
                 ),
                 []
             )}
-        </>
+        </Card>
     );
 };
 

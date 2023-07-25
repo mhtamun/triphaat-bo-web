@@ -4,6 +4,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 import { PrimeIcons } from 'primereact/api';
 import _ from 'lodash';
 
@@ -17,24 +18,20 @@ const Page = () => {
     const router = useRouter();
 
     return (
-        <>
-            <div className="card">
-                <Button
-                    label={'New'}
-                    icon="pi pi-plus"
-                    severity="success"
-                    className=" mr-2"
-                    onClick={e => {
-                        router.push(`/trips/create`);
-                    }}
-                />
-            </div>
+        <Card title="Trips" subTitle="Manage trips here!">
+            <Button
+                label={'Create New Trip'}
+                icon="pi pi-plus"
+                severity="success"
+                className="mb-3"
+                onClick={e => {
+                    router.push(`/trips/create`);
+                }}
+            />
             {useMemo(
                 () => (
                     <GenericViewGenerator
                         name={'Trip'}
-                        title="Trips"
-                        subtitle="Manage trips here!"
                         viewAll={{
                             uri: `/api/v1/trips`,
                             ignoredColumns: ['id', 'smallDescription', 'bigDescription', 'createdAt', 'updatedAt'],
@@ -59,7 +56,7 @@ const Page = () => {
                 ),
                 []
             )}
-        </>
+        </Card>
     );
 };
 
