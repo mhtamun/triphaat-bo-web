@@ -289,7 +289,7 @@ const Page = () => {
                             submitButtonText="Save"
                         />
                     ),
-                    []
+                    [vendors, locations]
                 )}
             </Card>
         </>
