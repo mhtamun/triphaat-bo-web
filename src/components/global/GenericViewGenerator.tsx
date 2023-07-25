@@ -381,12 +381,10 @@ function GenericViewGenerator({
 
     const leftToolbarTemplate = () => {
         return (
-            <>
-                <div>
-                    <h5 className="m-0">{title ?? ''}</h5>
-                    <p className="m-0">{subtitle ?? ''}</p>
-                </div>
-            </>
+            <div>
+                <h5 className="m-0">{title ?? ''}</h5>
+                <p className="m-0">{subtitle ?? ''}</p>
+            </div>
         );
     };
 
