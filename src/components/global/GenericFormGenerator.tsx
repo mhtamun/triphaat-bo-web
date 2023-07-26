@@ -32,7 +32,7 @@ export default function GenericFormGenerator({
     datum?: any;
     fields: IField[];
     nonEdibleFields?: string[];
-    callback: (value: any, callback: () => void) => void;
+    callback: (values: any, resetForm?: () => void) => void;
     onValueModify?: (value: any) => void;
     submitButtonText?: string;
     resetButtonText?: string;
@@ -105,37 +105,11 @@ export default function GenericFormGenerator({
             const filteredValues = _.omit(values, [...hiddenFields, ...nonEdibleFields]);
             // console.debug({ filteredValues });
 
-            // if (!_.isUndefined(method) && !_.isNull(method) && !_.isUndefined(uri) && !_.isNull(uri)) {
-            //     let response = null;
-            //     let payload = null;
-
-            //     if (_.some(fields, (field) => field.type === 'file')) {
-            //         payload = getFormData(filteredValues);
-            //     } else {
-            //         payload = filteredValues;
-            //     }
-
-            //     if (method.toLowerCase() === 'post') response = await callPostApi(uri, payload);
-            //     else if (method.toLowerCase() === 'put') response = await callPutApi(uri, payload);
-
-            //     if (!response) {
-            //         showErrorToast('Server not found!');
-            //         return;
-            //     }
-
-            //     if (response.statusCode !== 200) {
-            //         showErrorToast(response.message);
-            //         return;
-            //     }
+            setSubmitting(false);
 
             callback(filteredValues, () => {
-                setSubmitting(false);
                 formik.resetForm();
             });
-
-            // } else {
-            //     callback(filteredValues);
-            // }
         },
     });
 

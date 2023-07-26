@@ -87,7 +87,7 @@ const Page = ({
                                             endDate: trip.endDate.split('T')[0],
                                         }}
                                         fields={getTripFields(vendors, locations)}
-                                        callback={(data, callback) => {
+                                        callback={data => {
                                             // console.debug({ data });
 
                                             callPutApi('/api/v1/trips/' + tripId, data)
@@ -97,7 +97,6 @@ const Page = ({
                                                     } else if (response.statusCode !== 200) {
                                                         // showToast('error', 'Unsuccessful!', response.message);
                                                     } else {
-                                                        // callback();
                                                         // showToast('success', 'Success!', response.message);
                                                     }
                                                 })
