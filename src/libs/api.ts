@@ -61,32 +61,43 @@ instance.interceptors.response.use(
     }
 );
 
-const getHeaders = (contentType?: string | null) => {
+const getHeaders = (authorization?: string | null, contentType?: string | null) => {
     return {
         'Content-Type': !contentType ? 'application/json' : contentType,
-        Authorization:
-            !getCookie('accessType') || !getCookie('accessToken')
+        Authorization: !authorization
+            ? !getCookie('accessType') || !getCookie('accessToken')
                 ? undefined
-                : `${getCookie('accessType')} ${getCookie('accessToken')}`,
+                : `${getCookie('accessType')} ${getCookie('accessToken')}`
+            : authorization,
     };
 };
 
-export const callPostApi = (url: string, payload: any, contentType?: string): Promise<IData> =>
+export const callPostApi = (
+    url: string,
+    payload: any,
+    authorization?: string | null,
+    contentType?: string | null
+): Promise<IData> =>
     instance.post(url, payload, {
-        headers: getHeaders(contentType),
+        headers: getHeaders(authorization, contentType),
     });
 
-export const callGetApi = (url: string): Promise<IData> =>
+export const callGetApi = (url: string, authorization?: string | null): Promise<IData> =>
     instance.get(url, {
-        headers: getHeaders(),
+        headers: getHeaders(authorization),
     });
 
-export const callPutApi = (url: string, payload: any, contentType?: string): Promise<IData> =>
+export const callPutApi = (
+    url: string,
+    payload: any,
+    authorization?: string | null,
+    contentType?: string
+): Promise<IData> =>
     instance.put(url, payload, {
-        headers: getHeaders(contentType),
+        headers: getHeaders(authorization, contentType),
     });
 
-export const callDeleteApi = (url: string): Promise<IData> =>
+export const callDeleteApi = (url: string, authorization?: string | null): Promise<IData> =>
     instance.delete(url, {
-        headers: getHeaders(),
+        headers: getHeaders(authorization),
     });

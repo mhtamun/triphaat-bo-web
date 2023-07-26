@@ -146,9 +146,9 @@ export default function GenericFormGenerator({
     // }
 
     function getField(field: IField) {
-        console.debug({
-            field,
-        });
+        // console.debug({
+        //     field,
+        // });
 
         const errorMessage: string = !formik.touched[field.name]
             ? ''
