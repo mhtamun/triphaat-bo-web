@@ -12,8 +12,9 @@ export const getPermissionTypes = () => callGetApi(apiBaseUrl + '/api/v1/permiss
 
 export const getRoles = () => callGetApi(apiBaseUrl + '/api/v1/roles');
 
-export const getVendors = () => callGetApi(apiBaseUrl + '/api/v1/vendors');
+export const getVendors = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/vendors', authorization);
 
-export const getLocations = () => callGetApi(apiBaseUrl + '/api/v1/locations');
+export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
 
-export const getTrip = (id: string) => callGetApi(apiBaseUrl + '/api/v1/trips/' + id);
+export const getTrip = (id: string, authorization: string) =>
+    callGetApi(apiBaseUrl + '/api/v1/trips/' + id, authorization);

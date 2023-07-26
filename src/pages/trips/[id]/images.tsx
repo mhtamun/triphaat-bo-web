@@ -14,41 +14,28 @@ import { getTrip } from '../../../apis';
 import { getGeneralStatusOptions } from '../../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Images | Trip Management', () => {
+    getAuthorized(context, 'Images | Trip Management', async cookies => {
         const tripId = context.query.id;
 
-        // console.debug({ roleId });
+        const responseGetTrip = await getTrip(tripId, `${cookies.accessType} ${cookies.accessToken}`);
+
+        if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
+            return {
+                redirect: {
+                    destination: '/errors/500',
+                    permanent: false,
+                },
+            };
+        }
 
         return {
             tripId,
+            trip: responseGetTrip.data,
         };
     });
 
-const Page = ({ tripId }: { tripId: string }) => {
+const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     const router = useRouter();
-
-    const [trip, setTrip] = useState(null);
-
-    useEffect(() => {
-        getTrip(tripId)
-            .then(response => {
-                if (!response) {
-                    // showToast('error', 'Unsuccessful!', 'Server not working!');
-                } else if (response.statusCode !== 200) {
-                    // showToast('error', 'Unsuccessful!', response.message);
-                } else {
-                    // showToast('success', 'Success!', response.message);
-
-                    setTrip(response.data);
-                }
-            })
-            .catch(error => {
-                console.error('error', error);
-
-                // showToast('error', 'Unsuccessful!', 'Something went wrong!');
-            })
-            .finally(() => {});
-    }, []);
 
     return (
         <>
@@ -70,16 +57,15 @@ const Page = ({ tripId }: { tripId: string }) => {
                             () => (
                                 <GenericViewGenerator
                                     name={'Image'}
-                                    title="Trip Image"
+                                    title="Trip Images"
                                     subtitle="Manage trip images here!"
                                     viewAll={{
                                         uri: `/api/v1/images`,
-                                        ignoredColumns: ['id', 'createdAt', 'updatedAt'],
+                                        ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                         actionIdentifier: 'id',
                                         onDataModify: data =>
                                             _.map(data, datum => ({
                                                 ...datum,
-                                                trips: null,
                                             })),
                                     }}
                                     addNew={{
@@ -98,9 +84,9 @@ const Page = ({ tripId }: { tripId: string }) => {
                                             name: 'tripId',
                                             placeholder: '',
                                             title: '',
-                                            initialValue: tripId,
+                                            initialValue: parseInt(tripId),
                                             validate: (values: any) => {
-                                                if (!values.type) return 'Required!';
+                                                if (!values.tripId) return 'Required!';
 
                                                 return null;
                                             },
@@ -109,7 +95,7 @@ const Page = ({ tripId }: { tripId: string }) => {
                                             type: 'text',
                                             name: 'url',
                                             placeholder: 'Enter image URL for this trip!',
-                                            title: 'Reasons',
+                                            title: 'URL',
                                             initialValue: null,
                                             validate: (values: any) => {
                                                 if (!values.url) return 'Required!';
