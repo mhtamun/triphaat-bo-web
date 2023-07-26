@@ -97,8 +97,7 @@ const Page = ({
                                                     } else if (response.statusCode !== 200) {
                                                         // showToast('error', 'Unsuccessful!', response.message);
                                                     } else {
-                                                        callback();
-
+                                                        // callback();
                                                         // showToast('success', 'Success!', response.message);
                                                     }
                                                 })

@@ -205,53 +205,33 @@ export const getTripFields = (vendors: IVendor[], locations: ILocation[]) => [
     },
 ];
 
-export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context, 'Create A Trip');
+export const getServerSideProps: GetServerSideProps = async context =>
+    getAuthorized(context, 'Create A Trip | Trip Management', async cookies => {
+        const responseGetVendors = await getVendors(`${cookies.accessType} ${cookies.accessToken}`);
+        const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
-const Page = () => {
+        if (
+            !responseGetVendors ||
+            responseGetVendors.statusCode !== 200 ||
+            !responseGetLocations ||
+            responseGetLocations.statusCode !== 200
+        ) {
+            return {
+                redirect: {
+                    destination: '/errors/500',
+                    permanent: false,
+                },
+            };
+        }
+
+        return {
+            vendors: responseGetVendors.data,
+            locations: responseGetLocations.data,
+        };
+    });
+
+const Page = ({ vendors, locations }: { vendors: IVendor[]; locations: ILocation[] }) => {
     const router = useRouter();
-
-    const [vendors, setVendors] = useState(null);
-    const [locations, setLocations] = useState(null);
-
-    useEffect(() => {
-        getVendors()
-            .then(response => {
-                if (!response) {
-                    // showToast('error', 'Unsuccessful!', 'Server not working!');
-                } else if (response.statusCode !== 200) {
-                    // showToast('error', 'Unsuccessful!', response.message);
-                } else {
-                    // showToast('success', 'Success!', response.message);
-
-                    setVendors(response.data);
-                }
-            })
-            .catch(error => {
-                console.error('error', error);
-
-                // showToast('error', 'Unsuccessful!', 'Something went wrong!');
-            })
-            .finally(() => {});
-
-        getLocations()
-            .then(response => {
-                if (!response) {
-                    // showToast('error', 'Unsuccessful!', 'Server not working!');
-                } else if (response.statusCode !== 200) {
-                    // showToast('error', 'Unsuccessful!', response.message);
-                } else {
-                    // showToast('success', 'Success!', response.message);
-
-                    setLocations(response.data);
-                }
-            })
-            .catch(error => {
-                console.error('error', error);
-
-                // showToast('error', 'Unsuccessful!', 'Something went wrong!');
-            })
-            .finally(() => {});
-    }, []);
 
     return (
         <>
