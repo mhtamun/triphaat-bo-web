@@ -22,8 +22,8 @@ export interface IVendor {
 
 export interface ILocation {
     name: string;
-    city: string;
-    state: string;
+    city?: string;
+    state?: string;
     country: string;
 }
 
@@ -76,7 +76,7 @@ export const getTripFields = (vendors: IVendor[], locations: ILocation[]) => [
         initialValue: null,
         options: _.map(locations, (location: ILocation) => ({
             value: location.name,
-            label: location.name + ' ' + location.city + ' ' + location.state + ' ' + location.country,
+            label: `${location.name}, ${!location.city ? '' : ','} ${!location.state ? '' : ','} ${location.country}`,
         })),
         validate: (values: any) => {
             if (!values.locationName) return 'Required!';
@@ -241,7 +241,7 @@ const Page = ({ vendors, locations }: { vendors: IVendor[]; locations: ILocation
                         !vendors || _.size(vendors) === 0 || !locations || _.size(locations) === 0 ? null : (
                             <GenericFormGenerator
                                 fields={getTripFields(vendors, locations)}
-                                callback={(data, callback) => {
+                                callback={(data, resetForm) => {
                                     // console.debug({ data });
 
                                     callPostApi('/api/v1/trips', data)
@@ -251,7 +251,7 @@ const Page = ({ vendors, locations }: { vendors: IVendor[]; locations: ILocation
                                             } else if (response.statusCode !== 200) {
                                                 // showToast('error', 'Unsuccessful!', response.message);
                                             } else {
-                                                callback();
+                                                resetForm();
 
                                                 // showToast('success', 'Success!', response.message);
 

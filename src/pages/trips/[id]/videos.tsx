@@ -62,7 +62,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     title="Trip Videos"
                                     subtitle="Manage trip videos here!"
                                     viewAll={{
-                                        uri: `/api/v1/videos`,
+                                        uri: `/api/v1/trips/${tripId}/videos`,
                                         ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                         actionIdentifier: 'id',
                                         onDataModify: data =>

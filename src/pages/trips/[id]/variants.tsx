@@ -59,7 +59,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     title="Trip Variants"
                                     subtitle="Manage trip variants here!"
                                     viewAll={{
-                                        uri: `/api/v1/variants`,
+                                        uri: `/api/v1/trips/${tripId}/variants`,
                                         ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                         actionIdentifier: 'id',
                                         onDataModify: data =>
