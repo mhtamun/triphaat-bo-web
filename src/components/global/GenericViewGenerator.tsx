@@ -159,7 +159,7 @@ const AddNewItemComponent = ({
             <GenericFormGenerator
                 fields={fields}
                 nonEdibleFields={nonEdibleFields}
-                callback={(data, callback) => {
+                callback={(data, resetForm) => {
                     // console.debug({ data });
 
                     callPostApi(postApiUri, data)
@@ -169,7 +169,7 @@ const AddNewItemComponent = ({
                             } else if (response.statusCode !== 200) {
                                 showToast('error', 'Unsuccessful!', response.message);
                             } else {
-                                callback();
+                                resetForm();
 
                                 setFormModalOpen(false);
 

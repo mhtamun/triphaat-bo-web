@@ -16,7 +16,7 @@ instance.interceptors.request.use(
     function (config) {
         // Do something before request is sent
 
-        console.debug('request', config);
+        // console.debug('request', config);
 
         return config;
     },
@@ -41,7 +41,7 @@ instance.interceptors.response.use(
         // Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
 
-        console.debug('response', response);
+        console.debug('response -> data', response.data);
 
         return response.data;
     },
@@ -55,7 +55,7 @@ instance.interceptors.response.use(
 
         if (!error.response.data) return null;
 
-        console.error('response', error.response);
+        console.error('response -> data', error.response.data);
 
         return error.response.data;
     }

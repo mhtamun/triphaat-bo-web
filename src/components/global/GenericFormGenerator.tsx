@@ -32,7 +32,7 @@ export default function GenericFormGenerator({
     datum?: any;
     fields: IField[];
     nonEdibleFields?: string[];
-    callback: (values: any, resetForm?: () => void) => void;
+    callback: (values: any, resetForm: () => void) => void;
     onValueModify?: (value: any) => void;
     submitButtonText?: string;
     resetButtonText?: string;
