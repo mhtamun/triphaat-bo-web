@@ -4,7 +4,11 @@ import { Demo } from './demo';
 import { Toast } from 'primereact/toast';
 
 /* Next & Layout Types */
-type Page<P = {}> = NextPage<P> & {
+type Page<
+    P = {
+        isVendor?: boolean;
+    }
+> = NextPage<P> & {
     getLayout?: (page: ReactElement) => ReactNode;
 };
 

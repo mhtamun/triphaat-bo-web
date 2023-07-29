@@ -19,7 +19,7 @@ export default function MyApp({ Component, pageProps }: Props) {
     } else {
         return (
             <LayoutProvider>
-                <Layout title={pageProps.title ?? ''}>
+                <Layout title={pageProps.title ?? ''} isVendor={pageProps.isVendor}>
                     <Component {...pageProps} />
                 </Layout>
             </LayoutProvider>

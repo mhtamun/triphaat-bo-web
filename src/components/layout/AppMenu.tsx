@@ -5,48 +5,52 @@ import AppMenuitem from './AppMenuitem';
 import { MenuProvider } from './context/menucontext';
 import { AppMenuItem } from '../../types/types';
 
-const AppMenu = () => {
-    const model: AppMenuItem[] = [
-        {
-            label: 'Menu',
-            items: [
-                { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' },
-                {
-                    icon: 'pi pi-fw pi-user',
-                    label: 'User Management',
-                    items: [
-                        {
-                            label: 'Roles',
-                            to: '/roles',
-                        },
-                        {
-                            label: 'Users',
-                            to: '/users',
-                        },
-                    ],
-                },
-                {
-                    icon: 'pi pi-fw pi-th-large',
-                    label: 'Vendor Management',
-                    to: '/vendors',
-                },
-                {
-                    icon: 'pi pi-fw pi-image',
-                    label: 'Trip Management',
-                    items: [
-                        {
-                            label: 'Locations',
-                            to: '/trips/locations',
-                        },
-                        {
-                            label: 'Trips',
-                            to: '/trips',
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
+const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
+    let model: AppMenuItem[] = [];
+    if (!isVendor) {
+        model = [
+            {
+                label: 'Menu',
+                items: [
+                    { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' },
+                    {
+                        icon: 'pi pi-fw pi-user',
+                        label: 'User Management',
+                        items: [
+                            {
+                                label: 'Roles',
+                                to: '/roles',
+                            },
+                            {
+                                label: 'Users',
+                                to: '/users',
+                            },
+                        ],
+                    },
+                    {
+                        icon: 'pi pi-fw pi-th-large',
+                        label: 'Vendor Management',
+                        to: '/vendors',
+                    },
+                    {
+                        icon: 'pi pi-fw pi-image',
+                        label: 'Trip Management',
+                        items: [
+                            {
+                                label: 'Locations',
+                                to: '/trips/locations',
+                            },
+                            {
+                                label: 'Trips',
+                                to: '/trips',
+                            },
+                        ],
+                    },
+                ],
+            },
+        ];
+    } else {
+    }
 
     return (
         <MenuProvider>

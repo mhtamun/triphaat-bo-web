@@ -13,7 +13,7 @@ import { LayoutContext } from './context/layoutcontext';
 import PrimeReact from 'primereact/api';
 import { ChildContainerProps, LayoutState, AppTopbarRef } from '../../types/types';
 
-const Layout = ({ title, children }: ChildContainerProps) => {
+const Layout = ({ title, isVendor, children }: ChildContainerProps) => {
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
     const topbarRef = useRef<AppTopbarRef>(null);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -134,7 +134,7 @@ const Layout = ({ title, children }: ChildContainerProps) => {
             <div className={containerClass}>
                 <AppTopbar ref={topbarRef} />
                 <div ref={sidebarRef} className="layout-sidebar">
-                    <AppSidebar />
+                    <AppSidebar isVendor={isVendor} />
                 </div>
                 <div className="layout-main-container">
                     <div className="layout-main">{children}</div>
