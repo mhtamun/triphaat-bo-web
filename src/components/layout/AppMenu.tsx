@@ -7,49 +7,63 @@ import { AppMenuItem } from '../../types/types';
 
 const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
     let model: AppMenuItem[] = [];
+
+    const triphaatAdminMenuModel = [
+        {
+            label: 'Menu',
+            items: [
+                { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' },
+                {
+                    icon: 'pi pi-fw pi-user',
+                    label: 'User Management',
+                    items: [
+                        {
+                            label: 'Roles',
+                            to: '/roles',
+                        },
+                        {
+                            label: 'Users',
+                            to: '/users',
+                        },
+                    ],
+                },
+                {
+                    icon: 'pi pi-fw pi-th-large',
+                    label: 'Vendor Management',
+                    to: '/vendors',
+                },
+                {
+                    icon: 'pi pi-fw pi-image',
+                    label: 'Trip Management',
+                    items: [
+                        {
+                            label: 'Locations',
+                            to: '/trips/locations',
+                        },
+                        {
+                            label: 'Trips',
+                            to: '/trips',
+                        },
+                    ],
+                },
+            ],
+        },
+    ];
+
+    const vendorAdminMenuModel = [
+        {
+            label: 'Menu',
+            items: [{ icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' }],
+        },
+    ];
+
+    // const userType = JSON.parse(getCookie('user')).type;
+    // console.debug({ userType });
+
     if (!isVendor) {
-        model = [
-            {
-                label: 'Menu',
-                items: [
-                    { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' },
-                    {
-                        icon: 'pi pi-fw pi-user',
-                        label: 'User Management',
-                        items: [
-                            {
-                                label: 'Roles',
-                                to: '/roles',
-                            },
-                            {
-                                label: 'Users',
-                                to: '/users',
-                            },
-                        ],
-                    },
-                    {
-                        icon: 'pi pi-fw pi-th-large',
-                        label: 'Vendor Management',
-                        to: '/vendors',
-                    },
-                    {
-                        icon: 'pi pi-fw pi-image',
-                        label: 'Trip Management',
-                        items: [
-                            {
-                                label: 'Locations',
-                                to: '/trips/locations',
-                            },
-                            {
-                                label: 'Trips',
-                                to: '/trips',
-                            },
-                        ],
-                    },
-                ],
-            },
-        ];
+        model = triphaatAdminMenuModel;
     } else {
+        model = vendorAdminMenuModel;
     }
 
     return (

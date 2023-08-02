@@ -9,11 +9,11 @@ import { Checkbox } from 'primereact/checkbox';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 // application libraries
-import AppConfig from '../../../components/layout/AppConfig';
-import { LayoutContext } from '../../../components/layout/context/layoutcontext';
-import { Page } from '../../../types/types';
-import { login } from '../../../apis/';
-import { createLogin } from '../../../libs/auth';
+import AppConfig from '../../../../components/layout/AppConfig';
+import { LayoutContext } from '../../../../components/layout/context/layoutcontext';
+import { Page } from '../../../../types/types';
+import { vendorLogin } from '../../../../apis/';
+import { createLogin } from '../../../../libs/auth';
 // third party libraries
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -40,7 +40,7 @@ const LoginPage: Page = () => {
         enableReinitialize: false,
 
         initialValues: {
-            email: 'maruf@tripociate.com',
+            email: 'vendor@triphaat.com',
             password: 'soLTVf9390l5JLgh',
             checked: false,
         },
@@ -53,7 +53,7 @@ const LoginPage: Page = () => {
         onSubmit: (values, { setSubmitting }) => {
             setSubmitting(true);
 
-            login({ email: values.email, password: values.password, type: 'TRIPHAAT_ADMIN' })
+            vendorLogin({ email: values.email, password: values.password, type: 'VENDOR_ADMIN' })
                 .then(response => {
                     if (!response) {
                         showToast('error', 'Unsuccessful!', 'Server not working!');
@@ -62,9 +62,14 @@ const LoginPage: Page = () => {
                     } else {
                         showToast('success', 'Success!', response.message);
 
-                        createLogin(response.data.user, response.data.access_type, response.data.access_token);
+                        createLogin(
+                            response.data.user,
+                            response.data.access_type,
+                            response.data.access_token,
+                            response.data.vendor
+                        );
 
-                        router.push('/');
+                        router.push('/v/');
                     }
                 })
                 .catch(error => {
@@ -93,6 +98,11 @@ const LoginPage: Page = () => {
                         style={{ borderRadius: '53px' }}
                         onSubmit={formik.handleSubmit}
                     >
+                        <div className="text-center mb-5">
+                            <div className="text-900 text-3xl font-medium mb-3">Welcome, Vendor!</div>
+                            <span className="text-600 font-medium">Sign in to continue</span>
+                        </div>
+
                         <div>
                             <label htmlFor="email" className="block text-900 text-xl font-medium mb-2">
                                 Email
@@ -135,7 +145,7 @@ const LoginPage: Page = () => {
                                     className="font-medium no-underline ml-2 text-right cursor-pointer"
                                     style={{ color: 'var(--primary-color)' }}
                                     onClick={() => {
-                                        router.push('/reset-password');
+                                        router.push('/v/reset-password');
                                     }}
                                 >
                                     Forgot password?
@@ -150,10 +160,10 @@ const LoginPage: Page = () => {
                                 onClick={e => {
                                     e.preventDefault();
 
-                                    router.push('/v/auth/login');
+                                    router.push('/auth/login');
                                 }}
                             >
-                                Vendor Admin Login
+                                TripHaat Admin Login
                             </Button>
                         </div>
                     </form>

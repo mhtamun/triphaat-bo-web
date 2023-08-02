@@ -4,18 +4,24 @@ import { GetServerSidePropsContext } from 'next';
 // application
 import { getCookie, setCookie, removeCookie, parseCookie, ICookie } from './cookie';
 
-export const getUser = () => getCookie('user');
-export const setUser = (value: string) => setCookie('user', value);
+export const getUser = () => JSON.parse(getCookie('user'));
+export const setUser = (value: string) => setCookie('user', JSON.stringify(value));
+export const getVendor = () => JSON.parse(getCookie('vendor'));
+export const setVendor = (value: string) => setCookie('vendor', JSON.stringify(value));
 export const getAccessType = () => getCookie('accessType');
 export const setAccessType = (value: string) => setCookie('accessType', value);
 export const getAccessToken = () => getCookie('accessToken');
 export const setAccessToken = (value: string) => setCookie('accessToken', value);
 
-export const createLogin = (user: any, accessType: string, accessToken: string): boolean => {
+export const createLogin = (user: any, accessType: string, accessToken: string, vendor?: any): boolean => {
     try {
         setUser(user);
         setAccessType(accessType);
         setAccessToken(accessToken);
+
+        if (vendor) {
+            setVendor(vendor);
+        }
 
         return true;
     } catch (error) {
@@ -34,6 +40,7 @@ export const isLoggedIn = () => {
 export const destroyLogin = (): boolean => {
     try {
         removeCookie('user');
+        removeCookie('vendor');
         removeCookie('accessType');
         removeCookie('accessToken');
 
@@ -63,10 +70,32 @@ export const getAuthorized = async (
     const { req } = context;
     const cookies = getServerSideCookie(req);
 
-    if (!req.url?.includes('/auth/login') && (!cookies?.user || !cookies?.accessType || !cookies?.accessToken)) {
+    if (
+        (!req.url?.includes('/auth/login') && (!cookies?.user || !cookies.accessType || !cookies.accessToken)) ||
+        (!req.url?.includes('/v/auth/login') &&
+            (!cookies?.user || !cookies.vendor || !cookies.accessType || !cookies.accessToken))
+    ) {
         return {
             redirect: {
-                destination: '/auth/login',
+                destination: !req.url?.includes('/v') ? '/auth/login' : '/v/auth/login',
+                permanent: false,
+            },
+        };
+    }
+
+    const user = JSON.parse(cookies?.user);
+
+    if (!req.url?.includes('/v') && user.type === 'VENDOR_ADMIN') {
+        return {
+            redirect: {
+                destination: '/v/',
+                permanent: false,
+            },
+        };
+    } else if (req.url?.includes('/v') && user.type === 'TRIPHAAT_ADMIN') {
+        return {
+            redirect: {
+                destination: '/',
                 permanent: false,
             },
         };

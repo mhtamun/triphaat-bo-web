@@ -25,7 +25,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
         topbarmenubutton: topbarmenubuttonRef.current,
     }));
 
-    const toggleMenu: React.MouseEventHandler<HTMLButtonElement> | undefined = (event) => {
+    const toggleMenu: React.MouseEventHandler<HTMLButtonElement> | undefined = event => {
         menu.current?.toggle(event);
     };
 
@@ -81,7 +81,12 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                             command: () => {
                                 const success = destroyLogin();
 
-                                if (success) router.push('/');
+                                // console.debug(router.pathname);
+
+                                if (success) {
+                                    if (router.pathname.includes('/v')) router.push('/v');
+                                    else router.push('/');
+                                }
                             },
                         },
                     ]}
