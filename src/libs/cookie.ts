@@ -3,6 +3,7 @@ import cookie from 'cookie';
 
 export interface ICookie {
     user: any;
+    vendor?: any;
     accessType: string;
     accessToken: string;
 }

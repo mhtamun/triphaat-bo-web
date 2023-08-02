@@ -6,7 +6,9 @@ import { MenuProvider } from './context/menucontext';
 import { AppMenuItem } from '../../types/types';
 
 const AppMenu = () => {
-    const model: AppMenuItem[] = [
+    let model: AppMenuItem[] = [];
+
+    const triphaatAdminMenuModel = [
         {
             label: 'Menu',
             items: [
@@ -47,6 +49,22 @@ const AppMenu = () => {
             ],
         },
     ];
+
+    const vendorAdminMenuModel = [
+        {
+            label: 'Menu',
+            items: [{ icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' }],
+        },
+    ];
+
+    // const userType = JSON.parse(getCookie('user')).type;
+    // console.debug({ userType });
+
+    // if (userType === 'TRIPHAAT_ADMIN') {
+    //     model = triphaatAdminMenuModel;
+    // } else if (userType === 'VENDOR_ADMIN') {
+    //     model = vendorAdminMenuModel;
+    // }
 
     return (
         <MenuProvider>
