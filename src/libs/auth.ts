@@ -14,6 +14,8 @@ export const getAccessToken = () => getCookie('accessToken');
 export const setAccessToken = (value: string) => setCookie('accessToken', value);
 
 export const createLogin = (user: any, accessType: string, accessToken: string, vendor?: any): boolean => {
+    console.debug('I am creating');
+
     try {
         setUser(user);
         setAccessType(accessType);
@@ -70,11 +72,7 @@ export const getAuthorized = async (
     const { req } = context;
     const cookies = getServerSideCookie(req);
 
-    if (
-        (!req.url?.includes('/auth/login') && (!cookies?.user || !cookies.accessType || !cookies.accessToken)) ||
-        (!req.url?.includes('/v/auth/login') &&
-            (!cookies?.user || !cookies.vendor || !cookies.accessType || !cookies.accessToken))
-    ) {
+    if (!req.url?.includes('/auth/login') && (!cookies?.user || !cookies.accessType || !cookies.accessToken)) {
         return {
             redirect: {
                 destination: !req.url?.includes('/v') ? '/auth/login' : '/v/auth/login',
@@ -85,21 +83,21 @@ export const getAuthorized = async (
 
     const user = JSON.parse(cookies?.user);
 
-    if (!req.url?.includes('/v') && user.type === 'VENDOR_ADMIN') {
-        return {
-            redirect: {
-                destination: '/v/',
-                permanent: false,
-            },
-        };
-    } else if (req.url?.includes('/v') && user.type === 'TRIPHAAT_ADMIN') {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
-    }
+    // if (!req.url?.includes('/v/') && user.type === 'VENDOR_ADMIN') {
+    //     return {
+    //         redirect: {
+    //             destination: '/v/',
+    //             permanent: false,
+    //         },
+    //     };
+    // } else if (req.url?.includes('/v/') && user.type === 'TRIPHAAT_ADMIN') {
+    //     return {
+    //         redirect: {
+    //             destination: '/',
+    //             permanent: false,
+    //         },
+    //     };
+    // }
 
     let props = null;
 
