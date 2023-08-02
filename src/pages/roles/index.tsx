@@ -65,18 +65,6 @@ const Page = () => {
                                     return null;
                                 },
                             },
-                            {
-                                type: 'hidden',
-                                name: 'type',
-                                placeholder: '',
-                                title: '',
-                                initialValue: 'ADMIN',
-                                validate: (values: any) => {
-                                    if (!values.type) return 'Name required!';
-
-                                    return null;
-                                },
-                            },
                         ]}
                     />
                 ),

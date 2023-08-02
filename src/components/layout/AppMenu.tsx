@@ -53,7 +53,10 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
     const vendorAdminMenuModel = [
         {
             label: 'Menu',
-            items: [{ icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' }],
+            items: [
+                { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' },
+                { icon: 'pi pi-fw pi-user', label: 'User Management', to: '/v/users' },
+            ],
         },
     ];
 
