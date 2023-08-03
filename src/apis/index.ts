@@ -16,8 +16,13 @@ export const getVendors = (authorization: string) => callGetApi(apiBaseUrl + '/a
 
 export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
 
+export const getLocationsForVendor = () => callGetApi(apiBaseUrl + '/public/api/v1/locations');
+
 export const getTrip = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/api/v1/trips/' + id, authorization);
+
+export const getTripForVendor = (id: string, authorization: string) =>
+    callGetApi(apiBaseUrl + '/vendor/api/v1/trips/' + id, authorization);
 
 export const vendorLogin = (payload: { email: string; password: string; type: string }) =>
     callPostApi(apiBaseUrl + '/vendor/api/v1/auth/sign-in', payload);

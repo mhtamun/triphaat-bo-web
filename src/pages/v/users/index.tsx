@@ -5,36 +5,23 @@ import { GetServerSideProps } from 'next';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../libs/auth';
-import GenericViewGenerator from '../../components/global/GenericViewGenerator';
-import { getRoles } from '../../apis';
+import { getAuthorized } from '../../../libs/auth';
+import GenericViewGenerator from '../../../components/global/GenericViewGenerator';
 
-export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context, 'User Management');
+export const roles = [
+    { value: 2, label: 'Super Admin' },
+    { value: 3, label: 'Admin' },
+    { value: 4, label: 'Trip Manager' },
+];
+
+export const getServerSideProps: GetServerSideProps = async context =>
+    getAuthorized(context, 'User Management', () => {
+        return {
+            isVendor: true,
+        };
+    });
 
 const Page = () => {
-    const [roles, setRoles] = useState(null);
-
-    useEffect(() => {
-        getRoles()
-            .then(response => {
-                if (!response) {
-                    // showToast('error', 'Unsuccessful!', 'Server not working!');
-                } else if (response.statusCode !== 200) {
-                    // showToast('error', 'Unsuccessful!', response.message);
-                } else {
-                    // showToast('success', 'Success!', response.message);
-
-                    setRoles(response.data);
-                }
-            })
-            .catch(error => {
-                console.error('error', error);
-
-                // showToast('error', 'Unsuccessful!', 'Something went wrong!');
-            })
-            .finally(() => {});
-    }, []);
-
     const fields = [
         {
             type: 'text',
@@ -77,7 +64,7 @@ const Page = () => {
             name: 'type',
             placeholder: '',
             title: '',
-            initialValue: 'TRIPHAAT_ADMIN',
+            initialValue: 'VENDOR_ADMIN',
             validate: (values: any) => {
                 if (!values.type) return 'Required!';
 
@@ -90,10 +77,7 @@ const Page = () => {
             placeholder: 'Select a role!',
             title: 'Role',
             initialValue: null,
-            options: _.map(roles, (role: { id: number; name: string }) => ({
-                value: role.id,
-                label: role.name,
-            })),
+            options: roles,
             validate: (values: any) => {
                 if (!values.roleId) return 'Required!';
 
@@ -137,7 +121,7 @@ const Page = () => {
                         title="Users"
                         subtitle="Manage user here!"
                         viewAll={{
-                            uri: `/api/v1/users`,
+                            uri: `/vendor/api/v1/users`,
                             ignoredColumns: [
                                 'id',
                                 'password',
@@ -156,12 +140,12 @@ const Page = () => {
                                 })),
                         }}
                         addNew={{
-                            uri: `/api/v1/users`,
+                            uri: `/vendor/api/v1/users`,
                         }}
-                        viewOne={{ uri: '/api/v1/users/{id}', identifier: '{id}' }}
-                        editExisting={{ uri: '/api/v1/users/{id}', identifier: '{id}' }}
+                        viewOne={{ uri: '/vendor/api/v1/users/{id}', identifier: '{id}' }}
+                        editExisting={{ uri: '/vendor/api/v1/users/{id}', identifier: '{id}' }}
                         removeOne={{
-                            uri: '/api/v1/users/{id}',
+                            uri: '/vendor/api/v1/users/{id}',
                             identifier: '{id}',
                         }}
                         fields={fields}
