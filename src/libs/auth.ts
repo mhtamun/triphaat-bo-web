@@ -70,10 +70,16 @@ export const getAuthorized = async (
     const { req } = context;
     const cookies = getServerSideCookie(req);
 
-    if (!req.url?.includes('/auth/login') && (!cookies?.user || !cookies.accessType || !cookies.accessToken)) {
+    // console.debug({ url: req.url });
+
+    if (
+        req.url !== '/auth/login' &&
+        req.url !== '/v/auth/login' &&
+        (!cookies?.user || !cookies.accessType || !cookies.accessToken)
+    ) {
         return {
             redirect: {
-                destination: !req.url?.includes('/v') ? '/auth/login' : '/v/auth/login',
+                destination: req.url === '/v' || req.url?.includes('/v/') ? '/v/auth/login' : '/auth/login',
                 permanent: false,
             },
         };
@@ -81,21 +87,23 @@ export const getAuthorized = async (
 
     const user = JSON.parse(cookies?.user);
 
-    // if (!req.url?.includes('/v/') && user.type === 'VENDOR_ADMIN') {
-    //     return {
-    //         redirect: {
-    //             destination: '/v/',
-    //             permanent: false,
-    //         },
-    //     };
-    // } else if (req.url?.includes('/v/') && user.type === 'TRIPHAAT_ADMIN') {
-    //     return {
-    //         redirect: {
-    //             destination: '/',
-    //             permanent: false,
-    //         },
-    //     };
-    // }
+    if (user.type === 'TRIPHAAT_ADMIN' && (req.url === '/v' || req.url?.includes('/v/'))) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+
+    if (user.type === 'VENDOR_ADMIN' && req.url !== '/v' && !req.url?.includes('/v/')) {
+        return {
+            redirect: {
+                destination: '/v/',
+                permanent: false,
+            },
+        };
+    }
 
     let props = null;
 

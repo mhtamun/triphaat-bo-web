@@ -54,7 +54,7 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
         {
             label: 'Menu',
             items: [
-                { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' },
+                { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/v' },
                 { icon: 'pi pi-fw pi-user', label: 'User Management', to: '/v/users' },
                 { icon: 'pi pi-fw pi-image', label: 'Trip Management', to: '/v/trips' },
             ],

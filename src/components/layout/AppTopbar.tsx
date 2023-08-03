@@ -81,11 +81,14 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                             command: () => {
                                 const success = destroyLogin();
 
-                                // console.debug(router.pathname);
+                                console.debug(router.pathname);
 
                                 if (success) {
-                                    if (router.pathname.includes('/v')) router.push('/v');
-                                    else router.push('/');
+                                    if (router.pathname.includes('/v/') || router.pathname === '/v') {
+                                        router.push('/v/auth/login');
+                                    } else {
+                                        router.push('/auth/login');
+                                    }
                                 }
                             },
                         },
