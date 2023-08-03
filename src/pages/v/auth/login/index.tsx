@@ -62,14 +62,14 @@ const LoginPage: Page = () => {
                     } else {
                         showToast('success', 'Success!', response.message);
 
-                        createLogin(
+                        const success = createLogin(
                             response.data.user,
                             response.data.access_type,
                             response.data.access_token,
                             response.data.vendor
                         );
 
-                        router.push('/v/');
+                        if (success) router.replace('/v/');
                     }
                 })
                 .catch(error => {

@@ -70,13 +70,9 @@ export const getAuthorized = async (
     const { req } = context;
     const cookies = getServerSideCookie(req);
 
-    // console.debug({ url: req.url });
+    // console.debug({ why: 'I am here?' });
 
-    if (
-        req.url !== '/auth/login' &&
-        req.url !== '/v/auth/login' &&
-        (!cookies?.user || !cookies.accessType || !cookies.accessToken)
-    ) {
+    if (!cookies?.user || !cookies?.accessType || !cookies?.accessToken) {
         return {
             redirect: {
                 destination: req.url === '/v' || req.url?.includes('/v/') ? '/v/auth/login' : '/auth/login',
@@ -87,23 +83,7 @@ export const getAuthorized = async (
 
     const user = JSON.parse(cookies?.user);
 
-    if (user.type === 'TRIPHAAT_ADMIN' && (req.url === '/v' || req.url?.includes('/v/'))) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
-    }
-
-    if (user.type === 'VENDOR_ADMIN' && req.url !== '/v' && !req.url?.includes('/v/')) {
-        return {
-            redirect: {
-                destination: '/v/',
-                permanent: false,
-            },
-        };
-    }
+    // todo: check if different user type trying to access different pages from different users
 
     let props = null;
 
