@@ -53,11 +53,11 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
                 <TabView
                     activeIndex={0}
                     onTabChange={e => {
-                        if (e.index === 0) router.push(`/v/trips/${tripId}`);
-                        if (e.index === 1) router.push(`/v/trips/${tripId}/variants`);
-                        if (e.index === 2) router.push(`/v/trips/${tripId}/images`);
-                        if (e.index === 3) router.push(`/v/trips/${tripId}/videos`);
-                        if (e.index === 4) router.push(`/v/trips/${tripId}/tags`);
+                        if (e.index === 0) router.push(`/v-p/trips/${tripId}`);
+                        if (e.index === 1) router.push(`/v-p/trips/${tripId}/variants`);
+                        if (e.index === 2) router.push(`/v-p/trips/${tripId}/images`);
+                        if (e.index === 3) router.push(`/v-p/trips/${tripId}/videos`);
+                        if (e.index === 4) router.push(`/v-p/trips/${tripId}/tags`);
                     }}
                 >
                     <TabPanel header="Details">

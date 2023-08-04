@@ -84,8 +84,8 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                                 console.debug(router.pathname);
 
                                 if (success) {
-                                    if (router.pathname.includes('/v/') || router.pathname === '/v') {
-                                        router.push('/v/auth/login');
+                                    if (router.pathname.includes('/v-p/') || router.pathname === '/v-p') {
+                                        router.push('/v-p/auth/login');
                                     } else {
                                         router.push('/auth/login');
                                     }

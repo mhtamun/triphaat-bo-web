@@ -30,7 +30,7 @@ const Page = () => {
                 severity="success"
                 className="mb-3"
                 onClick={e => {
-                    router.push(`/v/trips/create`);
+                    router.push(`/v-p/trips/create`);
                 }}
             />
             {useMemo(
@@ -53,7 +53,7 @@ const Page = () => {
                                 icon: PrimeIcons.ARROW_RIGHT,
                                 text: 'Detail',
                                 callback: identifier => {
-                                    router.push(`/v/trips/${identifier}`);
+                                    router.push(`/v-p/trips/${identifier}`);
                                 },
                             },
                         ]}

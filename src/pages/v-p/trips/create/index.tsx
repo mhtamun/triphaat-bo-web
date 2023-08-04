@@ -222,7 +222,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
 
                                                 // showToast('success', 'Success!', response.message);
 
-                                                router.push(`/v/trips/${response.data.id}`);
+                                                router.push(`/v-p/trips/${response.data.id}`);
                                             }
                                         })
                                         .catch(error => {

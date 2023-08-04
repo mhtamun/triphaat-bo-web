@@ -14,7 +14,7 @@ import { getTripForVendor } from '../../../../apis';
 import { getGeneralStatusOptions } from '../../../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Images | Trip Management', async cookies => {
+    getAuthorized(context, 'Variants | Trip Management', async cookies => {
         const tripId = context.query.id;
 
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
@@ -29,6 +29,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         }
 
         return {
+            isVendor: true,
             tripId,
             trip: responseGetTrip.data,
         };
@@ -39,28 +40,27 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
 
     return (
         <>
-            <Card title={trip?.name}>
+            <Card title={trip?.name} className="mb-3">
                 <TabView
-                    activeIndex={2}
+                    activeIndex={1}
                     onTabChange={e => {
-                        if (e.index === 0) router.push(`/v/trips/${tripId}`);
-                        if (e.index === 1) router.push(`/v/trips/${tripId}/variants`);
-                        if (e.index === 2) router.push(`/v/trips/${tripId}/images`);
-                        if (e.index === 3) router.push(`/v/trips/${tripId}/videos`);
-                        if (e.index === 4) router.push(`/v/trips/${tripId}/tags`);
+                        if (e.index === 0) router.push(`/v-p/trips/${tripId}`);
+                        if (e.index === 1) router.push(`/v-p/trips/${tripId}/variants`);
+                        if (e.index === 2) router.push(`/v-p/trips/${tripId}/images`);
+                        if (e.index === 3) router.push(`/v-p/trips/${tripId}/videos`);
+                        if (e.index === 4) router.push(`/v-p/trips/${tripId}/tags`);
                     }}
                 >
                     <TabPanel header="Details"></TabPanel>
-                    <TabPanel header="Variants"></TabPanel>
-                    <TabPanel header="Images">
+                    <TabPanel header="Variants">
                         {useMemo(
                             () => (
                                 <GenericViewGenerator
-                                    name={'Image'}
-                                    title="Trip Images"
-                                    subtitle="Manage trip images here!"
+                                    name={'Variant'}
+                                    title="Trip Variants"
+                                    subtitle="Manage trip variants here!"
                                     viewAll={{
-                                        uri: `/api/v1/trips/${tripId}/images`,
+                                        uri: `/api/v1/trips/${tripId}/variants`,
                                         ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                         actionIdentifier: 'id',
                                         onDataModify: data =>
@@ -69,13 +69,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             })),
                                     }}
                                     addNew={{
-                                        uri: `/api/v1/images`,
-                                        buttonText: 'Add Image',
+                                        uri: `/api/v1/variants`,
+                                        buttonText: 'Add Variant',
                                     }}
-                                    viewOne={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
-                                    editExisting={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+                                    viewOne={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
+                                    editExisting={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
                                     removeOne={{
-                                        uri: '/api/v1/images/{id}',
+                                        uri: '/api/v1/variants/{id}',
                                         identifier: '{id}',
                                     }}
                                     fields={[
@@ -93,31 +93,47 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         },
                                         {
                                             type: 'text',
-                                            name: 'url',
-                                            placeholder: 'Enter image URL for this trip!',
-                                            title: 'URL',
+                                            name: 'reasons',
+                                            placeholder: 'Enter reasons for this variant!',
+                                            title: 'Reasons',
                                             initialValue: null,
                                             validate: (values: any) => {
-                                                if (!values.url) return 'Required!';
+                                                if (!values.reasons) return 'Required!';
 
                                                 return null;
                                             },
                                         },
                                         {
-                                            type: 'text',
-                                            name: 'title',
-                                            placeholder: 'Enter title for this image!',
-                                            title: 'Title',
+                                            type: 'number',
+                                            name: 'costPrice',
+                                            placeholder: 'Enter cost price!',
+                                            title: 'Cost Price',
                                             initialValue: null,
+                                            validate: (values: any) => {
+                                                if (!values.costPrice) return 'Required!';
+
+                                                return null;
+                                            },
                                         },
                                         {
-                                            type: 'text',
-                                            name: 'description',
-                                            placeholder: 'Enter description for this image!',
-                                            title: 'Description',
+                                            type: 'number',
+                                            name: 'price',
+                                            placeholder: 'Enter price!',
+                                            title: 'Price',
+                                            initialValue: null,
+                                            validate: (values: any) => {
+                                                if (!values.price) return 'Required!';
+
+                                                return null;
+                                            },
+                                        },
+                                        {
+                                            type: 'number',
+                                            name: 'offerPrice',
+                                            placeholder: 'Enter offer price!',
+                                            title: 'Offer Price',
                                             initialValue: null,
                                         },
-
                                         {
                                             type: 'select-sync',
                                             name: 'status',
@@ -137,6 +153,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                             [trip]
                         )}
                     </TabPanel>
+                    <TabPanel header="Images"></TabPanel>
                     <TabPanel header="Videos"></TabPanel>
                     <TabPanel header="Tags"></TabPanel>
                 </TabView>

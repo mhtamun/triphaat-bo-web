@@ -14,7 +14,7 @@ import { getTripForVendor } from '../../../../apis';
 import { getGeneralStatusOptions } from '../../../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Videos | Trip Management', async cookies => {
+    getAuthorized(context, 'Images | Trip Management', async cookies => {
         const tripId = context.query.id;
 
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
@@ -29,7 +29,6 @@ export const getServerSideProps: GetServerSideProps = async context =>
         }
 
         return {
-            isVendor: true,
             tripId,
             trip: responseGetTrip.data,
         };
@@ -42,27 +41,26 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
         <>
             <Card title={trip?.name}>
                 <TabView
-                    activeIndex={3}
+                    activeIndex={2}
                     onTabChange={e => {
-                        if (e.index === 0) router.push(`/v/trips/${tripId}`);
-                        if (e.index === 1) router.push(`/v/trips/${tripId}/variants`);
-                        if (e.index === 2) router.push(`/v/trips/${tripId}/images`);
-                        if (e.index === 3) router.push(`/v/trips/${tripId}/videos`);
-                        if (e.index === 4) router.push(`/v/trips/${tripId}/tags`);
+                        if (e.index === 0) router.push(`/v-p/trips/${tripId}`);
+                        if (e.index === 1) router.push(`/v-p/trips/${tripId}/variants`);
+                        if (e.index === 2) router.push(`/v-p/trips/${tripId}/images`);
+                        if (e.index === 3) router.push(`/v-p/trips/${tripId}/videos`);
+                        if (e.index === 4) router.push(`/v-p/trips/${tripId}/tags`);
                     }}
                 >
                     <TabPanel header="Details"></TabPanel>
                     <TabPanel header="Variants"></TabPanel>
-                    <TabPanel header="Images"></TabPanel>
-                    <TabPanel header="Videos">
+                    <TabPanel header="Images">
                         {useMemo(
                             () => (
                                 <GenericViewGenerator
-                                    name={'Video'}
-                                    title="Trip Videos"
-                                    subtitle="Manage trip videos here!"
+                                    name={'Image'}
+                                    title="Trip Images"
+                                    subtitle="Manage trip images here!"
                                     viewAll={{
-                                        uri: `/api/v1/trips/${tripId}/videos`,
+                                        uri: `/api/v1/trips/${tripId}/images`,
                                         ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                         actionIdentifier: 'id',
                                         onDataModify: data =>
@@ -71,13 +69,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             })),
                                     }}
                                     addNew={{
-                                        uri: `/api/v1/videos`,
-                                        buttonText: 'Add Video',
+                                        uri: `/api/v1/images`,
+                                        buttonText: 'Add Image',
                                     }}
-                                    viewOne={{ uri: '/api/v1/videos/{id}', identifier: '{id}' }}
-                                    editExisting={{ uri: '/api/v1/videos/{id}', identifier: '{id}' }}
+                                    viewOne={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+                                    editExisting={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
                                     removeOne={{
-                                        uri: '/api/v1/videos/{id}',
+                                        uri: '/api/v1/images/{id}',
                                         identifier: '{id}',
                                     }}
                                     fields={[
@@ -139,6 +137,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                             [trip]
                         )}
                     </TabPanel>
+                    <TabPanel header="Videos"></TabPanel>
                     <TabPanel header="Tags"></TabPanel>
                 </TabView>
             </Card>

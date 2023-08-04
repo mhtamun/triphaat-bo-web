@@ -69,7 +69,7 @@ const LoginPage: Page = () => {
                             response.data.vendor
                         );
 
-                        if (success) router.replace('/v/');
+                        if (success) router.replace('/v-p/');
                     }
                 })
                 .catch(error => {
@@ -145,7 +145,7 @@ const LoginPage: Page = () => {
                                     className="font-medium no-underline ml-2 text-right cursor-pointer"
                                     style={{ color: 'var(--primary-color)' }}
                                     onClick={() => {
-                                        router.push('/v/reset-password');
+                                        router.push('/v-p/reset-password');
                                     }}
                                 >
                                     Forgot password?

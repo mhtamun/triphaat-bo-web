@@ -85,7 +85,7 @@ const DataTable = ({
             emptyMessage={
                 emptyListText ?? (
                     <>
-                        <h2 style={emptyMessageStyle}>Opps!</h2>
+                        <h2 style={emptyMessageStyle}>Oops!</h2>
                         <p style={emptyMessageStyle}>No data available!!</p>
                     </>
                 )

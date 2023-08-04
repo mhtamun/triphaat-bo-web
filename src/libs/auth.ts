@@ -70,12 +70,10 @@ export const getAuthorized = async (
     const { req } = context;
     const cookies = getServerSideCookie(req);
 
-    // console.debug({ why: 'I am here?' });
-
     if (!cookies?.user || !cookies?.accessType || !cookies?.accessToken) {
         return {
             redirect: {
-                destination: req.url === '/v' || req.url?.includes('/v/') ? '/v/auth/login' : '/auth/login',
+                destination: !req.url?.includes('/v-p/') ? '/auth/login' : '/v-p/auth/login',
                 permanent: false,
             },
         };
@@ -83,7 +81,23 @@ export const getAuthorized = async (
 
     const user = JSON.parse(cookies?.user);
 
-    // todo: check if different user type trying to access different pages from different users
+    if (user.type === 'TRIPHAAT_ADMIN' && req.url?.includes('/v-p')) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+
+    if (user.type === 'VENDOR_ADMIN' && !req.url?.includes('/v-p')) {
+        return {
+            redirect: {
+                destination: '/v-p/',
+                permanent: false,
+            },
+        };
+    }
 
     let props = null;
 

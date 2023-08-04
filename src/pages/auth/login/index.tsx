@@ -150,7 +150,7 @@ const LoginPage: Page = () => {
                                 onClick={e => {
                                     e.preventDefault();
 
-                                    router.push('/v/auth/login');
+                                    router.push('/v-p/auth/login');
                                 }}
                             >
                                 Vendor Admin Login
