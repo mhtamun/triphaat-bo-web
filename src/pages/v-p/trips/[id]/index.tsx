@@ -3,6 +3,8 @@ import React, { useMemo, useState, useEffect } from 'react';
 // third-party
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+// import { Menubar } from 'primereact/menubar';
+// import { MenuItemCommandEvent } from 'primereact/menuitem';
 import { Card } from 'primereact/card';
 import { TabView, TabPanel } from 'primereact/tabview';
 import _ from 'lodash';
@@ -49,6 +51,16 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
 
     return (
         <>
+            {/* <Menubar
+                className="mb-3"
+                model={[
+                    {
+                        label: 'Details',
+                        icon: 'pi pi-fw pi-file',
+                        command: (event: MenuItemCommandEvent) => {},
+                    },
+                ]}
+            /> */}
             <Card title={trip?.name} className="mb-3">
                 <TabView
                     activeIndex={0}
@@ -58,6 +70,7 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
                         if (e.index === 2) router.push(`/v-p/trips/${tripId}/images`);
                         if (e.index === 3) router.push(`/v-p/trips/${tripId}/videos`);
                         if (e.index === 4) router.push(`/v-p/trips/${tripId}/tags`);
+                        if (e.index === 5) router.push(`/v-p/trips/${tripId}/travelers`);
                     }}
                 >
                     <TabPanel header="Details">
@@ -101,6 +114,7 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
                     <TabPanel header="Images"></TabPanel>
                     <TabPanel header="Videos"></TabPanel>
                     <TabPanel header="Tags"></TabPanel>
+                    <TabPanel header="Travelers"></TabPanel>
                 </TabView>
             </Card>
         </>

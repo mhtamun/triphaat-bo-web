@@ -73,7 +73,7 @@ export const getAuthorized = async (
     if (!cookies?.user || !cookies?.accessType || !cookies?.accessToken) {
         return {
             redirect: {
-                destination: !req.url?.includes('/v-p/') ? '/auth/login' : '/v-p/auth/login',
+                destination: !req.url?.includes('/v-p') ? '/auth/login' : '/v-p/auth/login',
                 permanent: false,
             },
         };

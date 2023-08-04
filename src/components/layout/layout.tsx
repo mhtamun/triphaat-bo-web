@@ -127,7 +127,7 @@ const Layout = ({ title, isVendor, children }: ChildContainerProps) => {
     return (
         <>
             <Head>
-                <title>{title} | BACK-OFFICE - triphaat.com</title>
+                <title>{`${title} | ${!isVendor ? 'BACK-OFFICE' : 'VENDOR-PANEL'} | triphaat.com`}</title>
                 <link rel="icon" href={`/favicon.png`} type="image/x-icon"></link>
             </Head>
 

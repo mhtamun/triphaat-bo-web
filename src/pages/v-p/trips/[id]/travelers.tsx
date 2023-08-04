@@ -14,7 +14,7 @@ import { getTripForVendor } from '../../../../apis';
 import { getGeneralStatusOptions } from '../../../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Variants | Trip Management', async cookies => {
+    getAuthorized(context, 'Images | Trip Management', async cookies => {
         const tripId = context.query.id;
 
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
@@ -40,9 +40,9 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
 
     return (
         <>
-            <Card title={trip?.name} className="mb-3">
+            <Card title={trip?.name}>
                 <TabView
-                    activeIndex={1}
+                    activeIndex={5}
                     onTabChange={e => {
                         if (e.index === 0) router.push(`/v-p/trips/${tripId}`);
                         if (e.index === 1) router.push(`/v-p/trips/${tripId}/variants`);
@@ -53,16 +53,27 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                     }}
                 >
                     <TabPanel header="Details"></TabPanel>
-                    <TabPanel header="Variants">
+                    <TabPanel header="Variants"></TabPanel>
+                    <TabPanel header="Images"></TabPanel>
+                    <TabPanel header="Videos"></TabPanel>
+                    <TabPanel header="Tags"></TabPanel>
+                    <TabPanel header="Travelers">
                         {useMemo(
                             () => (
                                 <GenericViewGenerator
-                                    name={'Variant'}
-                                    title="Trip Variants"
-                                    subtitle="Manage trip variants here!"
+                                    name={'Traveller'}
+                                    title="Trip Travelers"
+                                    subtitle="Manage trip travelers here!"
                                     viewAll={{
-                                        uri: `/api/v1/trips/${tripId}/variants`,
-                                        ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
+                                        uri: `/vendor/api/v1/trips/${tripId}/trip-travelers`,
+                                        ignoredColumns: [
+                                            'id',
+                                            'vendorId',
+                                            'tripId',
+                                            'travellerId',
+                                            'createdAt',
+                                            'updatedAt',
+                                        ],
                                         actionIdentifier: 'id',
                                         onDataModify: data =>
                                             _.map(data, datum => ({
@@ -70,13 +81,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             })),
                                     }}
                                     addNew={{
-                                        uri: `/api/v1/variants`,
-                                        buttonText: 'Add Variant',
+                                        uri: `/vendor/api/v1/trip-travelers`,
+                                        buttonText: 'Add Tag',
                                     }}
-                                    viewOne={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
-                                    editExisting={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
+                                    viewOne={{ uri: '/vendor/api/v1/trip-travelers/{id}', identifier: '{id}' }}
+                                    editExisting={{ uri: '/vendor/api/v1/trip-travelers/{id}', identifier: '{id}' }}
                                     removeOne={{
-                                        uri: '/api/v1/variants/{id}',
+                                        uri: '/vendor/api/v1/trip-travelers/{id}',
                                         identifier: '{id}',
                                     }}
                                     fields={[
@@ -94,56 +105,24 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         },
                                         {
                                             type: 'text',
-                                            name: 'reasons',
-                                            placeholder: 'Enter reasons for this variant!',
-                                            title: 'Reasons',
+                                            name: 'firstName',
+                                            placeholder: 'Enter first name this traveller!',
+                                            title: 'First Name',
                                             initialValue: null,
                                             validate: (values: any) => {
-                                                if (!values.reasons) return 'Required!';
+                                                if (!values.firstName) return 'Required!';
 
                                                 return null;
                                             },
                                         },
                                         {
-                                            type: 'number',
-                                            name: 'costPrice',
-                                            placeholder: 'Enter cost price!',
-                                            title: 'Cost Price',
+                                            type: 'text',
+                                            name: 'lastName',
+                                            placeholder: 'Enter last name this traveller!',
+                                            title: 'Last Name',
                                             initialValue: null,
                                             validate: (values: any) => {
-                                                if (!values.costPrice) return 'Required!';
-
-                                                return null;
-                                            },
-                                        },
-                                        {
-                                            type: 'number',
-                                            name: 'price',
-                                            placeholder: 'Enter price!',
-                                            title: 'Price',
-                                            initialValue: null,
-                                            validate: (values: any) => {
-                                                if (!values.price) return 'Required!';
-
-                                                return null;
-                                            },
-                                        },
-                                        {
-                                            type: 'number',
-                                            name: 'offerPrice',
-                                            placeholder: 'Enter offer price!',
-                                            title: 'Offer Price',
-                                            initialValue: null,
-                                        },
-                                        {
-                                            type: 'select-sync',
-                                            name: 'status',
-                                            placeholder: 'Select status!',
-                                            title: 'Status',
-                                            initialValue: 'ACTIVE',
-                                            options: getGeneralStatusOptions(),
-                                            validate: (values: any) => {
-                                                if (!values.status) return 'Required!';
+                                                if (!values.lastName) return 'Required!';
 
                                                 return null;
                                             },
@@ -154,10 +133,6 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                             [trip]
                         )}
                     </TabPanel>
-                    <TabPanel header="Images"></TabPanel>
-                    <TabPanel header="Videos"></TabPanel>
-                    <TabPanel header="Tags"></TabPanel>
-                    <TabPanel header="Travelers"></TabPanel>
                 </TabView>
             </Card>
         </>

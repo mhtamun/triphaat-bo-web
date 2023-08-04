@@ -49,6 +49,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                         if (e.index === 2) router.push(`/v-p/trips/${tripId}/images`);
                         if (e.index === 3) router.push(`/v-p/trips/${tripId}/videos`);
                         if (e.index === 4) router.push(`/v-p/trips/${tripId}/tags`);
+                        if (e.index === 5) router.push(`/v-p/trips/${tripId}/travelers`);
                     }}
                 >
                     <TabPanel header="Details"></TabPanel>
@@ -140,6 +141,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                         )}
                     </TabPanel>
                     <TabPanel header="Tags"></TabPanel>
+                    <TabPanel header="Travelers"></TabPanel>
                 </TabView>
             </Card>
         </>
