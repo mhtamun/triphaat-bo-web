@@ -77,7 +77,7 @@ const DataTable = ({
     const dummyHeaderFooterForEmptyDataset =
         !_.isUndefined(data) && !_.isNull(data) && _.size(data) > 0 ? undefined : ' ';
 
-    const emptyMessageStyle = { color: 'red', textAlign: 'center' };
+    const emptyMessageStyle = { color: 'red' };
 
     return (
         <Table

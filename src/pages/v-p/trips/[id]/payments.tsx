@@ -17,7 +17,7 @@ import GenericViewGenerator from '../../../../components/global/GenericViewGener
 import { getTripForVendor } from '../../../../apis';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Images | Trip Management', async cookies => {
+    getAuthorized(context, 'Payments | Trip Management', async cookies => {
         const tripId = context.query.id;
 
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
@@ -172,7 +172,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                 name: 'status',
                 placeholder: 'Select status!',
                 title: 'Status',
-                initialValue: 'PENDING',
+                initialValue: 'SUCCESSFUL',
                 options: [
                     { value: 'PENDING', label: 'Pending' },
                     { value: 'SUCCESSFUL', label: 'Successful' },
@@ -187,6 +187,8 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
             },
         ];
     }, []);
+
+    console.debug(new Date().toISOString());
 
     return (
         <>
@@ -263,7 +265,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             }}
                                             addNew={{
                                                 uri: `/vendor/api/v1/trip-payments`,
-                                                buttonText: 'Add Tag',
+                                                buttonText: 'Receive Payment',
                                             }}
                                             // viewOne={{ uri: '/vendor/api/v1/trip-payments/{id}', identifier: '{id}' }}
                                             // editExisting={{
@@ -349,7 +351,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             }}
                                             addNew={{
                                                 uri: `/vendor/api/v1/trip-payments`,
-                                                buttonText: 'Add Tag',
+                                                buttonText: 'Drop Payment',
                                             }}
                                             // viewOne={{ uri: '/vendor/api/v1/trip-payments/{id}', identifier: '{id}' }}
                                             // editExisting={{

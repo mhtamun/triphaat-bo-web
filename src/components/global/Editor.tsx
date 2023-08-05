@@ -25,9 +25,9 @@ const EditorField = (props: {
 
     const [isTouched, setTouched] = useState(false);
 
-    const editorRef = useRef(null);
+    const editorRef = useRef<HTMLElement | null>(null);
 
-    const handleSaveChanges = useCallback(e => {
+    const handleSaveChanges = useCallback((e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
 
         if (editorRef.current) {
@@ -43,16 +43,6 @@ const EditorField = (props: {
     }, []);
 
     // console.debug({ value });
-
-    let wrappedValue: string | null = value;
-
-    try {
-        JSON.parse(wrappedValue);
-    } catch (error) {
-        // console.error(error);
-
-        wrappedValue = null;
-    }
 
     return (
         <div className="field p-fluid">
@@ -74,7 +64,7 @@ const EditorField = (props: {
                         id={name}
                         apiKey="enwgih463zy7tucf51q0rohglyrfuf0j63f3u5e8qupxnjir"
                         onInit={(evt, editor) => (editorRef.current = editor)}
-                        initialValue={JSON.parse(wrappedValue)}
+                        initialValue={JSON.parse(value)}
                         onEditorChange={editor => {
                             // console.debug({ editor });
 
@@ -106,7 +96,7 @@ const EditorField = (props: {
                         }}
                     />
                 ),
-                [wrappedValue]
+                [value]
             )}
             {!isTouched ? null : (
                 <Button
@@ -115,7 +105,7 @@ const EditorField = (props: {
                     severity={!isTouched ? 'info' : 'danger'}
                     onClick={handleSaveChanges}
                 >
-                    {!isTouched ? '' : 'Save Your New Changes'}
+                    {!isTouched ? '' : ' Save Your New Changes'}
                 </Button>
             )}
             {!title ? null : (
@@ -131,7 +121,7 @@ const EditorField = (props: {
                     overflow: 'scroll',
                     position: 'relative',
                 }}
-                dangerouslySetInnerHTML={{ __html: JSON.parse(wrappedValue) }}
+                dangerouslySetInnerHTML={{ __html: JSON.parse(value) }}
             />
             {!errorMessage ? null : (
                 <small id={`${name}-help`} className="p-error">
