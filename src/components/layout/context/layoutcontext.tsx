@@ -1,5 +1,8 @@
 import React, { useState, createContext } from 'react';
 import { LayoutState, ChildContainerProps, LayoutConfig, LayoutContextProps } from '../../../types/types';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export const LayoutContext = createContext({} as LayoutContextProps);
 
 export const LayoutProvider = ({ children }: ChildContainerProps) => {
@@ -66,5 +69,10 @@ export const LayoutProvider = ({ children }: ChildContainerProps) => {
         showProfileSidebar,
     };
 
-    return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>;
+    return (
+        <LayoutContext.Provider value={value}>
+            <ToastContainer />
+            {children}
+        </LayoutContext.Provider>
+    );
 };
