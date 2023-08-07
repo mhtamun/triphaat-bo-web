@@ -25,7 +25,7 @@ const EditorField = (props: {
 
     const [isTouched, setTouched] = useState(false);
 
-    const editorRef = useRef<HTMLElement | null>(null);
+    const editorRef = useRef<any | null>(null);
 
     const handleSaveChanges = useCallback((e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();

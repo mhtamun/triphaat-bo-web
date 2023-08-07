@@ -20,6 +20,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
         const responseGetVendors = await getVendors(`${cookies.accessType} ${cookies.accessToken}`);
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
+        // @ts-ignore
         const responseGetTrip = await getTrip(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 
         if (

@@ -17,6 +17,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Variants | Trip Management', async cookies => {
         const tripId = context.query.id;
 
+        // @ts-ignore
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {

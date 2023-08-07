@@ -36,8 +36,6 @@ import {
 } from './demo';
 
 type ChildContainerProps = {
-    title: string;
-    isVendor?: boolean;
     children: ReactNode;
 };
 

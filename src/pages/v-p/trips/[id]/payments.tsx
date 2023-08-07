@@ -20,6 +20,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Payments | Trip Management', async cookies => {
         const tripId = context.query.id;
 
+        // @ts-ignore
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
@@ -389,7 +390,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                         <Divider />
                         <Message
                             className="mt-3"
-                            severity={(totalIn - totalOut).toFixed(2) > 0 ? 'success' : 'error'}
+                            severity={parseFloat((totalIn - totalOut).toFixed(2)) > 0 ? 'success' : 'error'}
                             content={`Balance: BDT ${(totalIn - totalOut).toFixed(2)}`}
                         />
                     </TabPanel>

@@ -124,11 +124,9 @@ export default function GenericFormGenerator({
         //     field,
         // });
 
-        const errorMessage: string = !formik.touched[field.name]
-            ? ''
-            : !formik.errors[field.name]
-            ? ''
-            : formik.errors[field.name];
+        const errorMessage: string =
+            // @ts-ignore
+            !formik.touched[field.name] && !formik.errors[field.name] ? '' : formik.errors[field.name];
 
         if (
             field.type === 'date' ||
@@ -146,6 +144,7 @@ export default function GenericFormGenerator({
                     name={field.name}
                     title={field.title}
                     placeholder={field.placeholder}
+                    // @ts-ignore
                     value={formik.values[field.name] ?? ''}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -161,6 +160,7 @@ export default function GenericFormGenerator({
                     name={field.name}
                     title={field.title}
                     placeholder={field.placeholder}
+                    // @ts-ignore
                     value={formik.values[field.name] ?? ''}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -176,6 +176,7 @@ export default function GenericFormGenerator({
                     name={field.name}
                     placeholder={field.placeholder}
                     title={field.title}
+                    // @ts-ignore
                     value={formik.values[field.name]}
                     setFieldValue={formik.setFieldValue}
                     setFieldTouched={formik.setFieldTouched}
@@ -190,6 +191,7 @@ export default function GenericFormGenerator({
                     name={field.name}
                     title={field.title}
                     placeholder={field.placeholder}
+                    // @ts-ignore
                     value={formik.values[field.name] ?? ''}
                     options={field.options ?? []}
                     setFieldValue={formik.setFieldValue}

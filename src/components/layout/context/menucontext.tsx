@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react';
-import { ChildContainerProps, MenuContextProps } from '../../types/types';
+import { ChildContainerProps, MenuContextProps } from '../../../types/types';
 
 export const MenuContext = createContext({} as MenuContextProps);
 
@@ -8,7 +8,7 @@ export const MenuProvider = ({ children }: ChildContainerProps) => {
 
     const value = {
         activeMenu,
-        setActiveMenu
+        setActiveMenu,
     };
 
     return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>;

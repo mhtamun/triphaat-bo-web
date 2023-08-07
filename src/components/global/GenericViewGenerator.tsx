@@ -237,7 +237,7 @@ function GenericViewGenerator({
     filtration?: any;
     pagination?: any;
 }) {
-    const toast = useRef(null);
+    const toast = useRef<any | null>(null);
 
     // Props
     const {

@@ -18,6 +18,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Videos | Trip Management', async cookies => {
         const tripId = context.query.id;
 
+        // @ts-ignore
         const responseGetTrip = await getTrip(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {

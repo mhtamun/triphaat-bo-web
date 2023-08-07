@@ -27,7 +27,7 @@ const LoginPage: Page = () => {
         { 'p-input-filled': layoutConfig.inputStyle === 'filled' }
     );
 
-    const toast = useRef(null);
+    const toast = useRef<any | null>(null);
 
     const showToast = useCallback(
         (color: 'success' | 'warning' | 'error', title: string | null, message: string, ttl?: number) => {

@@ -13,7 +13,12 @@ import { LayoutContext } from './context/layoutcontext';
 import PrimeReact from 'primereact/api';
 import { ChildContainerProps, LayoutState, AppTopbarRef } from '../../types/types';
 
-const Layout = ({ title, isVendor, children }: ChildContainerProps) => {
+interface ILayout extends ChildContainerProps {
+    title?: string;
+    isVendor?: boolean;
+}
+
+const Layout = ({ title, isVendor, children }: ILayout) => {
     const { layoutConfig, layoutState, setLayoutState } = useContext(LayoutContext);
     const topbarRef = useRef<AppTopbarRef>(null);
     const sidebarRef = useRef<HTMLDivElement>(null);

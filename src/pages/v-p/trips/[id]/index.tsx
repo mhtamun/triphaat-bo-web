@@ -22,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         const tripId = context.query.id;
 
         const responseGetLocations = await getLocationsForVendor();
+        // @ts-ignore
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 
         if (
