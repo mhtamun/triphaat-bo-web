@@ -1,6 +1,6 @@
 import { Demo } from '../../../types/types';
 
-let icons: Demo.Icon[] = [];
+const icons: Demo.Icon[] = [];
 let selectedIcon: Demo.Icon | undefined;
 export const IconService = {
     getIcons() {

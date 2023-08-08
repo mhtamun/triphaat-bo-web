@@ -60,6 +60,7 @@ export interface AppMailReplyProps {
     hide: () => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace Demo {
     interface Task {
         id?: number;
@@ -199,13 +200,13 @@ export declare namespace Demo {
     type Icon = {
         icon?: {
             paths?: string[];
-            attrs?: [{}];
+            attrs?: [any];
             isMulticolor?: boolean;
             isMulticolor2?: boolean;
             grid?: number;
             tags?: string[];
         };
-        attrs?: [{}];
+        attrs?: [any];
         properties?: {
             order?: number;
             id: number;

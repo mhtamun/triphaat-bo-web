@@ -125,6 +125,7 @@ export default function GenericFormGenerator({
         // });
 
         const errorMessage: string =
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             !formik.touched[field.name] && !formik.errors[field.name] ? '' : formik.errors[field.name];
 
@@ -144,6 +145,7 @@ export default function GenericFormGenerator({
                     name={field.name}
                     title={field.title}
                     placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     value={formik.values[field.name] ?? ''}
                     onChange={formik.handleChange}
@@ -160,6 +162,7 @@ export default function GenericFormGenerator({
                     name={field.name}
                     title={field.title}
                     placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     value={formik.values[field.name] ?? ''}
                     onChange={formik.handleChange}
@@ -176,6 +179,7 @@ export default function GenericFormGenerator({
                     name={field.name}
                     placeholder={field.placeholder}
                     title={field.title}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     value={formik.values[field.name]}
                     setFieldValue={formik.setFieldValue}
@@ -191,6 +195,7 @@ export default function GenericFormGenerator({
                     name={field.name}
                     title={field.title}
                     placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     value={formik.values[field.name] ?? ''}
                     options={field.options ?? []}
@@ -263,7 +268,7 @@ export default function GenericFormGenerator({
     //     }
     // }
 
-    let submitButton = <Button type="submit" label={!submitButtonText ? 'Submit' : submitButtonText}></Button>;
+    const submitButton = <Button type="submit" label={!submitButtonText ? 'Submit' : submitButtonText}></Button>;
 
     // if (_.isUndefined(onShowSubmitButton) || _.isNull(onShowSubmitButton))
     //     submitButton = (

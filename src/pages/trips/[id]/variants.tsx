@@ -17,6 +17,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Variants | Trip Management', async cookies => {
         const tripId = context.query.id;
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const responseGetTrip = await getTrip(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 

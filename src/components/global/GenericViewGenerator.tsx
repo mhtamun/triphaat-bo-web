@@ -1,6 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { Toast } from 'primereact/toast';
-import { Card } from 'primereact/card';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 import { DataTable, ModalConfirmation, Modal, GenericFormGenerator } from '../index';
@@ -16,7 +14,6 @@ const DeleteItemComponent = ({
     deleteIdentifier,
     datumId,
     onSuccess,
-    showToast,
 }: {
     isConfirmationModalOpen: boolean;
     setConfirmationModalOpen: (isConfirmationModalOpen: boolean) => void;
@@ -24,7 +21,6 @@ const DeleteItemComponent = ({
     deleteIdentifier: string;
     datumId: string;
     onSuccess: () => void;
-    showToast: (color: 'success' | 'warning' | 'error', title: string | null, message: string, ttl?: number) => void;
 }) => {
     return (
         <ModalConfirmation
@@ -42,19 +38,15 @@ const DeleteItemComponent = ({
                 callDeleteApi(_.replace(deleteApiUri, deleteIdentifier, datumId))
                     .then(response => {
                         if (!response) {
-                            showToast('error', 'Unsuccessful!', 'Server not working!');
+                            // todo
                         } else if (response.statusCode !== 200) {
-                            showToast('error', 'Unsuccessful!', response.message);
+                            // todo
                         } else {
-                            showToast('success', 'Success!', response.message);
-
                             onSuccess();
                         }
                     })
                     .catch(error => {
                         console.error('error', error);
-
-                        showToast('error', 'Unsuccessful!', 'Something went wrong!');
                     });
             }}
         />
@@ -71,7 +63,6 @@ const EditItemComponent = ({
     fields,
     nonEdibleFields = [],
     onSuccess,
-    showToast,
     name,
 }: {
     isFormModalOpen: boolean;
@@ -83,7 +74,6 @@ const EditItemComponent = ({
     datumId: any;
     datum: any;
     onSuccess: (data: any) => void;
-    showToast: (color: 'success' | 'warning' | 'error', title: string | null, message: string, ttl?: number) => void;
     name: string;
 }) => {
     return (
@@ -101,26 +91,22 @@ const EditItemComponent = ({
                 callback={(data, callback) => {
                     // console.debug({ data });
 
-                    callPutApi(_.replace(putApiUri, putIdentifier, datumId), data)
+                    callPutApi(_.replace(putApiUri, putIdentifier, datumId), data, null, null, true)
                         .then(response => {
                             if (!response) {
-                                showToast('error', 'Unsuccessful!', 'Server not working!');
+                                // todo
                             } else if (response.statusCode !== 200) {
-                                showToast('error', 'Unsuccessful!', response.message);
+                                // todo
                             } else {
                                 callback();
 
                                 setFormModalOpen(false);
 
                                 onSuccess(data);
-
-                                showToast('success', 'Success!', response.message);
                             }
                         })
                         .catch(error => {
                             console.error('error', error);
-
-                            showToast('error', 'Unsuccessful!', 'Something went wrong!');
                         })
                         .finally(() => {});
                 }}
@@ -136,7 +122,6 @@ const AddNewItemComponent = ({
     nonEdibleFields,
     postApiUri,
     onSuccess,
-    showToast,
     name,
 }: {
     isFormModalOpen: boolean;
@@ -145,7 +130,6 @@ const AddNewItemComponent = ({
     nonEdibleFields?: string[];
     postApiUri: string;
     onSuccess: (data: any) => void;
-    showToast: (color: 'success' | 'warning' | 'error', title: string | null, message: string, ttl?: number) => void;
     name: string;
 }) => {
     return (
@@ -165,23 +149,19 @@ const AddNewItemComponent = ({
                     callPostApi(postApiUri, data)
                         .then(response => {
                             if (!response) {
-                                showToast('error', 'Unsuccessful!', 'Server not working!');
+                                // todo
                             } else if (response.statusCode !== 200) {
-                                showToast('error', 'Unsuccessful!', response.message);
+                                // todo
                             } else {
                                 resetForm();
 
                                 setFormModalOpen(false);
 
                                 onSuccess(data);
-
-                                showToast('success', 'Success!', response.message);
                             }
                         })
                         .catch(error => {
                             console.error('error', error);
-
-                            showToast('error', 'Unsuccessful!', 'Something went wrong!');
                         })
                         .finally(() => {});
                 }}
@@ -237,8 +217,6 @@ function GenericViewGenerator({
     filtration?: any;
     pagination?: any;
 }) {
-    const toast = useRef<any | null>(null);
-
     // Props
     const {
         uri: getAllApiUri,
@@ -273,7 +251,7 @@ function GenericViewGenerator({
     // });
 
     const getAllData = (getApiUri: string, handleDataCallback?: (data: any) => any) => {
-        callGetApi(getApiUri)
+        callGetApi(getApiUri, null, true)
             .then(response => {
                 if (!response) throw { message: 'Server not working!' };
 
@@ -288,8 +266,6 @@ function GenericViewGenerator({
             })
             .catch(error => {
                 console.error('error', error);
-
-                showToast('error', 'Unsuccessful!', error.message ?? 'Something went wrong!');
             });
     };
 
@@ -299,7 +275,7 @@ function GenericViewGenerator({
         value: string,
         handleDataCallback?: (data: any) => any
     ) => {
-        callGetApi(_.replace(getOneApiUri, getOneIdentifier, value))
+        callGetApi(_.replace(getOneApiUri, getOneIdentifier, value), null, true)
             .then(response => {
                 if (!response) throw { message: 'Server not working!' };
 
@@ -312,8 +288,6 @@ function GenericViewGenerator({
             })
             .catch(error => {
                 console.error('error', error);
-
-                showToast('error', 'Unsuccessful!', error.message);
             });
     };
 
@@ -371,13 +345,6 @@ function GenericViewGenerator({
     useEffect(() => {
         if (!_.isUndefined(datum) && !_.isNull(datum)) setEditFormModalOpen(true);
     }, [datum]);
-
-    const showToast = useCallback(
-        (color: 'success' | 'warning' | 'error', title: string | null, message: string, ttl?: number) => {
-            toast.current.show({ severity: color, summary: title ?? '', detail: message, life: ttl ?? 3000 });
-        },
-        []
-    );
 
     const leftToolbarTemplate = () => {
         return (
@@ -450,7 +417,6 @@ function GenericViewGenerator({
 
                                 if (!_.isUndefined(addNewCallback) && !_.isNull(addNewCallback)) addNewCallback(data);
                             }}
-                            showToast={showToast}
                             name={name}
                         />
                     ),
@@ -476,7 +442,6 @@ function GenericViewGenerator({
                                 if (!_.isUndefined(editExistingCallback) && !_.isNull(editExistingCallback))
                                     editExistingCallback(data);
                             }}
-                            showToast={showToast}
                             name={name}
                         />
                     ),
@@ -497,12 +462,10 @@ function GenericViewGenerator({
                                 if (!_.isUndefined(removeOneCallback) && !_.isNull(removeOneCallback))
                                     removeOneCallback();
                             }}
-                            showToast={showToast}
                         />
                     ),
                 [isDeleteFormModalOpen]
             )}
-            <Toast ref={toast} />
         </>
     );
 }

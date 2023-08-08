@@ -2,7 +2,7 @@ import { callPostApi, callGetApi } from '../libs/api';
 import { apiBaseUrl } from '../config/env';
 
 export const login = (payload: { email: string; password: string; type: string }) =>
-    callPostApi(apiBaseUrl + '/api/v1/auth/sign-in', payload);
+    callPostApi(apiBaseUrl + '/api/v1/auth/sign-in', payload, null, null, true);
 
 export const resetPassword = () => {};
 
@@ -25,4 +25,4 @@ export const getTripForVendor = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/vendor/api/v1/trips/' + id, authorization);
 
 export const vendorLogin = (payload: { email: string; password: string; type: string }) =>
-    callPostApi(apiBaseUrl + '/vendor/api/v1/auth/sign-in', payload);
+    callPostApi(apiBaseUrl + '/vendor/api/v1/auth/sign-in', payload, null, null, true);

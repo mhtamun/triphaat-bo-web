@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { getCookie } from './cookie';
 import { apiBaseUrl as baseURL } from '../config/env';
+import { showApiCallLoaderToast } from '../utils/toast';
 
 const instance = axios.create({
     baseURL,
@@ -29,7 +30,7 @@ instance.interceptors.request.use(
     }
 );
 
-interface IData {
+export interface IData {
     statusCode: number;
     message: string;
     data?: any;
@@ -45,7 +46,7 @@ instance.interceptors.response.use(
 
         return response.data;
     },
-    function (error: AxiosError): AxiosResponse<IData | null> | null | {} {
+    function (error: AxiosError<AxiosResponse>): AxiosResponse<IData> | null {
         // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
 
@@ -76,28 +77,50 @@ export const callPostApi = (
     url: string,
     payload: any,
     authorization?: string | null,
-    contentType?: string | null
-): Promise<IData> =>
-    instance.post(url, payload, {
+    contentType?: string | null,
+    showLoader?: boolean
+): Promise<IData> => {
+    const promise: Promise<IData> = instance.post(url, payload, {
         headers: getHeaders(authorization, contentType),
     });
 
-export const callGetApi = (url: string, authorization?: string | null): Promise<IData> =>
-    instance.get(url, {
+    if (!showLoader) return promise;
+
+    return showApiCallLoaderToast(promise, 'Posting data, please wait!', 'info');
+};
+
+export const callGetApi = (url: string, authorization?: string | null, showLoader?: boolean): Promise<IData> => {
+    const promise: Promise<IData> = instance.get(url, {
         headers: getHeaders(authorization),
     });
+
+    if (!showLoader) return promise;
+
+    return showApiCallLoaderToast(promise, 'Fetching data, please wait!', 'info');
+};
 
 export const callPutApi = (
     url: string,
     payload: any,
     authorization?: string | null,
-    contentType?: string
-): Promise<IData> =>
-    instance.put(url, payload, {
+    contentType?: string | null,
+    showLoader?: boolean
+): Promise<IData> => {
+    const promise: Promise<IData> = instance.put(url, payload, {
         headers: getHeaders(authorization, contentType),
     });
 
-export const callDeleteApi = (url: string, authorization?: string | null): Promise<IData> =>
-    instance.delete(url, {
+    if (!showLoader) return promise;
+
+    return showApiCallLoaderToast(promise, 'Updating data, please wait!', 'info');
+};
+
+export const callDeleteApi = (url: string, authorization?: string | null, showLoader?: boolean): Promise<IData> => {
+    const promise: Promise<IData> = instance.delete(url, {
         headers: getHeaders(authorization),
     });
+
+    if (!showLoader) return promise;
+
+    return showApiCallLoaderToast(promise, 'Deleting, please wait!', 'info');
+};

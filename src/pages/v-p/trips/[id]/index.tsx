@@ -22,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         const tripId = context.query.id;
 
         const responseGetLocations = await getLocationsForVendor();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 
