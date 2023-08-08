@@ -44,7 +44,7 @@ export const showApiCallLoaderToast = (
                         ...toastOptions,
                         ...options,
                         render: response.message,
-                        autoClose: 500,
+                        autoClose: 1000,
                         isLoading: false,
                         type: toast.TYPE.SUCCESS,
                         toastId: toastId,

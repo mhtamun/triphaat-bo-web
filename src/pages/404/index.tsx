@@ -3,8 +3,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'primereact/button';
-import AppConfig from '../../../components/layout/AppConfig';
-import { Page } from '../../../types/types';
+import AppConfig from '../../components/layout/AppConfig';
+import { Page } from '../../types/types';
 
 const NotFoundPage: Page = () => {
     const router = useRouter();

@@ -4,7 +4,6 @@ import React, { useMemo, useCallback, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Card } from 'primereact/card';
-import { TabView, TabPanel } from 'primereact/tabview';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Divider } from 'primereact/divider';
@@ -15,6 +14,7 @@ import _ from 'lodash';
 import { getAuthorized } from '../../../../libs/auth';
 import GenericViewGenerator from '../../../../components/global/GenericViewGenerator';
 import { getTripForVendor } from '../../../../apis';
+import TabViewComponent from '../../../../components/trips/TabViewComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Payments | Trip Management', async cookies => {
@@ -195,207 +195,195 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <>
             <Card title={trip?.name}>
-                <TabView
-                    activeIndex={6}
-                    onTabChange={e => {
-                        if (e.index === 0) router.push(`/v-p/trips/${tripId}`);
-                        if (e.index === 1) router.push(`/v-p/trips/${tripId}/variants`);
-                        if (e.index === 2) router.push(`/v-p/trips/${tripId}/images`);
-                        if (e.index === 3) router.push(`/v-p/trips/${tripId}/videos`);
-                        if (e.index === 4) router.push(`/v-p/trips/${tripId}/tags`);
-                        if (e.index === 5) router.push(`/v-p/trips/${tripId}/travelers`);
-                        if (e.index === 6) router.push(`/v-p/trips/${tripId}/payments`);
-                    }}
-                >
-                    <TabPanel header="Details"></TabPanel>
-                    <TabPanel header="Variants"></TabPanel>
-                    <TabPanel header="Images"></TabPanel>
-                    <TabPanel header="Videos"></TabPanel>
-                    <TabPanel header="Tags"></TabPanel>
-                    <TabPanel header="Travelers"></TabPanel>
-                    <TabPanel header="Payments">
-                        <div className="grid">
-                            <div
-                                className="col-6"
-                                style={{
-                                    background: 'rgba(0, 255, 0, 0.3)',
-                                }}
-                            >
-                                {useMemo(
-                                    () => (
-                                        <GenericViewGenerator
-                                            name={'Payment (IN)'}
-                                            title="Trip Payments (IN)"
-                                            subtitle="Manage trip payments (inbound) here!"
-                                            viewAll={{
-                                                uri: `/vendor/api/v1/trips/${tripId}/types/IN/trip-payments`,
-                                                ignoredColumns: [
-                                                    'id',
-                                                    'vendorId',
-                                                    'tripId',
-                                                    'type',
-                                                    'invoiceNumber',
-                                                    'orderNumber',
-                                                    'additionalDetails',
-                                                    'billingEmail',
-                                                    'billingAddress',
-                                                    'createdAt',
-                                                    'updatedAt',
-                                                ],
-                                                actionIdentifier: 'id',
-                                                onDataModify: data =>
-                                                    _.map(data, datum => ({
-                                                        ...datum,
-                                                    })),
-                                                onSuccess: data => {
-                                                    console.debug({ data });
-
-                                                    const totalIn = _.reduce(
-                                                        data,
-                                                        (result, datum, index) => {
-                                                            return (
-                                                                result +
-                                                                parseFloat(datum.amount) *
-                                                                    parseFloat(datum.conversionRate)
-                                                            );
-                                                        },
-                                                        0
-                                                    );
-
-                                                    setTotalIn(totalIn);
-                                                },
-                                            }}
-                                            addNew={{
-                                                uri: `/vendor/api/v1/trip-payments`,
-                                                buttonText: 'Receive Payment',
-                                            }}
-                                            // viewOne={{ uri: '/vendor/api/v1/trip-payments/{id}', identifier: '{id}' }}
-                                            // editExisting={{
-                                            //     uri: '/vendor/api/v1/trip-payments/{id}',
-                                            //     identifier: '{id}',
-                                            // }}
-                                            // removeOne={{
-                                            //     uri: '/vendor/api/v1/trip-payments/{id}',
-                                            //     identifier: '{id}',
-                                            // }}
-                                            fields={getFormFields(parseInt(tripId), 'IN')}
-                                        />
-                                    ),
-                                    [trip]
-                                )}
+                <TabViewComponent
+                    activeIndex={9}
+                    router={router}
+                    tripId={tripId}
+                    content={
+                        <>
+                            <div className="grid">
                                 <div
-                                    className="mt-3"
+                                    className="col-6"
                                     style={{
-                                        background: 'rgba(0, 0, 0, 0.3)',
+                                        background: 'rgba(0, 255, 0, 0.3)',
                                     }}
                                 >
-                                    <DataTable
-                                        value={[{ totalIn: totalIn.toFixed(2) }]}
-                                        columnResizeMode="expand"
-                                        resizableColumns
-                                        showGridlines
-                                        scrollable
-                                        tableStyle={{ minWidth: '50%' }}
+                                    {useMemo(
+                                        () => (
+                                            <GenericViewGenerator
+                                                name={'Payment (IN)'}
+                                                title="Trip Payments (IN)"
+                                                subtitle="Manage trip payments (inbound) here!"
+                                                viewAll={{
+                                                    uri: `/vendor/api/v1/trips/${tripId}/types/IN/trip-payments`,
+                                                    ignoredColumns: [
+                                                        'id',
+                                                        'vendorId',
+                                                        'tripId',
+                                                        'type',
+                                                        'invoiceNumber',
+                                                        'orderNumber',
+                                                        'additionalDetails',
+                                                        'billingEmail',
+                                                        'billingAddress',
+                                                        'createdAt',
+                                                        'updatedAt',
+                                                    ],
+                                                    actionIdentifier: 'id',
+                                                    onDataModify: data =>
+                                                        _.map(data, datum => ({
+                                                            ...datum,
+                                                        })),
+                                                    onSuccess: data => {
+                                                        console.debug({ data });
+
+                                                        const totalIn = _.reduce(
+                                                            data,
+                                                            (result, datum, index) => {
+                                                                return (
+                                                                    result +
+                                                                    parseFloat(datum.amount) *
+                                                                        parseFloat(datum.conversionRate)
+                                                                );
+                                                            },
+                                                            0
+                                                        );
+
+                                                        setTotalIn(totalIn);
+                                                    },
+                                                }}
+                                                addNew={{
+                                                    uri: `/vendor/api/v1/trip-payments`,
+                                                    buttonText: 'Receive Payment',
+                                                }}
+                                                // viewOne={{ uri: '/vendor/api/v1/trip-payments/{id}', identifier: '{id}' }}
+                                                // editExisting={{
+                                                //     uri: '/vendor/api/v1/trip-payments/{id}',
+                                                //     identifier: '{id}',
+                                                // }}
+                                                // removeOne={{
+                                                //     uri: '/vendor/api/v1/trip-payments/{id}',
+                                                //     identifier: '{id}',
+                                                // }}
+                                                fields={getFormFields(parseInt(tripId), 'IN')}
+                                            />
+                                        ),
+                                        [trip]
+                                    )}
+                                    <div
+                                        className="mt-3"
+                                        style={{
+                                            background: 'rgba(0, 0, 0, 0.3)',
+                                        }}
                                     >
-                                        <Column field="totalIn" header={'Total In (BDT)'} />
-                                    </DataTable>
+                                        <DataTable
+                                            value={[{ totalIn: totalIn.toFixed(2) }]}
+                                            columnResizeMode="expand"
+                                            resizableColumns
+                                            showGridlines
+                                            scrollable
+                                            tableStyle={{ minWidth: '50%' }}
+                                        >
+                                            <Column field="totalIn" header={'Total In (BDT)'} />
+                                        </DataTable>
+                                    </div>
                                 </div>
-                            </div>
-                            <div
-                                className="col-6"
-                                style={{
-                                    background: 'rgba(255, 0, 0, 0.3)',
-                                }}
-                            >
-                                {useMemo(
-                                    () => (
-                                        <GenericViewGenerator
-                                            name={'Payment (OUT)'}
-                                            title="Trip Payments (OUT)"
-                                            subtitle="Manage trip payments (outbound) here!"
-                                            viewAll={{
-                                                uri: `/vendor/api/v1/trips/${tripId}/types/OUT/trip-payments`,
-                                                ignoredColumns: [
-                                                    'id',
-                                                    'vendorId',
-                                                    'tripId',
-                                                    'type',
-                                                    'invoiceNumber',
-                                                    'orderNumber',
-                                                    'additionalDetails',
-                                                    'billingEmail',
-                                                    'billingAddress',
-                                                    'createdAt',
-                                                    'updatedAt',
-                                                ],
-                                                actionIdentifier: 'id',
-                                                onDataModify: data =>
-                                                    _.map(data, datum => ({
-                                                        ...datum,
-                                                    })),
-                                                onSuccess: data => {
-                                                    console.debug({ data });
-
-                                                    const totalOut = _.reduce(
-                                                        data,
-                                                        (result, datum, index) => {
-                                                            return (
-                                                                result +
-                                                                parseFloat(datum.amount) *
-                                                                    parseFloat(datum.conversionRate)
-                                                            );
-                                                        },
-                                                        0
-                                                    );
-
-                                                    setTotalOut(totalOut);
-                                                },
-                                            }}
-                                            addNew={{
-                                                uri: `/vendor/api/v1/trip-payments`,
-                                                buttonText: 'Drop Payment',
-                                            }}
-                                            // viewOne={{ uri: '/vendor/api/v1/trip-payments/{id}', identifier: '{id}' }}
-                                            // editExisting={{
-                                            //     uri: '/vendor/api/v1/trip-payments/{id}',
-                                            //     identifier: '{id}',
-                                            // }}
-                                            // removeOne={{
-                                            //     uri: '/vendor/api/v1/trip-payments/{id}',
-                                            //     identifier: '{id}',
-                                            // }}
-                                            fields={getFormFields(parseInt(tripId), 'OUT')}
-                                        />
-                                    ),
-                                    [trip]
-                                )}
                                 <div
-                                    className="mt-3"
+                                    className="col-6"
                                     style={{
-                                        background: 'rgba(0, 0, 0, 0.3)',
+                                        background: 'rgba(255, 0, 0, 0.3)',
                                     }}
                                 >
-                                    <DataTable
-                                        value={[{ totalOut: totalOut.toFixed(2) }]}
-                                        columnResizeMode="expand"
-                                        resizableColumns
-                                        showGridlines
-                                        scrollable
-                                        tableStyle={{ minWidth: '50%' }}
+                                    {useMemo(
+                                        () => (
+                                            <GenericViewGenerator
+                                                name={'Payment (OUT)'}
+                                                title="Trip Payments (OUT)"
+                                                subtitle="Manage trip payments (outbound) here!"
+                                                viewAll={{
+                                                    uri: `/vendor/api/v1/trips/${tripId}/types/OUT/trip-payments`,
+                                                    ignoredColumns: [
+                                                        'id',
+                                                        'vendorId',
+                                                        'tripId',
+                                                        'type',
+                                                        'invoiceNumber',
+                                                        'orderNumber',
+                                                        'additionalDetails',
+                                                        'billingEmail',
+                                                        'billingAddress',
+                                                        'createdAt',
+                                                        'updatedAt',
+                                                    ],
+                                                    actionIdentifier: 'id',
+                                                    onDataModify: data =>
+                                                        _.map(data, datum => ({
+                                                            ...datum,
+                                                        })),
+                                                    onSuccess: data => {
+                                                        console.debug({ data });
+
+                                                        const totalOut = _.reduce(
+                                                            data,
+                                                            (result, datum, index) => {
+                                                                return (
+                                                                    result +
+                                                                    parseFloat(datum.amount) *
+                                                                        parseFloat(datum.conversionRate)
+                                                                );
+                                                            },
+                                                            0
+                                                        );
+
+                                                        setTotalOut(totalOut);
+                                                    },
+                                                }}
+                                                addNew={{
+                                                    uri: `/vendor/api/v1/trip-payments`,
+                                                    buttonText: 'Drop Payment',
+                                                }}
+                                                // viewOne={{ uri: '/vendor/api/v1/trip-payments/{id}', identifier: '{id}' }}
+                                                // editExisting={{
+                                                //     uri: '/vendor/api/v1/trip-payments/{id}',
+                                                //     identifier: '{id}',
+                                                // }}
+                                                // removeOne={{
+                                                //     uri: '/vendor/api/v1/trip-payments/{id}',
+                                                //     identifier: '{id}',
+                                                // }}
+                                                fields={getFormFields(parseInt(tripId), 'OUT')}
+                                            />
+                                        ),
+                                        [trip]
+                                    )}
+                                    <div
+                                        className="mt-3"
+                                        style={{
+                                            background: 'rgba(0, 0, 0, 0.3)',
+                                        }}
                                     >
-                                        <Column field="totalOut" header={'Total Out (BDT)'} />
-                                    </DataTable>
+                                        <DataTable
+                                            value={[{ totalOut: totalOut.toFixed(2) }]}
+                                            columnResizeMode="expand"
+                                            resizableColumns
+                                            showGridlines
+                                            scrollable
+                                            tableStyle={{ minWidth: '50%' }}
+                                        >
+                                            <Column field="totalOut" header={'Total Out (BDT)'} />
+                                        </DataTable>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <Divider />
-                        <Message
-                            className="mt-3"
-                            severity={parseFloat((totalIn - totalOut).toFixed(2)) > 0 ? 'success' : 'error'}
-                            content={`Balance: BDT ${(totalIn - totalOut).toFixed(2)}`}
-                        />
-                    </TabPanel>
-                </TabView>
+                            <Divider />
+                            <Message
+                                className="mt-3"
+                                severity={parseFloat((totalIn - totalOut).toFixed(2)) > 0 ? 'success' : 'error'}
+                                content={`Balance: BDT ${(totalIn - totalOut).toFixed(2)}`}
+                            />
+                        </>
+                    }
+                />
             </Card>
         </>
     );

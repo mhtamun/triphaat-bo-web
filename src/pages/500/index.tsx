@@ -1,10 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
-
 import { useRouter } from 'next/router';
 import React from 'react';
-import AppConfig from '../../../components/layout/AppConfig';
+import AppConfig from '../../components/layout/AppConfig';
 import { Button } from 'primereact/button';
-import type { Page } from '../../../types/types';
+import type { Page } from '../../types/types';
 
 const ErrorPage: Page = () => {
     const router = useRouter();
@@ -31,6 +29,7 @@ const ErrorPage: Page = () => {
                         </div>
                         <h1 className="text-900 font-bold text-5xl mb-2">Error Occured</h1>
                         <p className="text-600 mb-5">Something went wrong.</p>
+                        {/* eslint-disable @next/next/no-img-element */}
                         <img src="/demo/images/error/asset-error.svg" alt="Error 500" className="mb-5" width="80%" />
                         <Button onClick={() => router.push('/')}>Go to Dashboard</Button>
                     </div>

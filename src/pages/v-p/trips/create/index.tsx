@@ -189,7 +189,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
             };
         }
 
-        console.debug(responseGetLocations.data);
+        // console.debug(responseGetLocations.data);
 
         return {
             isVendor: true,
@@ -211,7 +211,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                                 callback={(data, resetForm) => {
                                     // console.debug({ data });
 
-                                    callPostApi('/vendor/api/v1/trips', data)
+                                    callPostApi('/vendor/api/v1/trips', data, null, null, true)
                                         .then(response => {
                                             if (!response) {
                                                 // showToast('error', 'Unsuccessful!', 'Server not working!');

@@ -1,12 +1,9 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-// import { Menubar } from 'primereact/menubar';
-// import { MenuItemCommandEvent } from 'primereact/menuitem';
 import { Card } from 'primereact/card';
-import { TabView, TabPanel } from 'primereact/tabview';
 import _ from 'lodash';
 
 // application
@@ -16,6 +13,7 @@ import { getLocationsForVendor, getTripForVendor } from '../../../../apis';
 import { callPutApi } from '../../../../libs/api';
 import { ILocation } from '../../../trips/create';
 import { getTripFields } from '../create';
+import TabViewComponent from '../../../../components/trips/TabViewComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Details | Trip Management', async cookies => {
@@ -53,73 +51,47 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
 
     return (
         <>
-            {/* <Menubar
-                className="mb-3"
-                model={[
-                    {
-                        label: 'Details',
-                        icon: 'pi pi-fw pi-file',
-                        command: (event: MenuItemCommandEvent) => {},
-                    },
-                ]}
-            /> */}
             <Card title={trip?.name} className="mb-3">
-                <TabView
+                <TabViewComponent
                     activeIndex={0}
-                    onTabChange={e => {
-                        if (e.index === 0) router.push(`/v-p/trips/${tripId}`);
-                        if (e.index === 1) router.push(`/v-p/trips/${tripId}/variants`);
-                        if (e.index === 2) router.push(`/v-p/trips/${tripId}/images`);
-                        if (e.index === 3) router.push(`/v-p/trips/${tripId}/videos`);
-                        if (e.index === 4) router.push(`/v-p/trips/${tripId}/tags`);
-                        if (e.index === 5) router.push(`/v-p/trips/${tripId}/travelers`);
-                        if (e.index === 6) router.push(`/v-p/trips/${tripId}/payments`);
-                    }}
-                >
-                    <TabPanel header="Details">
-                        {useMemo(
-                            () =>
-                                !locations || _.size(locations) === 0 || !trip ? null : (
-                                    <GenericFormGenerator
-                                        datum={{
-                                            ...trip,
-                                            startDate: trip.startDate.split('T')[0],
-                                            endDate: trip.endDate.split('T')[0],
-                                        }}
-                                        fields={getTripFields(locations)}
-                                        callback={data => {
-                                            // console.debug({ data });
+                    router={router}
+                    tripId={tripId}
+                    content={useMemo(
+                        () =>
+                            !locations || _.size(locations) === 0 || !trip ? null : (
+                                <GenericFormGenerator
+                                    datum={{
+                                        ...trip,
+                                        startDate: trip.startDate.split('T')[0],
+                                        endDate: trip.endDate.split('T')[0],
+                                    }}
+                                    fields={getTripFields(locations)}
+                                    callback={data => {
+                                        // console.debug({ data });
 
-                                            callPutApi('/vendor/api/v1/trips/' + tripId, data)
-                                                .then(response => {
-                                                    if (!response) {
-                                                        // showToast('error', 'Unsuccessful!', 'Server not working!');
-                                                    } else if (response.statusCode !== 200) {
-                                                        // showToast('error', 'Unsuccessful!', response.message);
-                                                    } else {
-                                                        // showToast('success', 'Success!', response.message);
-                                                    }
-                                                })
-                                                .catch(error => {
-                                                    console.error('error', error);
+                                        callPutApi('/vendor/api/v1/trips/' + tripId, data)
+                                            .then(response => {
+                                                if (!response) {
+                                                    // showToast('error', 'Unsuccessful!', 'Server not working!');
+                                                } else if (response.statusCode !== 200) {
+                                                    // showToast('error', 'Unsuccessful!', response.message);
+                                                } else {
+                                                    // showToast('success', 'Success!', response.message);
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('error', error);
 
-                                                    // showToast('error', 'Unsuccessful!', 'Something went wrong!');
-                                                })
-                                                .finally(() => {});
-                                        }}
-                                        submitButtonText="Save"
-                                    />
-                                ),
-                            [trip]
-                        )}
-                    </TabPanel>
-                    <TabPanel header="Variants"></TabPanel>
-                    <TabPanel header="Images"></TabPanel>
-                    <TabPanel header="Videos"></TabPanel>
-                    <TabPanel header="Tags"></TabPanel>
-                    <TabPanel header="Travelers"></TabPanel>
-                    <TabPanel header="Payments"></TabPanel>
-                </TabView>
+                                                // showToast('error', 'Unsuccessful!', 'Something went wrong!');
+                                            })
+                                            .finally(() => {});
+                                    }}
+                                    submitButtonText="Save"
+                                />
+                            ),
+                        [trip]
+                    )}
+                />
             </Card>
         </>
     );

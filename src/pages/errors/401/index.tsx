@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'primereact/button';
@@ -31,6 +29,7 @@ const AccessDeniedPage: Page = () => {
                         </div>
                         <h1 className="text-900 font-bold text-5xl mb-2">Access Denied</h1>
                         <p className="text-600 mb-5">You do not have the necessary permisions.</p>
+                        {/* eslint-disable @next/next/no-img-element */}
                         <img src="/demo/images/access/asset-access.svg" alt="Error 401" className="mb-5" width="80%" />
                         <Button onClick={() => router.push('/')}>Go to Dashboard</Button>
                     </div>
