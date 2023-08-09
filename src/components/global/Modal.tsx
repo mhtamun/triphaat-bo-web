@@ -34,7 +34,7 @@ const Modal = (props: {
                 header={header}
                 footer={basicDialogFooter}
                 onHide={onHide}
-                style={{ width: '90vw' }}
+                style={{ width: '50vw' }}
             >
                 {body}
             </Dialog>
