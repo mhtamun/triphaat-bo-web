@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "lint": "next lint",
+        "lint-fix": "next lint --fix",
         "start:dev": "rm -Rf .next && next dev -p 8081",
         "build": "next build",
         "start": "next start -p 8081"
