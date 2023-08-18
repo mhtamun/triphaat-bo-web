@@ -26,3 +26,12 @@ export const getTripForVendor = (id: string, authorization: string) =>
 
 export const vendorLogin = (payload: { email: string; password: string; type: string }) =>
     callPostApi(apiBaseUrl + '/vendor/api/v1/auth/sign-in', payload, null, null, true);
+
+export const getTotalCountNumberOfTripsForVendor = (authorization: string) =>
+    callGetApi(apiBaseUrl + '/vendor/api/v1/trips-count-total', authorization);
+
+export const getTotalBalancePaymentOfTripsForVendor = (authorization: string) =>
+    callGetApi(apiBaseUrl + '/vendor/api/v1/trip-payments-balance-total', authorization);
+
+export const getCurrentMonthBalancePaymentOfTripsForVendor = (authorization: string) =>
+    callGetApi(apiBaseUrl + '/vendor/api/v1/trip-payments-balance-current-month', authorization);
