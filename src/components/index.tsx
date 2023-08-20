@@ -6,6 +6,7 @@ import InputText from './global/InputText';
 import Dropdown from './global/Dropdown';
 import InputTextarea from './global/InputTextarea';
 import Editor from './global/Editor';
+import MultiSelect from './global/MultiSelect';
 
 import GenericViewGenerator from './global/GenericViewGenerator';
 import GenericFormGenerator from './global/GenericFormGenerator';
@@ -20,4 +21,5 @@ export {
     Dropdown as SelectSyncField,
     InputTextarea as TextareaField,
     Editor as EditorField,
+    MultiSelect as MultiSelectSyncField,
 };

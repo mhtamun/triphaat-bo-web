@@ -59,14 +59,32 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
                                         _.map(data, datum => ({
-                                            ...datum,
+                                            id: datum.id,
+                                            reasons: datum.reasons.map(
+                                                (reason: string, index: number) => index + 1 + '. ' + reason + '\n'
+                                            ),
+                                            costPrice: datum.costPrice,
+                                            price: datum.price,
+                                            offerPrice: datum.offerPrice,
+                                            minimumRequiredTraveller: datum.minRequiredTraveller,
+                                            status: datum.status,
                                         })),
                                 }}
                                 addNew={{
                                     uri: `/api/v1/variants`,
                                     buttonText: 'Add Variant',
                                 }}
-                                viewOne={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
+                                viewOne={{
+                                    uri: '/api/v1/variants/{id}',
+                                    identifier: '{id}',
+                                    // Prisma returning decimal values as string, so needed to parse to float
+                                    onDataModify: datum => ({
+                                        ...datum,
+                                        costPrice: parseFloat(datum.costPrice),
+                                        price: parseFloat(datum.price),
+                                        offerPrice: parseFloat(datum.offerPrice),
+                                    }),
+                                }}
                                 editExisting={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}
                                 removeOne={{
                                     uri: '/api/v1/variants/{id}',
@@ -86,11 +104,44 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         },
                                     },
                                     {
-                                        type: 'text',
+                                        type: 'multi-select-sync',
                                         name: 'reasons',
-                                        placeholder: 'Enter reasons for this variant!',
+                                        placeholder: 'Select reasons for this variant!',
                                         title: 'Reasons',
                                         initialValue: null,
+                                        options: [
+                                            {
+                                                label: 'Sharing',
+                                                value: '',
+                                                items: [
+                                                    { label: 'No sharing', value: 'No sharing' },
+                                                    { label: '2 person sharing', value: '2 person sharing' },
+                                                    { label: '3 person sharing', value: '3 person sharing' },
+                                                    { label: '4 person sharing', value: '4 person sharing' },
+                                                ],
+                                            },
+                                            {
+                                                label: 'Transportation',
+                                                value: '',
+                                                items: [
+                                                    { label: 'AC Bus', value: 'AC Bus' },
+                                                    { label: 'Non-AC Bus', value: 'Non-AC Bus' },
+                                                    { label: 'First Class Flight', value: 'First Class Flight' },
+                                                    { label: 'Business Class Flight', value: 'Business Class Flight' },
+                                                    { label: 'Economy Class Flight', value: 'Economy Class Flight' },
+                                                ],
+                                            },
+                                            {
+                                                label: 'Accommodation',
+                                                value: '',
+                                                items: [
+                                                    { label: '3 Star Hotel', value: '3 Star Hotel' },
+                                                    { label: '4 Star Hotel', value: '4 Star Hotel' },
+                                                    { label: '5 Star Hotel', value: '5 Star Hotel' },
+                                                ],
+                                            },
+                                        ],
+                                        isGroupOptions: true,
                                         validate: (values: any) => {
                                             if (!values.reasons) return 'Required!';
 
@@ -127,6 +178,18 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         placeholder: 'Enter offer price!',
                                         title: 'Offer Price',
                                         initialValue: null,
+                                    },
+                                    {
+                                        type: 'number',
+                                        name: 'minRequiredTraveller',
+                                        placeholder: 'Enter minimum number of traveller required for this variant!',
+                                        title: 'Minimum Required Traveller',
+                                        initialValue: null,
+                                        validate: (values: any) => {
+                                            if (!values.minRequiredTraveller) return 'Required!';
+
+                                            return null;
+                                        },
                                     },
                                     {
                                         type: 'select-sync',

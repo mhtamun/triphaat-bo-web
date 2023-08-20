@@ -16,17 +16,33 @@ export const getServerSideProps: GetServerSideProps = async context =>
         const responseCountNumberOfTrips = await getTotalCountNumberOfTripsForVendor(
             `${cookies.accessType} ${cookies.accessToken}`
         );
-        console.debug({ responseCountNumberOfTrips });
+        // console.debug({ responseCountNumberOfTrips });
 
         const responseTotalBalancePaymentOfTrips = await getTotalBalancePaymentOfTripsForVendor(
             `${cookies.accessType} ${cookies.accessToken}`
         );
-        console.debug({ responseTotalBalancePaymentOfTrips });
+        // console.debug({ responseTotalBalancePaymentOfTrips });
 
         const responseCurrentMonthBalancePaymentOfTrips = await getCurrentMonthBalancePaymentOfTripsForVendor(
             `${cookies.accessType} ${cookies.accessToken}`
         );
-        console.debug({ responseCurrentMonthBalancePaymentOfTrips });
+        // console.debug({ responseCurrentMonthBalancePaymentOfTrips });
+
+        if (
+            !responseCountNumberOfTrips ||
+            responseCountNumberOfTrips.statusCode !== 200 ||
+            !responseTotalBalancePaymentOfTrips ||
+            responseTotalBalancePaymentOfTrips.statusCode !== 200 ||
+            !responseCurrentMonthBalancePaymentOfTrips ||
+            responseCurrentMonthBalancePaymentOfTrips.statusCode !== 200
+        ) {
+            return {
+                redirect: {
+                    destination: '/500',
+                    permanent: false,
+                },
+            };
+        }
 
         return {
             isVendor: true,

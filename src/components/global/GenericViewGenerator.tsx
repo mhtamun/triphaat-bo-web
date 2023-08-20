@@ -37,11 +37,7 @@ const DeleteItemComponent = ({
                 setConfirmationModalOpen(!isConfirmationModalOpen);
                 callDeleteApi(_.replace(deleteApiUri, deleteIdentifier, datumId))
                     .then(response => {
-                        if (!response) {
-                            // todo
-                        } else if (response.statusCode !== 200) {
-                            // todo
-                        } else {
+                        if (response.statusCode !== 200) {
                             onSuccess();
                         }
                     })
@@ -93,11 +89,7 @@ const EditItemComponent = ({
 
                     callPutApi(_.replace(putApiUri, putIdentifier, datumId), data, null, null, true)
                         .then(response => {
-                            if (!response) {
-                                // todo
-                            } else if (response.statusCode !== 200) {
-                                // todo
-                            } else {
+                            if (response.statusCode === 200) {
                                 callback();
 
                                 setFormModalOpen(false);
@@ -148,11 +140,7 @@ const AddNewItemComponent = ({
 
                     callPostApi(postApiUri, data)
                         .then(response => {
-                            if (!response) {
-                                // todo
-                            } else if (response.statusCode !== 200) {
-                                // todo
-                            } else {
+                            if (response.statusCode === 200) {
                                 resetForm();
 
                                 setFormModalOpen(false);

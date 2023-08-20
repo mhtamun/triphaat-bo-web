@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
-import { InputField, SelectSyncField, TextareaField, EditorField } from '../index';
+import { InputField, SelectSyncField, MultiSelectSyncField, TextareaField, EditorField } from '../index';
 
 export interface IField {
     type: string;
@@ -10,7 +10,12 @@ export interface IField {
     title: string;
     placeholder: string;
     initialValue: string | number | boolean | null;
-    options?: { value: boolean | number | string; label: string }[];
+    options?: {
+        value: boolean | number | string;
+        label: string;
+        items?: { value: boolean | number | string; label: string }[];
+    }[];
+    isGroupOptions?: boolean; // only for multi select dropdowns
     isDisabled?: boolean;
     show?: boolean;
     validate?: (values: any) => string | null;
@@ -199,6 +204,24 @@ export default function GenericFormGenerator({
                     // @ts-ignore
                     value={formik.values[field.name] ?? ''}
                     options={field.options ?? []}
+                    setFieldValue={formik.setFieldValue}
+                    isDisabled={field.isDisabled}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'multi-select-sync')
+            return (
+                <MultiSelectSyncField
+                    key={field.name}
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    value={formik.values[field.name] ?? ''}
+                    options={field.options ?? []}
+                    isGroupOptions={field.isGroupOptions}
                     setFieldValue={formik.setFieldValue}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}

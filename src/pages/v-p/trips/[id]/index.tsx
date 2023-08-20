@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         ) {
             return {
                 redirect: {
-                    destination: '/errors/500',
+                    destination: '/500',
                     permanent: false,
                 },
             };

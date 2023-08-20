@@ -1,42 +1,63 @@
 import React from 'react';
-import { Dropdown } from 'primereact/dropdown';
+import { MultiSelect } from 'primereact/multiselect';
 import _ from 'lodash';
+import { ISelectOption } from './Dropdown';
 
-export interface ISelectOption {
-    value: boolean | number | string;
-    label: string;
+interface IMultiSelectOption extends ISelectOption {
+    items?: { value: boolean | number | string; label: string }[];
 }
 
-const SelectSyncField = (props: {
+const MultiSelectSyncField = (props: {
     name: string;
     title: string;
     placeholder?: string;
     value?: string;
-    options: ISelectOption[];
+    options: IMultiSelectOption[];
+    isGroupOptions?: boolean;
     setFieldValue: (name: string, value: any) => void;
     isDisabled?: boolean;
     errorMessage?: string;
 }) => {
-    const { name, title, placeholder, value, options, setFieldValue, isDisabled = false, errorMessage = '' } = props;
+    const {
+        name,
+        title,
+        placeholder,
+        value,
+        options,
+        isGroupOptions,
+        setFieldValue,
+        isDisabled = false,
+        errorMessage = '',
+    } = props;
 
     // console.debug({ name, title, placeholder, value, options });
+
+    const groupedItemTemplate = (option: IMultiSelectOption) => {
+        return (
+            <div className="flex align-items-center">
+                <div>{option.label}</div>
+            </div>
+        );
+    };
 
     return (
         <div className="field p-fluid">
             <label htmlFor={name}>{title}</label>
-            <Dropdown
-                inputId={name}
+            <MultiSelect
                 name={name}
                 placeholder={placeholder}
                 value={value}
                 options={options}
                 optionLabel="label"
                 optionValue="value"
-                showClear
+                optionGroupLabel={!isGroupOptions ? undefined : 'label'}
+                optionGroupChildren={!isGroupOptions ? undefined : 'items'}
+                // optionGroupTemplate={groupedItemTemplate}
+                display="chip"
+                maxSelectedLabels={5}
                 filter
                 disabled={isDisabled}
                 className={!errorMessage ? '' : 'p-invalid'}
-                aria-describedby={`${name}-help`}
                 onChange={e => {
                     // console.debug({ e });
 
@@ -52,4 +73,4 @@ const SelectSyncField = (props: {
     );
 };
 
-export default SelectSyncField;
+export default MultiSelectSyncField;

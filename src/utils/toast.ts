@@ -27,44 +27,34 @@ export const showApiCallLoaderToast = (
     toast.loading(pendingMessage, { ...toastOptions, ...options, autoClose: false, isLoading: true, type, toastId });
 
     return new Promise((resolve, reject) => {
-        promise
-            .then(response => {
-                if (!response || response.statusCode !== 200)
-                    toast.update(toastId, {
+        setTimeout(() => {
+            promise
+                .then(response => {
+                    toast(response.message, {
                         ...toastOptions,
                         ...options,
-                        render: response.message,
-                        autoClose: false,
-                        isLoading: false,
-                        type: toast.TYPE.ERROR,
-                        toastId: toastId,
-                    });
-                else
-                    toast.update(toastId, {
-                        ...toastOptions,
-                        ...options,
-                        render: response.message,
                         autoClose: 1000,
                         isLoading: false,
-                        type: toast.TYPE.SUCCESS,
-                        toastId: toastId,
+                        type: response.statusCode !== 200 && response.error ? toast.TYPE.ERROR : toast.TYPE.SUCCESS,
                     });
 
-                resolve(response);
-            })
-            .catch(error => {
-                toast.update(toastId, {
-                    ...toastOptions,
-                    ...options,
-                    render: 'Something went wrong!',
-                    autoClose: false,
-                    isLoading: false,
-                    type: toast.TYPE.ERROR,
-                    toastId: toastId,
-                });
+                    resolve(response);
+                })
+                .catch(error => {
+                    toast('Something went wrong!', {
+                        ...toastOptions,
+                        ...options,
+                        autoClose: 1000,
+                        isLoading: false,
+                        type: toast.TYPE.ERROR,
+                    });
 
-                reject(error);
-            });
+                    reject(error);
+                })
+                .finally(() => {
+                    toast.dismiss(toastId);
+                });
+        }, 500);
     });
 };
 
