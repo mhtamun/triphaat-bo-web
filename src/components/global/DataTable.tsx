@@ -55,6 +55,7 @@ const DataTable = ({
                 <>
                     {_.map(actions, (action: IAction, index: number) => (
                         <Button
+                            key={index}
                             label={action.text ?? undefined}
                             icon={action.icon}
                             severity={action.color}

@@ -11,9 +11,22 @@ import { getAuthorized } from '../../../../libs/auth';
 import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
 import { getLocationsForVendor, getTripForVendor } from '../../../../apis';
 import { callPutApi } from '../../../../libs/api';
-import { ILocation } from '../../../trips/create';
 import { getTripFields } from '../create';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
+
+export interface ILocation {
+    id: number;
+    name: string;
+    city: {
+        name: string;
+        state: {
+            name: string;
+            country: {
+                name: string;
+            };
+        };
+    };
+}
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Details | Trip Management', async cookies => {

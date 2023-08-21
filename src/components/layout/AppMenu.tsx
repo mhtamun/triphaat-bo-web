@@ -33,18 +33,9 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     to: '/vendors',
                 },
                 {
-                    icon: 'pi pi-fw pi-image',
-                    label: 'Trip Management',
-                    items: [
-                        {
-                            label: 'Locations',
-                            to: '/trips/locations',
-                        },
-                        {
-                            label: 'Trips',
-                            to: '/trips',
-                        },
-                    ],
+                    icon: 'pi pi-fw pi-map',
+                    label: 'Location Management',
+                    to: '/locations/countries',
                 },
             ],
         },

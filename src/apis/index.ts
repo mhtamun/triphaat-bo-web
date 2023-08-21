@@ -14,12 +14,23 @@ export const getRoles = () => callGetApi(apiBaseUrl + '/api/v1/roles');
 
 export const getVendors = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/vendors', authorization);
 
-export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
+// export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
+
+// export const getCountries = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/countries', authorization);
+
+export const getCountryById = (id: string, authorization: string) =>
+    callGetApi(apiBaseUrl + '/api/v1/countries/' + id, authorization);
+
+export const getStateById = (id: string, authorization: string) =>
+    callGetApi(apiBaseUrl + '/api/v1/states/' + id, authorization);
+
+export const getCityById = (id: string, authorization: string) =>
+    callGetApi(apiBaseUrl + '/api/v1/cities/' + id, authorization);
 
 export const getLocationsForVendor = () => callGetApi(apiBaseUrl + '/public/api/v1/locations');
 
-export const getTrip = (id: string, authorization: string) =>
-    callGetApi(apiBaseUrl + '/api/v1/trips/' + id, authorization);
+// export const getTrip = (id: string, authorization: string) =>
+//     callGetApi(apiBaseUrl + '/api/v1/trips/' + id, authorization);
 
 export const getTripForVendor = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/vendor/api/v1/trips/' + id, authorization);
