@@ -104,6 +104,18 @@ export const getTripFields = (locations: ILocation[]) => [
         },
     },
     {
+        type: 'hidden',
+        name: 'dateType',
+        placeholder: '',
+        title: '',
+        initialValue: 'FIXED_DATE',
+        validate: (values: any) => {
+            if (!values.dateType) return 'Required!';
+
+            return null;
+        },
+    },
+    {
         type: 'date',
         name: 'startDate',
         placeholder: 'Enter start date for this trip!',
@@ -128,6 +140,18 @@ export const getTripFields = (locations: ILocation[]) => [
         },
     },
     {
+        type: 'date',
+        name: 'expiryDateOfBooking',
+        placeholder: 'Enter date of expiration for this trip!',
+        title: 'Expiration Date Of Booking',
+        initialValue: null,
+        validate: (values: any) => {
+            if (!values.expiryDateOfBooking) return 'Required!';
+
+            return null;
+        },
+    },
+    {
         type: 'number',
         name: 'numberOfSeats',
         placeholder: 'Enter number of seats for this trip!',
@@ -135,6 +159,21 @@ export const getTripFields = (locations: ILocation[]) => [
         initialValue: null,
         validate: (values: any) => {
             if (!values.numberOfSeats) return 'Required!';
+
+            return null;
+        },
+    },
+    {
+        type: 'number',
+        name: 'minRequiredSeatsToRun',
+        placeholder: 'Enter number of seats required for this trip to run!',
+        title: 'Number of Seats (Minimum)',
+        initialValue: null,
+        validate: (values: any) => {
+            if (!values.minRequiredSeatsToRun) return 'Required!';
+
+            if (values.numberOfSeats < values.minRequiredSeatsToRun)
+                return "You can't input a value greater the maximum number of seats!";
 
             return null;
         },
@@ -162,6 +201,18 @@ export const getTripFields = (locations: ILocation[]) => [
         },
     },
     {
+        type: 'number',
+        name: 'serial',
+        placeholder: 'Enter serial number for sorting!',
+        title: 'Serial',
+        initialValue: 9999,
+        validate: (values: any) => {
+            if (!values.serial) return 'Required!';
+
+            return null;
+        },
+    },
+    {
         type: 'select-sync',
         name: 'status',
         placeholder: 'Select status!',
@@ -183,7 +234,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         if (!responseGetLocations || responseGetLocations.statusCode !== 200) {
             return {
                 redirect: {
-                    destination: '/errors/500',
+                    destination: '/500',
                     permanent: false,
                 },
             };
@@ -222,7 +273,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
 
                                                 // showToast('success', 'Success!', response.message);
 
-                                                router.push(`/v-p/trips/${response.data.id}`);
+                                                router.push(`/v-p/fixed-date-trips/${response.data.id}`);
                                             }
                                         })
                                         .catch(error => {

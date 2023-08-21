@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
@@ -30,7 +30,9 @@ const Page = () => {
                 severity="success"
                 className="mb-3"
                 onClick={e => {
-                    router.push(`/v-p/trips/create`);
+                    e.preventDefault();
+
+                    router.push(`/v-p/fixed-date-trips/create`);
                 }}
             />
             {useMemo(
@@ -38,13 +40,12 @@ const Page = () => {
                     <GenericViewGenerator
                         name={'Trip'}
                         viewAll={{
-                            uri: `/vendor/api/v1/trips`,
+                            uri: `/vendor/api/v1/date-types/${'FIXED_DATE'}/trips`,
                             ignoredColumns: ['id', 'smallDescription', 'bigDescription', 'createdAt', 'updatedAt'],
                             actionIdentifier: 'id',
                             onDataModify: data =>
                                 _.map(data, datum => ({
                                     ...datum,
-                                    trips: null,
                                 })),
                         }}
                         customActions={[
@@ -53,7 +54,7 @@ const Page = () => {
                                 icon: PrimeIcons.ARROW_RIGHT,
                                 text: 'Detail',
                                 callback: identifier => {
-                                    router.push(`/v-p/trips/${identifier}`);
+                                    router.push(`/v-p/fixed-date-trips/${identifier}`);
                                 },
                             },
                         ]}

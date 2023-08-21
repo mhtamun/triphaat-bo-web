@@ -33,9 +33,9 @@ export const showApiCallLoaderToast = (
                     toast(response.message, {
                         ...toastOptions,
                         ...options,
-                        autoClose: 1000,
+                        autoClose: response.statusCode !== 200 ? false : 1000,
                         isLoading: false,
-                        type: response.statusCode !== 200 && response.error ? toast.TYPE.ERROR : toast.TYPE.SUCCESS,
+                        type: response.statusCode !== 200 ? toast.TYPE.ERROR : toast.TYPE.SUCCESS,
                     });
 
                     resolve(response);
