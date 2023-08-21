@@ -16,6 +16,22 @@ import { ILocation } from '../../../trips/create';
 
 export const getTripFields = (locations: ILocation[]) => [
     {
+        type: 'select-sync',
+        name: 'locationId',
+        placeholder: 'Select a location for trip!',
+        title: 'Location',
+        initialValue: null,
+        options: _.map(locations, (location: ILocation) => ({
+            value: location.id,
+            label: `${location.name}, ${location.city.name}, ${location.city.state.name}, ${location.city.state.country.name}`,
+        })),
+        validate: (values: any) => {
+            if (!values.locationId) return 'Required!';
+
+            return null;
+        },
+    },
+    {
         type: 'hidden',
         name: 'type',
         placeholder: '',
@@ -39,22 +55,7 @@ export const getTripFields = (locations: ILocation[]) => [
             return null;
         },
     },
-    {
-        type: 'select-sync',
-        name: 'locationName',
-        placeholder: 'Select a location for trip!',
-        title: 'Location Name',
-        initialValue: null,
-        options: _.map(locations, (location: ILocation) => ({
-            value: location.name,
-            label: `${location.name}, ${!location.city ? '' : ','} ${!location.state ? '' : ','} ${location.country}`,
-        })),
-        validate: (values: any) => {
-            if (!values.locationName) return 'Required!';
 
-            return null;
-        },
-    },
     {
         type: 'textarea',
         name: 'smallDescription',
@@ -243,7 +244,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
             };
         }
 
-        // console.debug(responseGetLocations.data);
+        console.debug(responseGetLocations.data);
 
         return {
             isVendor: true,

@@ -242,7 +242,9 @@ export default function GenericFormGenerator({
         const isNotShow =
             _.isUndefined(fields[count].show) || _.isNull(fields[count].show)
                 ? false
-                : fields[count].show(formik.values) === false;
+                : fields[count].show(formik.values) === false
+                ? true
+                : false;
 
         const isHidden = fields[count].type === 'hidden';
 
@@ -269,26 +271,28 @@ export default function GenericFormGenerator({
 
             for (let i = 0; i < numberOfColumn; i++) {
                 insideItems.push(
-                    <div key={'inside' + i + 'column'} className={`field col`}>
+                    <div key={'inside-' + (i + 1) + '-column'} className={`field col`}>
                         {getField(fields[count])}
                     </div>
                 );
 
+                // console.debug({ count, field: fields[count].name });
                 count++;
             }
 
             formFields.push(
-                <div key={count + 1} className="formgrid grid">
+                <div key={'outside-' + (count + 1) + '-row-group'} className="formgrid grid">
                     {_.map(insideItems, insideItem => insideItem)}
                 </div>
             );
         } else {
             formFields.push(
-                <div key={count + 1} className="field">
+                <div key={'outside-' + (count + 1) + '-row'} className="field">
                     {getField(fields[count])}
                 </div>
             );
 
+            // console.debug({ count, field: fields[count].name });
             count++;
         }
     }

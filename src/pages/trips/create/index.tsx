@@ -21,10 +21,17 @@ export interface IVendor {
 }
 
 export interface ILocation {
+    id: number;
     name: string;
-    city?: string;
-    state?: string;
-    country: string;
+    city: {
+        name: string;
+        state: {
+            name: string;
+            country: {
+                name: string;
+            };
+        };
+    };
 }
 
 export const getTripFields = (vendors: IVendor[], locations: ILocation[]) => [
@@ -75,8 +82,8 @@ export const getTripFields = (vendors: IVendor[], locations: ILocation[]) => [
         title: 'Location Name',
         initialValue: null,
         options: _.map(locations, (location: ILocation) => ({
-            value: location.name,
-            label: `${location.name}, ${!location.city ? '' : ','} ${!location.state ? '' : ','} ${location.country}`,
+            value: location.id,
+            label: `${location.name}`,
         })),
         validate: (values: any) => {
             if (!values.locationName) return 'Required!';
