@@ -90,6 +90,7 @@ export const getTripFields = (locations: ILocation[]) => [
 
             return null;
         },
+        col: 2,
     },
     {
         type: 'number',
@@ -126,6 +127,7 @@ export const getTripFields = (locations: ILocation[]) => [
 
             return null;
         },
+        col: 3,
     },
     {
         type: 'date',
@@ -162,6 +164,7 @@ export const getTripFields = (locations: ILocation[]) => [
 
             return null;
         },
+        col: 2,
     },
     {
         type: 'number',
