@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormik } from 'formik';
+import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
 import { InputField, SelectSyncField, MultiSelectSyncField, TextareaField, EditorField } from '../index';
@@ -17,8 +17,9 @@ export interface IField {
     }[];
     isGroupOptions?: boolean; // only for multi select dropdowns
     isDisabled?: boolean;
-    show?: boolean;
-    validate?: (values: any) => string | null;
+    show?: (values: FormikValues) => boolean;
+    col?: number;
+    validate?: (values: FormikValues) => string | null;
 }
 
 export default function GenericFormGenerator({
@@ -31,6 +32,7 @@ export default function GenericFormGenerator({
     onValueModify,
     // onShowSubmitButton = null,
     submitButtonText,
+    resetButtonShow = true,
     resetButtonText,
     enableReinitialize = false,
 }: {
@@ -40,6 +42,7 @@ export default function GenericFormGenerator({
     callback: (values: any, resetForm: () => void) => void;
     onValueModify?: (value: any) => void;
     submitButtonText?: string;
+    resetButtonShow?: boolean;
     resetButtonText?: string;
     enableReinitialize?: boolean;
 }) {
@@ -93,17 +96,21 @@ export default function GenericFormGenerator({
 
             const hiddenFields: any[] = [];
 
-            // todo: Implement not showing fields to remove from values
             // Check false value not to submit in the form
             _.mapKeys(values, (value, key) => {
                 if (_.isUndefined(value) || _.isNull(value)) hiddenFields.push(key);
             });
 
             // Check information type value or not showing value not to submit in the form
-            const tempFalseFields = _.filter(fields, field => field.type === 'information' || field.show === false);
-            _.map(tempFalseFields, field => {
-                hiddenFields.push(field.name);
-            });
+            _.map(
+                _.filter(
+                    fields,
+                    field => field.type === 'information' || (field.show && field.show(values) === false)
+                ) as IField[],
+                field => {
+                    hiddenFields.push(field.name);
+                }
+            );
 
             // console.debug({ hiddenFields });
 
@@ -229,118 +236,80 @@ export default function GenericFormGenerator({
             );
     }
 
-    // let count = 0;
-    const formFields = [...fields];
-    // while (count < _.size(fields)) {
-    //     if (
-    //         !_.isUndefined(fields[count].show) &&
-    //         !_.isNull(fields[count].show) &&
-    //         fields[count].show(formik.values) === false
-    //     ) {
-    //         count++;
+    let count = 0;
+    const formFields = [];
+    while (count < _.size(fields)) {
+        const isNotShow =
+            _.isUndefined(fields[count].show) || _.isNull(fields[count].show)
+                ? false
+                : fields[count].show(formik.values) === false;
 
-    //         continue;
-    //     }
+        const isHidden = fields[count].type === 'hidden';
 
-    //     const numberOfColumn = fields[count].col;
+        if (isNotShow || isHidden) {
+            count++;
 
-    //     if (!_.isUndefined(numberOfColumn) && !_.isNull(numberOfColumn) && numberOfColumn > 1) {
-    //         const insideItems = [];
+            continue;
+        }
 
-    //         /* Hidden field count check */
-    //         let numberOfHiddenColumns = 0;
-    //         let tempCount = count;
-    //         for (let i = 0; i < numberOfColumn; i++) {
-    //             if (fields[tempCount].type === 'hidden') numberOfHiddenColumns++;
+        const numberOfColumn = fields[count].col ?? 1;
 
-    //             tempCount++;
-    //         }
-    //         /* Hidden field count check */
+        if (numberOfColumn > 1) {
+            const insideItems = [];
 
-    //         for (let i = 0; i < numberOfColumn; i++) {
-    //             insideItems.push(
-    //                 <div
-    //                     key={'inside' + i + 'column'}
-    //                     className={`form-group col-md-${Math.ceil(12 / (numberOfColumn - numberOfHiddenColumns))}`}
-    //                     style={fields[count].type === 'hidden' ? { display: 'none' } : {}}
-    //                 >
-    //                     {getField(fields[count])}
-    //                 </div>
-    //             );
+            /* Hidden field count check */
+            let numberOfHiddenColumns = 0;
+            let tempCount = count;
+            for (let i = 0; i < numberOfColumn; i++) {
+                if (fields[tempCount].type === 'hidden') numberOfHiddenColumns++;
 
-    //             count++;
-    //         }
+                tempCount++;
+            }
+            /* Hidden field count check */
 
-    //         formFields.push(
-    //             <div key={count + 1} className="form-row">
-    //                 {_.map(insideItems, (insideItem) => insideItem)}
-    //             </div>
-    //         );
-    //     } else {
-    //         formFields.push(
-    //             <div
-    //                 key={count + 1}
-    //                 className="form-row"
-    //                 style={fields[count].type === 'hidden' ? { display: 'none' } : {}}
-    //             >
-    //                 <div className="form-group col-md-12">{getField(fields[count])}</div>
-    //             </div>
-    //         );
+            for (let i = 0; i < numberOfColumn; i++) {
+                insideItems.push(
+                    <div key={'inside' + i + 'column'} className={`field col`}>
+                        {getField(fields[count])}
+                    </div>
+                );
 
-    //         count++;
-    //     }
-    // }
+                count++;
+            }
+
+            formFields.push(
+                <div key={count + 1} className="formgrid grid">
+                    {_.map(insideItems, insideItem => insideItem)}
+                </div>
+            );
+        } else {
+            formFields.push(
+                <div key={count + 1} className="field">
+                    {getField(fields[count])}
+                </div>
+            );
+
+            count++;
+        }
+    }
 
     const submitButton = <Button type="submit" label={!submitButtonText ? 'Submit' : submitButtonText}></Button>;
-
-    // if (_.isUndefined(onShowSubmitButton) || _.isNull(onShowSubmitButton))
-    //     submitButton = (
-    //         <CButton type="submit" className="mt-1" color="primary">
-    //             {!submitButtonText ? 'Submit' : submitButtonText}
-    //         </CButton>
-    //     );
-    // else {
-    //     if (onShowSubmitButton(formik.values))
-    //         submitButton = (
-    //             <CButton type="submit" className="mt-1" color="primary" size="sm">
-    //                 {!submitButtonText ? 'Submit' : submitButtonText}
-    //             </CButton>
-    //         );
-    // }
-
-    // Handle data change instantly
-    // useEffect(() => {
-    //     if (onValueModify !== null && typeof onValueModify === 'function') onValueModify(formik.values);
-    // }, [formik.values]);
+    const resetButton = !resetButtonShow ? null : (
+        <Button
+            type="reset"
+            label={!resetButtonText ? 'Reset' : resetButtonText}
+            onClick={formik.handleReset}
+            className="ml-3"
+        ></Button>
+    );
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            {formFields.map(formField => {
-                // console.debug({ formField });
-
-                return getField(formField);
+            {_.map(formFields, formFieldElement => {
+                return formFieldElement;
             })}
             {submitButton}
-            {/* {!resetButtonText ? null : (
-                <CButton
-                    className="mt-1 ml-3"
-                    variant="outline"
-                    color="primary"
-                    onClick={(e) => {
-                        e.preventDefault();
-
-                        for (const name in formik.values) {
-                            formik.setFieldValue(name, null);
-                        }
-
-                        // formik.resetForm();
-
-                        callback(formik.values);
-                    }}
-                >
-                    {resetButtonText}
-                </CButton>
-            )} */}
+            {resetButton}
         </form>
     );
 }
