@@ -102,11 +102,11 @@ const EditorField = (props: {
                 <Button
                     className="btn-block mt-3"
                     icon="pi pi-save"
-                    severity={!isTouched ? 'info' : 'danger'}
+                    label={'Save Your New Changes'}
+                    severity={'danger'}
+                    raised
                     onClick={handleSaveChanges}
-                >
-                    {!isTouched ? '' : ' Save Your New Changes'}
-                </Button>
+                />
             )}
             {!title ? null : (
                 <label htmlFor={name} className="mt-3">

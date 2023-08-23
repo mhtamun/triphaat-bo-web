@@ -14,7 +14,7 @@ import { getGeneralStatusOptions } from '../../../../utils';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'FAQs | Trip Management', async cookies => {
+    getAuthorized(context, 'Tags | Trip Management', async cookies => {
         const tripId = context.query.id;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
             return {
                 redirect: {
-                    destination: '/500',
+                    destination: '/errors/500',
                     permanent: false,
                 },
             };
@@ -44,17 +44,17 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
         <>
             <Card title={trip?.name} className="mb-3">
                 <TabViewComponent
-                    activeIndex={7}
+                    activeIndex={4}
                     router={router}
                     tripId={tripId}
                     content={useMemo(
                         () => (
                             <GenericViewGenerator
-                                name={'FAQ'}
-                                title="Trip FAQs"
-                                subtitle="Manage trip faqs here!"
+                                name={'Tag'}
+                                title="Trip Tags"
+                                subtitle="Manage trip tags here!"
                                 viewAll={{
-                                    uri: `/api/v1/trips/${tripId}/faqs`,
+                                    uri: `/api/v1/trips/${tripId}/tags`,
                                     ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
@@ -63,13 +63,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         })),
                                 }}
                                 addNew={{
-                                    uri: `/api/v1/faqs`,
-                                    buttonText: 'Add FAQ',
+                                    uri: `/api/v1/tags`,
+                                    buttonText: 'Add Tag',
                                 }}
-                                viewOne={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
-                                editExisting={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
+                                viewOne={{ uri: '/api/v1/tags/{id}', identifier: '{id}' }}
+                                editExisting={{ uri: '/api/v1/tags/{id}', identifier: '{id}' }}
                                 removeOne={{
-                                    uri: '/api/v1/faqs/{id}',
+                                    uri: '/api/v1/tags/{id}',
                                     identifier: '{id}',
                                 }}
                                 fields={[
@@ -87,24 +87,24 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                     {
                                         type: 'text',
-                                        name: 'question',
-                                        placeholder: 'Enter a question for this FAQ!',
-                                        title: 'Question',
+                                        name: 'tag',
+                                        placeholder: 'Enter a TAG for this trip!',
+                                        title: 'TAG',
                                         initialValue: null,
                                         validate: (values: any) => {
-                                            if (!values.question) return 'Required!';
+                                            if (!values.tag) return 'Required!';
 
                                             return null;
                                         },
                                     },
                                     {
-                                        type: 'text',
-                                        name: 'answer',
-                                        placeholder: 'Enter a answer for this FAQ!',
-                                        title: 'Answer',
-                                        initialValue: null,
+                                        type: 'number',
+                                        name: 'serial',
+                                        placeholder: 'Enter serial number for sorting!',
+                                        title: 'Serial',
+                                        initialValue: 9999,
                                         validate: (values: any) => {
-                                            if (!values.answer) return 'Required!';
+                                            if (!values.serial) return 'Required!';
 
                                             return null;
                                         },

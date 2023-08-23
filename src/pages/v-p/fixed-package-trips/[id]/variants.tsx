@@ -118,6 +118,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                                     { label: '2 person sharing', value: '2 person sharing' },
                                                     { label: '3 person sharing', value: '3 person sharing' },
                                                     { label: '4 person sharing', value: '4 person sharing' },
+                                                    { label: 'Couple', value: 'Couple' },
                                                 ],
                                             },
                                             {
@@ -154,11 +155,6 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         placeholder: 'Enter cost price!',
                                         title: 'Cost Price',
                                         initialValue: null,
-                                        validate: (values: any) => {
-                                            if (!values.costPrice) return 'Required!';
-
-                                            return null;
-                                        },
                                     },
                                     {
                                         type: 'number',
@@ -187,6 +183,18 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         initialValue: null,
                                         validate: (values: any) => {
                                             if (!values.minRequiredTraveller) return 'Required!';
+
+                                            return null;
+                                        },
+                                    },
+                                    {
+                                        type: 'number',
+                                        name: 'serial',
+                                        placeholder: 'Enter serial number for sorting!',
+                                        title: 'Serial',
+                                        initialValue: 9999,
+                                        validate: (values: any) => {
+                                            if (!values.serial) return 'Required!';
 
                                             return null;
                                         },

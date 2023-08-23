@@ -14,7 +14,7 @@ import { getGeneralStatusOptions } from '../../../../utils';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Highlights | Trip Management', async cookies => {
+    getAuthorized(context, 'FAQs | Trip Management', async cookies => {
         const tripId = context.query.id;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -44,35 +44,32 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
         <>
             <Card title={trip?.name} className="mb-3">
                 <TabViewComponent
-                    activeIndex={6}
+                    activeIndex={7}
                     router={router}
                     tripId={tripId}
                     content={useMemo(
                         () => (
                             <GenericViewGenerator
-                                name={'Include/Exclude'}
-                                title="Trip Include/Exclude List"
-                                subtitle="Manage trip include/exclude here!"
+                                name={'FAQ'}
+                                title="Trip FAQs"
+                                subtitle="Manage trip faqs here!"
                                 viewAll={{
-                                    uri: `/api/v1/trips/${tripId}/includes`,
+                                    uri: `/api/v1/trips/${tripId}/faqs`,
                                     ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
                                         _.map(data, datum => ({
-                                            id: datum.id,
-                                            note: datum.note,
-                                            type: !datum.not ? 'Include' : 'Exclude',
-                                            status: datum.status,
+                                            ...datum,
                                         })),
                                 }}
                                 addNew={{
-                                    uri: `/api/v1/includes`,
-                                    buttonText: 'Add Include/Exclude',
+                                    uri: `/api/v1/faqs`,
+                                    buttonText: 'Add FAQ',
                                 }}
-                                viewOne={{ uri: '/api/v1/includes/{id}', identifier: '{id}' }}
-                                editExisting={{ uri: '/api/v1/includes/{id}', identifier: '{id}' }}
+                                viewOne={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
+                                editExisting={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
                                 removeOne={{
-                                    uri: '/api/v1/includes/{id}',
+                                    uri: '/api/v1/faqs/{id}',
                                     identifier: '{id}',
                                 }}
                                 fields={[
@@ -90,31 +87,36 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                     {
                                         type: 'text',
-                                        name: 'note',
-                                        placeholder: 'Enter a include/exclude note for this trip!',
-                                        title: 'Note',
+                                        name: 'question',
+                                        placeholder: 'Enter a question for this FAQ!',
+                                        title: 'Question',
                                         initialValue: null,
                                         validate: (values: any) => {
-                                            if (!values.note) return 'Required!';
+                                            if (!values.question) return 'Required!';
 
                                             return null;
                                         },
                                     },
                                     {
-                                        type: 'select-sync',
-                                        name: 'not',
-                                        placeholder: 'Select include/exclude!',
-                                        title: 'Include/Exclude',
-                                        initialValue: false,
-                                        options: [
-                                            {
-                                                value: false,
-                                                label: 'Include',
-                                            },
-                                            { value: true, label: 'Exclude' },
-                                        ],
+                                        type: 'text',
+                                        name: 'answer',
+                                        placeholder: 'Enter a answer for this FAQ!',
+                                        title: 'Answer',
+                                        initialValue: null,
                                         validate: (values: any) => {
-                                            if (values.not === null || values.not === undefined) return 'Required!';
+                                            if (!values.answer) return 'Required!';
+
+                                            return null;
+                                        },
+                                    },
+                                    {
+                                        type: 'number',
+                                        name: 'serial',
+                                        placeholder: 'Enter serial number for sorting!',
+                                        title: 'Serial',
+                                        initialValue: 9999,
+                                        validate: (values: any) => {
+                                            if (!values.serial) return 'Required!';
 
                                             return null;
                                         },

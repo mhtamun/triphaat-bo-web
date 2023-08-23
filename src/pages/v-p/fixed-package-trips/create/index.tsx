@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
@@ -12,7 +12,20 @@ import GenericFormGenerator from '../../../../components/global/GenericFormGener
 import { getLocationsForVendor } from '../../../../apis';
 import { getGeneralStatusOptions } from '../../../../utils';
 import { callPostApi } from '../../../../libs/api';
-import { ILocation } from '../../../trips/create';
+
+export interface ILocation {
+    id: number;
+    name: string;
+    city: {
+        name: string;
+        state: {
+            name: string;
+            country: {
+                name: string;
+            };
+        };
+    };
+}
 
 export const getTripFields = (locations: ILocation[]) => [
     {
@@ -33,12 +46,36 @@ export const getTripFields = (locations: ILocation[]) => [
     },
     {
         type: 'hidden',
-        name: 'type',
+        name: 'dateType',
         placeholder: '',
         title: '',
-        initialValue: 'PRE_ARRANGED',
+        initialValue: 'FIXED',
         validate: (values: any) => {
-            if (!values.type) return 'Required!';
+            if (!values.dateType) return 'Required!';
+
+            return null;
+        },
+    },
+    {
+        type: 'hidden',
+        name: 'accommodationType',
+        placeholder: '',
+        title: '',
+        initialValue: 'FIXED',
+        validate: (values: any) => {
+            if (!values.accommodationType) return 'Required!';
+
+            return null;
+        },
+    },
+    {
+        type: 'hidden',
+        name: 'transportationType',
+        placeholder: '',
+        title: '',
+        initialValue: 'FIXED',
+        validate: (values: any) => {
+            if (!values.transportationType) return 'Required!';
 
             return null;
         },
@@ -102,17 +139,12 @@ export const getTripFields = (locations: ILocation[]) => [
         validate: (values: any) => {
             if (!values.durationInNights) return 'Required!';
 
-            return null;
-        },
-    },
-    {
-        type: 'hidden',
-        name: 'dateType',
-        placeholder: '',
-        title: '',
-        initialValue: 'FIXED_DATE',
-        validate: (values: any) => {
-            if (!values.dateType) return 'Required!';
+            if (
+                values.durationInNights &&
+                values.durationInDays &&
+                values.durationInNights + 1 !== values.durationInDays
+            )
+                return 'Nights can not be more then days!';
 
             return null;
         },
@@ -277,7 +309,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
 
                                                 // showToast('success', 'Success!', response.message);
 
-                                                router.push(`/v-p/fixed-date-trips/${response.data.id}`);
+                                                router.push(`/v-p/fixed-package-trips/${response.data.id}`);
                                             }
                                         })
                                         .catch(error => {

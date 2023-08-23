@@ -75,8 +75,8 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
             {
                 type: 'number',
                 name: 'amount',
-                placeholder: 'Enter amount!',
-                title: 'Amount',
+                placeholder: 'Enter amount in BDT!',
+                title: 'Amount (BDT)',
                 initialValue: null,
                 validate: (values: any) => {
                     if (!values.amount) return 'Required!';

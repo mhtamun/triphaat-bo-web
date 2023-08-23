@@ -14,7 +14,7 @@ import { getGeneralStatusOptions } from '../../../../utils';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Tags | Trip Management', async cookies => {
+    getAuthorized(context, 'Images | Trip Management', async cookies => {
         const tripId = context.query.id;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -42,19 +42,19 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
 
     return (
         <>
-            <Card title={trip?.name} className="mb-3">
+            <Card title={trip?.name}>
                 <TabViewComponent
-                    activeIndex={4}
+                    activeIndex={2}
                     router={router}
                     tripId={tripId}
                     content={useMemo(
                         () => (
                             <GenericViewGenerator
-                                name={'Tag'}
-                                title="Trip Tags"
-                                subtitle="Manage trip tags here!"
+                                name={'Image'}
+                                title="Trip Images"
+                                subtitle="Manage trip images here!"
                                 viewAll={{
-                                    uri: `/api/v1/trips/${tripId}/tags`,
+                                    uri: `/api/v1/trips/${tripId}/images`,
                                     ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
@@ -63,13 +63,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         })),
                                 }}
                                 addNew={{
-                                    uri: `/api/v1/tags`,
-                                    buttonText: 'Add Tag',
+                                    uri: `/api/v1/images`,
+                                    buttonText: 'Add Image',
                                 }}
-                                viewOne={{ uri: '/api/v1/tags/{id}', identifier: '{id}' }}
-                                editExisting={{ uri: '/api/v1/tags/{id}', identifier: '{id}' }}
+                                viewOne={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+                                editExisting={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
                                 removeOne={{
-                                    uri: '/api/v1/tags/{id}',
+                                    uri: '/api/v1/images/{id}',
                                     identifier: '{id}',
                                 }}
                                 fields={[
@@ -87,12 +87,38 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                     {
                                         type: 'text',
-                                        name: 'tag',
-                                        placeholder: 'Enter a TAG for this trip!',
-                                        title: 'TAG',
+                                        name: 'url',
+                                        placeholder: 'Enter image URL for this trip!',
+                                        title: 'URL',
                                         initialValue: null,
                                         validate: (values: any) => {
-                                            if (!values.tag) return 'Required!';
+                                            if (!values.url) return 'Required!';
+
+                                            return null;
+                                        },
+                                    },
+                                    {
+                                        type: 'text',
+                                        name: 'title',
+                                        placeholder: 'Enter title for this image!',
+                                        title: 'Title',
+                                        initialValue: null,
+                                    },
+                                    {
+                                        type: 'text',
+                                        name: 'description',
+                                        placeholder: 'Enter description for this image!',
+                                        title: 'Description',
+                                        initialValue: null,
+                                    },
+                                    {
+                                        type: 'number',
+                                        name: 'serial',
+                                        placeholder: 'Enter serial number for sorting!',
+                                        title: 'Serial',
+                                        initialValue: 9999,
+                                        validate: (values: any) => {
+                                            if (!values.serial) return 'Required!';
 
                                             return null;
                                         },

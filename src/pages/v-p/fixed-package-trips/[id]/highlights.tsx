@@ -14,7 +14,7 @@ import { getGeneralStatusOptions } from '../../../../utils';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Videos | Trip Management', async cookies => {
+    getAuthorized(context, 'Highlights | Trip Management', async cookies => {
         const tripId = context.query.id;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
             return {
                 redirect: {
-                    destination: '/errors/500',
+                    destination: '/500',
                     permanent: false,
                 },
             };
@@ -42,19 +42,19 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
 
     return (
         <>
-            <Card title={trip?.name}>
+            <Card title={trip?.name} className="mb-3">
                 <TabViewComponent
-                    activeIndex={3}
+                    activeIndex={5}
                     router={router}
                     tripId={tripId}
                     content={useMemo(
                         () => (
                             <GenericViewGenerator
-                                name={'Video'}
-                                title="Trip Videos"
-                                subtitle="Manage trip videos here!"
+                                name={'Highlight'}
+                                title="Trip Highlights"
+                                subtitle="Manage trip highlights here!"
                                 viewAll={{
-                                    uri: `/api/v1/trips/${tripId}/videos`,
+                                    uri: `/api/v1/trips/${tripId}/highlights`,
                                     ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
@@ -63,13 +63,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         })),
                                 }}
                                 addNew={{
-                                    uri: `/api/v1/videos`,
-                                    buttonText: 'Add Video',
+                                    uri: `/api/v1/highlights`,
+                                    buttonText: 'Add Highlight',
                                 }}
-                                viewOne={{ uri: '/api/v1/videos/{id}', identifier: '{id}' }}
-                                editExisting={{ uri: '/api/v1/videos/{id}', identifier: '{id}' }}
+                                viewOne={{ uri: '/api/v1/highlights/{id}', identifier: '{id}' }}
+                                editExisting={{ uri: '/api/v1/highlights/{id}', identifier: '{id}' }}
                                 removeOne={{
-                                    uri: '/api/v1/videos/{id}',
+                                    uri: '/api/v1/highlights/{id}',
                                     identifier: '{id}',
                                 }}
                                 fields={[
@@ -87,31 +87,28 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                     {
                                         type: 'text',
-                                        name: 'url',
-                                        placeholder: 'Enter image URL for this trip!',
-                                        title: 'URL',
+                                        name: 'note',
+                                        placeholder: 'Enter a highlight note for this trip!',
+                                        title: 'Note',
                                         initialValue: null,
                                         validate: (values: any) => {
-                                            if (!values.url) return 'Required!';
+                                            if (!values.note) return 'Required!';
 
                                             return null;
                                         },
                                     },
                                     {
-                                        type: 'text',
-                                        name: 'title',
-                                        placeholder: 'Enter title for this image!',
-                                        title: 'Title',
-                                        initialValue: null,
-                                    },
-                                    {
-                                        type: 'text',
-                                        name: 'description',
-                                        placeholder: 'Enter description for this image!',
-                                        title: 'Description',
-                                        initialValue: null,
-                                    },
+                                        type: 'number',
+                                        name: 'serial',
+                                        placeholder: 'Enter serial number for sorting!',
+                                        title: 'Serial',
+                                        initialValue: 9999,
+                                        validate: (values: any) => {
+                                            if (!values.serial) return 'Required!';
 
+                                            return null;
+                                        },
+                                    },
                                     {
                                         type: 'select-sync',
                                         name: 'status',

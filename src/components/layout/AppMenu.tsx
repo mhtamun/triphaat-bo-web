@@ -47,11 +47,10 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
             items: [
                 { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/v-p' },
                 { icon: 'pi pi-fw pi-user', label: 'User Management', to: '/v-p/users' },
-                { icon: 'pi pi-fw pi-image', label: 'Trip Management (Fixed)', to: '/v-p/fixed-date-trips' },
                 {
                     icon: 'pi pi-fw pi-image',
-                    label: 'Trip Management (Recurring)',
-                    to: '/v-p/recurring-date-trips',
+                    label: 'Trip Management',
+                    items: [{ label: 'Fixed Package Management', to: '/v-p/fixed-package-trips' }],
                 },
             ],
         },

@@ -44,32 +44,35 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
         <>
             <Card title={trip?.name} className="mb-3">
                 <TabViewComponent
-                    activeIndex={5}
+                    activeIndex={6}
                     router={router}
                     tripId={tripId}
                     content={useMemo(
                         () => (
                             <GenericViewGenerator
-                                name={'Highlight'}
-                                title="Trip Highlights"
-                                subtitle="Manage trip highlights here!"
+                                name={'Include/Exclude'}
+                                title="Trip Include/Exclude List"
+                                subtitle="Manage trip include/exclude here!"
                                 viewAll={{
-                                    uri: `/api/v1/trips/${tripId}/highlights`,
+                                    uri: `/api/v1/trips/${tripId}/includes`,
                                     ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
                                         _.map(data, datum => ({
-                                            ...datum,
+                                            id: datum.id,
+                                            note: datum.note,
+                                            type: !datum.not ? 'Include' : 'Exclude',
+                                            status: datum.status,
                                         })),
                                 }}
                                 addNew={{
-                                    uri: `/api/v1/highlights`,
-                                    buttonText: 'Add Highlight',
+                                    uri: `/api/v1/includes`,
+                                    buttonText: 'Add Include/Exclude',
                                 }}
-                                viewOne={{ uri: '/api/v1/highlights/{id}', identifier: '{id}' }}
-                                editExisting={{ uri: '/api/v1/highlights/{id}', identifier: '{id}' }}
+                                viewOne={{ uri: '/api/v1/includes/{id}', identifier: '{id}' }}
+                                editExisting={{ uri: '/api/v1/includes/{id}', identifier: '{id}' }}
                                 removeOne={{
-                                    uri: '/api/v1/highlights/{id}',
+                                    uri: '/api/v1/includes/{id}',
                                     identifier: '{id}',
                                 }}
                                 fields={[
@@ -88,11 +91,42 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     {
                                         type: 'text',
                                         name: 'note',
-                                        placeholder: 'Enter a highlight note for this trip!',
+                                        placeholder: 'Enter a include/exclude note for this trip!',
                                         title: 'Note',
                                         initialValue: null,
                                         validate: (values: any) => {
                                             if (!values.note) return 'Required!';
+
+                                            return null;
+                                        },
+                                    },
+                                    {
+                                        type: 'select-sync',
+                                        name: 'not',
+                                        placeholder: 'Select include/exclude!',
+                                        title: 'Include/Exclude',
+                                        initialValue: false,
+                                        options: [
+                                            {
+                                                value: false,
+                                                label: 'Include',
+                                            },
+                                            { value: true, label: 'Exclude' },
+                                        ],
+                                        validate: (values: any) => {
+                                            if (values.not === null || values.not === undefined) return 'Required!';
+
+                                            return null;
+                                        },
+                                    },
+                                    {
+                                        type: 'number',
+                                        name: 'serial',
+                                        placeholder: 'Enter serial number for sorting!',
+                                        title: 'Serial',
+                                        initialValue: 9999,
+                                        validate: (values: any) => {
+                                            if (!values.serial) return 'Required!';
 
                                             return null;
                                         },

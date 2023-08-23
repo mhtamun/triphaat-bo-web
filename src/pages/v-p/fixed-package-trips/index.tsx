@@ -32,7 +32,7 @@ const Page = () => {
                 onClick={e => {
                     e.preventDefault();
 
-                    router.push(`/v-p/fixed-date-trips/create`);
+                    router.push(`/v-p/fixed-package-trips/create`);
                 }}
             />
             {useMemo(
@@ -40,7 +40,7 @@ const Page = () => {
                     <GenericViewGenerator
                         name={'Trip'}
                         viewAll={{
-                            uri: `/vendor/api/v1/date-types/${'FIXED_DATE'}/trips`,
+                            uri: `/vendor/api/v1/date-types/FIXED/accommodation-types/FIXED/transportation-types/FIXED/trips`,
                             ignoredColumns: ['id', 'smallDescription', 'bigDescription', 'createdAt', 'updatedAt'],
                             actionIdentifier: 'id',
                             onDataModify: data =>
@@ -54,7 +54,7 @@ const Page = () => {
                                 icon: PrimeIcons.ARROW_RIGHT,
                                 text: 'Detail',
                                 callback: identifier => {
-                                    router.push(`/v-p/fixed-date-trips/${identifier}`);
+                                    router.push(`/v-p/fixed-package-trips/${identifier}`);
                                 },
                             },
                         ]}
