@@ -21,10 +21,11 @@ const TabViewComponent = ({
         if (e.index === 3) router.push(`/v-p/fixed-package-trips/${tripId}/videos`);
         if (e.index === 4) router.push(`/v-p/fixed-package-trips/${tripId}/tags`);
         if (e.index === 5) router.push(`/v-p/fixed-package-trips/${tripId}/highlights`);
-        if (e.index === 6) router.push(`/v-p/fixed-package-trips/${tripId}/includes`);
-        if (e.index === 7) router.push(`/v-p/fixed-package-trips/${tripId}/faqs`);
-        if (e.index === 8) router.push(`/v-p/fixed-package-trips/${tripId}/travelers`);
-        if (e.index === 9) router.push(`/v-p/fixed-package-trips/${tripId}/payments`);
+        if (e.index === 6) router.push(`/v-p/fixed-package-trips/${tripId}/activities`);
+        if (e.index === 7) router.push(`/v-p/fixed-package-trips/${tripId}/includes`);
+        if (e.index === 8) router.push(`/v-p/fixed-package-trips/${tripId}/faqs`);
+        if (e.index === 9) router.push(`/v-p/fixed-package-trips/${tripId}/travelers`);
+        if (e.index === 10) router.push(`/v-p/fixed-package-trips/${tripId}/payments`);
     }, []);
 
     return (
@@ -35,10 +36,11 @@ const TabViewComponent = ({
             <TabPanel header="Videos">{activeIndex === 3 ? content : null}</TabPanel>
             <TabPanel header="Tags">{activeIndex === 4 ? content : null}</TabPanel>
             <TabPanel header="Highlights">{activeIndex === 5 ? content : null}</TabPanel>
-            <TabPanel header="Includes">{activeIndex === 6 ? content : null}</TabPanel>
-            <TabPanel header="FAQs">{activeIndex === 7 ? content : null}</TabPanel>
-            <TabPanel header="Travelers">{activeIndex === 8 ? content : null}</TabPanel>
-            <TabPanel header="Payments">{activeIndex === 9 ? content : null}</TabPanel>
+            <TabPanel header="Activities">{activeIndex === 6 ? content : null}</TabPanel>
+            <TabPanel header="Includes">{activeIndex === 7 ? content : null}</TabPanel>
+            <TabPanel header="FAQs">{activeIndex === 8 ? content : null}</TabPanel>
+            <TabPanel header="Travelers">{activeIndex === 9 ? content : null}</TabPanel>
+            <TabPanel header="Payments">{activeIndex === 10 ? content : null}</TabPanel>
         </TabView>
     );
 };

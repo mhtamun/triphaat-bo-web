@@ -2,7 +2,7 @@ import React from 'react';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
-import { InputField, SelectSyncField, MultiSelectSyncField, TextareaField, EditorField } from '../index';
+import { InputField, SelectSyncField, MultiSelectSyncField, TextareaField, EditorField, ChipsField } from '../index';
 
 export interface IField {
     type: string;
@@ -229,6 +229,22 @@ export default function GenericFormGenerator({
                     value={formik.values[field.name] ?? ''}
                     options={field.options ?? []}
                     isGroupOptions={field.isGroupOptions}
+                    setFieldValue={formik.setFieldValue}
+                    isDisabled={field.isDisabled}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'chips')
+            return (
+                <ChipsField
+                    key={field.name}
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    value={formik.values[field.name] ?? ''}
                     setFieldValue={formik.setFieldValue}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
