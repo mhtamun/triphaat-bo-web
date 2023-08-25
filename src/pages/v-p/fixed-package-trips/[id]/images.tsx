@@ -122,6 +122,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
 
                                             return null;
                                         },
+                                        col: 2,
                                     },
                                     {
                                         type: 'select-sync',
