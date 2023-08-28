@@ -273,6 +273,28 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         // },
                                     },
                                     {
+                                        type: 'chips',
+                                        name: 'otherReasons',
+                                        placeholder: 'Enter reasons (press enter to start new line)!',
+                                        title: 'Other Reasons',
+                                        initialValue: null,
+                                        validate: (values: any) => {
+                                            if (
+                                                _.size(values.accommodationType) === 0 &&
+                                                _.size(values.accommodationClass) === 0 &&
+                                                _.size(values.accommodationSharing) === 0 &&
+                                                _.size(values.transportationType) === 0 &&
+                                                _.size(values.transportationClass) === 0 &&
+                                                _.size(values.transportationSharing) === 0 &&
+                                                _.size(values.foodType) === 0 &&
+                                                _.size(values.foodClass) === 0
+                                            )
+                                                return 'Please at least define what differs this variant from other variants!';
+
+                                            return null;
+                                        },
+                                    },
+                                    {
                                         type: 'number',
                                         name: 'costPricePerPerson',
                                         placeholder: 'Enter cost price (per person)!',
