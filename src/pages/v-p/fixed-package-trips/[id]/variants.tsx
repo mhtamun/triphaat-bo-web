@@ -287,7 +287,8 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                                 _.size(values.transportationClass) === 0 &&
                                                 _.size(values.transportationSharing) === 0 &&
                                                 _.size(values.foodType) === 0 &&
-                                                _.size(values.foodClass) === 0
+                                                _.size(values.foodClass) === 0 &&
+                                                !values.otherReasons
                                             )
                                                 return 'Please at least define what differs this variant from other variants!';
 
