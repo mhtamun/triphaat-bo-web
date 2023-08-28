@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Card } from 'primereact/card';
+import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
 // application
@@ -56,6 +57,17 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 viewAll={{
                                     uri: `/api/v1/trips/${tripId}/variants`,
                                     ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
+                                    scopedColumns: {
+                                        status: (item: any) => (
+                                            <>
+                                                <Badge
+                                                    value={item.status}
+                                                    size="large"
+                                                    severity={item.status === 'INACTIVE' ? 'danger' : 'success'}
+                                                ></Badge>
+                                            </>
+                                        ),
+                                    },
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
                                         _.map(data, datum => ({

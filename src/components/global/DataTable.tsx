@@ -14,12 +14,14 @@ export interface IAction {
 const DataTable = ({
     data,
     ignoredColumns,
+    scopedColumns,
     actionIdentifier = 'id',
     actions = [],
     emptyListText = null,
 }: {
     data: any;
     ignoredColumns?: string[];
+    scopedColumns?: any;
     actionIdentifier?: string;
     actions: IAction[];
     emptyListText?: string | null;
@@ -27,11 +29,12 @@ const DataTable = ({
     const columnHeads = [];
 
     if (!_.isUndefined(data) && !_.isNull(data) && _.size(data) > 0) {
-        _.map(_.keys(_.omit(data[0], [...(ignoredColumns ?? [])])), key => {
+        _.map(_.keys(_.omit(data[0], [...(ignoredColumns ?? [])])), (key: string) => {
             columnHeads.push({
                 key,
                 label: _.upperCase(key),
                 headerStyle: { minWidth: '10rem' },
+                body: !scopedColumns ? undefined : scopedColumns[key],
             });
         });
 
@@ -40,6 +43,7 @@ const DataTable = ({
                 key: 'actions',
                 label: 'ACTIONS',
                 headerStyle: { minWidth: '10rem' },
+                body: undefined,
             });
         }
     }
@@ -97,6 +101,7 @@ const DataTable = ({
             resizableColumns
             showGridlines
             scrollable
+            scrollHeight="100vh"
         >
             {_.map(columnHeads, item => {
                 return (
@@ -106,6 +111,7 @@ const DataTable = ({
                         header={item.label}
                         sortable={!_.isEqual(item.key, 'actions')}
                         headerStyle={item.headerStyle}
+                        body={item.body}
                     ></Column>
                 );
             })}
