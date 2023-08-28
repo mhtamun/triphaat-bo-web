@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
             return {
                 redirect: {
-                    destination: '/errors/500',
+                    destination: '/500',
                     permanent: false,
                 },
             };
@@ -49,7 +49,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                     content={useMemo(
                         () => (
                             <GenericViewGenerator
-                                name={'Traveller'}
+                                name={'Traveler'}
                                 title="Trip Travelers"
                                 subtitle="Manage trip travelers here!"
                                 viewAll={{
@@ -58,7 +58,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         'id',
                                         'vendorId',
                                         'tripId',
-                                        'travellerId',
+                                        'travelerId',
                                         'createdAt',
                                         'updatedAt',
                                     ],
@@ -94,7 +94,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     {
                                         type: 'text',
                                         name: 'firstName',
-                                        placeholder: 'Enter first name this traveller!',
+                                        placeholder: 'Enter first name this traveler!',
                                         title: 'First Name',
                                         initialValue: null,
                                         validate: (values: any) => {
@@ -106,7 +106,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     {
                                         type: 'text',
                                         name: 'lastName',
-                                        placeholder: 'Enter last name this traveller!',
+                                        placeholder: 'Enter last name this traveler!',
                                         title: 'Last Name',
                                         initialValue: null,
                                         validate: (values: any) => {

@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
             return {
                 redirect: {
-                    destination: '/errors/500',
+                    destination: '/500',
                     permanent: false,
                 },
             };
@@ -59,15 +59,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
                                         _.map(data, datum => ({
-                                            id: datum.id,
-                                            reasons: datum.reasons.map(
-                                                (reason: string, index: number) => index + 1 + '. ' + reason + '\n'
-                                            ),
-                                            costPrice: datum.costPrice,
-                                            price: datum.price,
-                                            offerPrice: datum.offerPrice,
-                                            minimumRequiredTraveller: datum.minRequiredTraveller,
-                                            status: datum.status,
+                                            ...datum,
                                         })),
                                 }}
                                 addNew={{
@@ -105,84 +97,203 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                     {
                                         type: 'multi-select-sync',
-                                        name: 'reasons',
-                                        placeholder: 'Select reasons for this variant!',
-                                        title: 'Reasons',
+                                        name: 'accommodationType',
+                                        placeholder: 'Select accommodation type for this variant!',
+                                        title: 'Accommodation Type',
                                         initialValue: null,
                                         options: [
+                                            { label: 'Hotel', value: 'Hotel' },
+                                            { label: 'Motel', value: 'Motel' },
+                                            { label: 'Resort', value: 'Resort' },
+                                            { label: 'Houseboat', value: 'Houseboat' },
+                                        ],
+                                        // isGroupOptions: true,
+                                        // validate: (values: any) => {
+                                        //     if (!values.reasons) return 'Required!';
+
+                                        //     return null;
+                                        // },
+                                    },
+                                    {
+                                        type: 'multi-select-sync',
+                                        name: 'accommodationClass',
+                                        placeholder: 'Select accommodation class for this variant!',
+                                        title: 'Accommodation Class',
+                                        initialValue: null,
+                                        options: [
+                                            { label: 'AC Accommodation', value: 'AC Accommodation' },
+                                            { label: 'Non-AC Accommodation', value: 'Non-AC Accommodation' },
+                                            { label: '2 Star', value: '2 Star' },
+                                            { label: '3 Star', value: '3 Star' },
+                                            { label: '4 Star', value: '4 Star' },
+                                            { label: '5 Star', value: '5 Star' },
+                                            { label: '7 Star', value: '7 Star' },
+                                        ],
+                                        // isGroupOptions: true,
+                                        // validate: (values: any) => {
+                                        //     if (!values.reasons) return 'Required!';
+
+                                        //     return null;
+                                        // },
+                                    },
+                                    {
+                                        type: 'multi-select-sync',
+                                        name: 'accommodationSharing',
+                                        placeholder: 'Select accommodation sharing for this variant!',
+                                        title: 'Accommodation Sharing',
+                                        initialValue: null,
+                                        options: [
+                                            { label: 'Couple (2 person sharing)', value: 'Couple (2 person sharing)' },
+                                            { label: '3 person sharing', value: '3 person sharing' },
+                                            { label: '4 person sharing', value: '4 person sharing' },
+                                            { label: '5 person sharing', value: '5 person sharing' },
+                                            { label: '6 person sharing', value: '6 person sharing' },
                                             {
-                                                label: 'Sharing',
-                                                value: '',
-                                                items: [
-                                                    { label: 'No sharing', value: 'No sharing' },
-                                                    { label: '2 person sharing', value: '2 person sharing' },
-                                                    { label: '3 person sharing', value: '3 person sharing' },
-                                                    { label: '4 person sharing', value: '4 person sharing' },
-                                                    { label: 'Couple', value: 'Couple' },
-                                                ],
-                                            },
-                                            {
-                                                label: 'Transportation',
-                                                value: '',
-                                                items: [
-                                                    { label: 'AC Bus', value: 'AC Bus' },
-                                                    { label: 'Non-AC Bus', value: 'Non-AC Bus' },
-                                                    { label: 'First Class Flight', value: 'First Class Flight' },
-                                                    { label: 'Business Class Flight', value: 'Business Class Flight' },
-                                                    { label: 'Economy Class Flight', value: 'Economy Class Flight' },
-                                                ],
-                                            },
-                                            {
-                                                label: 'Accommodation',
-                                                value: '',
-                                                items: [
-                                                    { label: '3 Star Hotel', value: '3 Star Hotel' },
-                                                    { label: '4 Star Hotel', value: '4 Star Hotel' },
-                                                    { label: '5 Star Hotel', value: '5 Star Hotel' },
-                                                ],
+                                                label: 'No sharing (1 Person sharing)',
+                                                value: 'No sharing (1 Person sharing)',
                                             },
                                         ],
-                                        isGroupOptions: true,
+                                        // isGroupOptions: true,
+                                        // validate: (values: any) => {
+                                        //     if (!values.reasons) return 'Required!';
+
+                                        //     return null;
+                                        // },
+                                    },
+                                    {
+                                        type: 'multi-select-sync',
+                                        name: 'transportationType',
+                                        placeholder: 'Select transportation type for this variant!',
+                                        title: 'Transportation Type',
+                                        initialValue: null,
+                                        options: [
+                                            { label: '2 Seater Vehicle', value: '2 Seater Vehicle' },
+                                            { label: '4 Seater Sedan', value: '4 Seater Sedan' },
+                                            { label: '4 Seater SUV (Jeep)', value: '4 Seater SUV (Jeep)' },
+                                            { label: '4 Seater Premium Car', value: '4 Seater Premium Car' },
+                                            { label: '7 Seater Car', value: '7 Seater Car' },
+                                            { label: '10 Seater Microbus', value: '10 Seater Microbus' },
+                                            { label: '30 Seater Minibus', value: '30 Seater Minibus' },
+                                            { label: '27 Seater (Luxury) Bus', value: '27 Seater (Luxury) Bus' },
+                                            { label: '36 Seater Bus', value: '36 Seater Bus' },
+                                            { label: 'Airplane', value: 'Airplane' },
+                                            { label: 'Speed Boat', value: 'Speed Boat' },
+                                            { label: 'Ship', value: 'Ship' },
+                                            { label: 'Cruise Ship', value: 'Cruise Ship' },
+                                        ],
+                                        // isGroupOptions: true,
+                                        // validate: (values: any) => {
+                                        //     if (!values.reasons) return 'Required!';
+
+                                        //     return null;
+                                        // },
+                                    },
+                                    {
+                                        type: 'multi-select-sync',
+                                        name: 'transportationClass',
+                                        placeholder: 'Select transportation class for this variant!',
+                                        title: 'Transportation Class',
+                                        initialValue: null,
+                                        options: [
+                                            { label: 'AC Transportation', value: 'AC Transportation' },
+                                            { label: 'Non-AC Transportation', value: 'Non-AC Transportation' },
+                                            { label: 'First Class', value: 'First Class' },
+                                            { label: 'Business Class', value: 'Business Class' },
+                                            { label: 'Economy Class', value: 'Economy Class' },
+                                        ],
+                                        // isGroupOptions: true,
+                                        // validate: (values: any) => {
+                                        //     if (!values.reasons) return 'Required!';
+
+                                        //     return null;
+                                        // },
+                                    },
+                                    {
+                                        type: 'multi-select-sync',
+                                        name: 'transportationSharing',
+                                        placeholder: 'Select transportation sharing for this variant!',
+                                        title: 'Transportation Sharing',
+                                        initialValue: null,
+                                        options: [
+                                            { label: 'Couple (2 person sharing)', value: 'Couple (2 person sharing)' },
+                                            { label: '3 person sharing', value: '3 person sharing' },
+                                            { label: '4 person sharing', value: '4 person sharing' },
+                                            { label: '5 person sharing', value: '5 person sharing' },
+                                            { label: '6 person sharing', value: '6 person sharing' },
+                                            {
+                                                label: 'No sharing (1 Person sharing)',
+                                                value: 'No sharing (1 Person sharing)',
+                                            },
+                                        ],
+                                        // isGroupOptions: true,
+                                        // validate: (values: any) => {
+                                        //     if (!values.reasons) return 'Required!';
+
+                                        //     return null;
+                                        // },
+                                    },
+                                    {
+                                        type: 'multi-select-sync',
+                                        name: 'foodType',
+                                        placeholder: 'Select food type for this variant!',
+                                        title: 'Food Type',
+                                        initialValue: null,
+                                        options: [],
+                                        // isGroupOptions: true,
+                                        // validate: (values: any) => {
+                                        //     if (!values.reasons) return 'Required!';
+
+                                        //     return null;
+                                        // },
+                                    },
+                                    {
+                                        type: 'multi-select-sync',
+                                        name: 'foodClass',
+                                        placeholder: 'Select food class for this variant!',
+                                        title: 'Food Class',
+                                        initialValue: null,
+                                        options: [],
+                                        // isGroupOptions: true,
+                                        // validate: (values: any) => {
+                                        //     if (!values.reasons) return 'Required!';
+
+                                        //     return null;
+                                        // },
+                                    },
+                                    {
+                                        type: 'number',
+                                        name: 'costPricePerPerson',
+                                        placeholder: 'Enter cost price (per person)!',
+                                        title: 'Cost Price (Per Person)',
+                                        initialValue: null,
+                                    },
+                                    {
+                                        type: 'number',
+                                        name: 'pricePerPerson',
+                                        placeholder: 'Enter price (price person)!',
+                                        title: 'Price (Per Person)',
+                                        initialValue: null,
                                         validate: (values: any) => {
-                                            if (!values.reasons) return 'Required!';
+                                            if (!values.pricePerPerson) return 'Required!';
 
                                             return null;
                                         },
                                     },
                                     {
                                         type: 'number',
-                                        name: 'costPrice',
-                                        placeholder: 'Enter cost price!',
-                                        title: 'Cost Price',
+                                        name: 'offerPricePerPerson',
+                                        placeholder: 'Enter offer price (person)!',
+                                        title: 'Offer Price (Per Person)',
                                         initialValue: null,
                                     },
                                     {
                                         type: 'number',
-                                        name: 'price',
-                                        placeholder: 'Enter price!',
-                                        title: 'Price',
+                                        name: 'minRequiredTraveler',
+                                        placeholder: 'Enter minimum number of traveler required for this variant!',
+                                        title: 'Minimum Required Traveler',
                                         initialValue: null,
                                         validate: (values: any) => {
-                                            if (!values.price) return 'Required!';
-
-                                            return null;
-                                        },
-                                    },
-                                    {
-                                        type: 'number',
-                                        name: 'offerPrice',
-                                        placeholder: 'Enter offer price!',
-                                        title: 'Offer Price',
-                                        initialValue: null,
-                                    },
-                                    {
-                                        type: 'number',
-                                        name: 'minRequiredTraveller',
-                                        placeholder: 'Enter minimum number of traveller required for this variant!',
-                                        title: 'Minimum Required Traveller',
-                                        initialValue: null,
-                                        validate: (values: any) => {
-                                            if (!values.minRequiredTraveller) return 'Required!';
+                                            if (!values.minRequiredTraveler) return 'Required!';
 
                                             return null;
                                         },

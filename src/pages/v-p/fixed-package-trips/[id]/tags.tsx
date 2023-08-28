@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
             return {
                 redirect: {
-                    destination: '/errors/500',
+                    destination: '/500',
                     permanent: false,
                 },
             };
