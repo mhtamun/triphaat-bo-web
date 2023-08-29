@@ -10,7 +10,7 @@ import _ from 'lodash';
 // application
 import { getAuthorized } from '../../../../libs/auth';
 import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
-import { getLocationsForVendor, getTripForVendor } from '../../../../apis';
+import { getLocations, getTripForVendor } from '../../../../apis';
 import { callPutApi } from '../../../../libs/api';
 import { getTripFields } from '../create';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Details | Trip Management', async cookies => {
         const tripId = context.query.id;
 
-        const responseGetLocations = await getLocationsForVendor();
+        const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);

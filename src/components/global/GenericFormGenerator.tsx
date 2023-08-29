@@ -37,7 +37,7 @@ export default function GenericFormGenerator({
     datum?: any;
     fields: IField[];
     nonEdibleFields?: string[];
-    callback: (values: any, resetForm: () => void) => void;
+    callback?: (values: any, resetForm: () => void) => void;
     onValueModify?: (values: FormikValues) => void;
     submitButtonShow?: boolean;
     submitButtonText?: string;
@@ -118,9 +118,11 @@ export default function GenericFormGenerator({
 
             setSubmitting(false);
 
-            callback(filteredValues, () => {
-                formik.resetForm();
-            });
+            if (submitButtonShow && callback) {
+                callback(filteredValues, () => {
+                    formik.resetForm();
+                });
+            }
         },
     });
 

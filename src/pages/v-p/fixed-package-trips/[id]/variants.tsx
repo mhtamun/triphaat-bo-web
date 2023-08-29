@@ -117,6 +117,8 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             { label: 'Hotel', value: 'Hotel' },
                                             { label: 'Motel', value: 'Motel' },
                                             { label: 'Resort', value: 'Resort' },
+                                            { label: 'Cottage', value: 'Cottage' },
+                                            { label: 'Apartment', value: 'Apartment' },
                                             { label: 'Houseboat', value: 'Houseboat' },
                                         ],
                                         // isGroupOptions: true,

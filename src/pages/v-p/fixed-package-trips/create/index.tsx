@@ -9,7 +9,7 @@ import _ from 'lodash';
 // application
 import { getAuthorized } from '../../../../libs/auth';
 import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
-import { getLocationsForVendor } from '../../../../apis';
+import { getLocations } from '../../../../apis';
 import { getGeneralStatusOptions } from '../../../../utils';
 import { callPostApi } from '../../../../libs/api';
 
@@ -264,8 +264,8 @@ export const getTripFields = (locations: ILocation[]) => [
 ];
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Create A Trip | Trip Management', async cookies => {
-        const responseGetLocations = await getLocationsForVendor();
+    getAuthorized(context, 'Create A Trip | Fixed Package Trip Management', async cookies => {
+        const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetLocations || responseGetLocations.statusCode !== 200) {
             return {

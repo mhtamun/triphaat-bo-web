@@ -1,6 +1,8 @@
 import { callPostApi, callGetApi } from '../libs/api';
 import { apiBaseUrl } from '../config/env';
 
+// TRIPHAAT admin APIs
+
 export const login = (payload: { email: string; password: string; type: string }) =>
     callPostApi(apiBaseUrl + '/api/v1/auth/sign-in', payload, null, null, true);
 
@@ -12,7 +14,7 @@ export const getPermissionTypes = () => callGetApi(apiBaseUrl + '/api/v1/permiss
 
 export const getRoles = () => callGetApi(apiBaseUrl + '/api/v1/roles');
 
-export const getVendors = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/vendors', authorization);
+// export const getVendors = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/vendors', authorization);
 
 // export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
 
@@ -27,16 +29,13 @@ export const getStateById = (id: string, authorization: string) =>
 export const getCityById = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/api/v1/cities/' + id, authorization);
 
-export const getLocationsForVendor = () => callGetApi(apiBaseUrl + '/public/api/v1/locations');
-
-// export const getTrip = (id: string, authorization: string) =>
-//     callGetApi(apiBaseUrl + '/api/v1/trips/' + id, authorization);
-
-export const getTripForVendor = (id: string, authorization: string) =>
-    callGetApi(apiBaseUrl + '/vendor/api/v1/trips/' + id, authorization);
+// VENDOR admin APIs
 
 export const vendorLogin = (payload: { email: string; password: string; type: string }) =>
     callPostApi(apiBaseUrl + '/vendor/api/v1/auth/sign-in', payload, null, null, true);
+
+export const getTripForVendor = (id: string, authorization: string) =>
+    callGetApi(apiBaseUrl + '/vendor/api/v1/trips/' + id, authorization);
 
 export const getTotalCountNumberOfTripsForVendor = (authorization: string) =>
     callGetApi(apiBaseUrl + '/vendor/api/v1/trips-count-total', authorization);
@@ -46,3 +45,14 @@ export const getTotalBalancePaymentOfTripsForVendor = (authorization: string) =>
 
 export const getCurrentMonthBalancePaymentOfTripsForVendor = (authorization: string) =>
     callGetApi(apiBaseUrl + '/vendor/api/v1/trip-payments-balance-current-month', authorization);
+
+// general APIs
+
+export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
+
+export const getTripVariants = (id: string, authorization: string) =>
+    callGetApi(apiBaseUrl + '/api/v1/trips/' + id + '/variants', authorization);
+
+// public APIs
+
+export const initBooking = (payload: any) => callPostApi('/public/api/v1/init-trip-booking', payload);

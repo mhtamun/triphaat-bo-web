@@ -235,7 +235,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                                             ...datum,
                                                         })),
                                                     onSuccess: data => {
-                                                        console.debug({ data });
+                                                        // console.debug({ data });
 
                                                         const totalIn = _.reduce(
                                                             data,
@@ -321,7 +321,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                                             ...datum,
                                                         })),
                                                     onSuccess: data => {
-                                                        console.debug({ data });
+                                                        // console.debug({ data });
 
                                                         const totalOut = _.reduce(
                                                             data,
