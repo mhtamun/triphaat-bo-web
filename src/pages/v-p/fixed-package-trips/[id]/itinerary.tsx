@@ -139,7 +139,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     {
                                         type: 'chips',
                                         name: 'meals',
-                                        placeholder: 'Enter body for itinerary',
+                                        placeholder: 'Enter meals description for itinerary',
                                         title: 'Meals (Description)',
                                         initialValue: null,
                                     },
