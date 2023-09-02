@@ -24,7 +24,7 @@ const ChipsField = (props: {
                 disabled={isDisabled}
                 className={!errorMessage ? '' : 'p-invalid'}
                 onChange={e => {
-                    console.debug({ e });
+                    // console.debug({ e });
 
                     setFieldValue(e.target.name, e.target.value ?? null);
                 }}

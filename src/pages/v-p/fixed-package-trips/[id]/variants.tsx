@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Card } from 'primereact/card';
+import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
 // application
@@ -56,6 +57,17 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 viewAll={{
                                     uri: `/api/v1/trips/${tripId}/variants`,
                                     ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
+                                    scopedColumns: {
+                                        status: (item: any) => (
+                                            <>
+                                                <Badge
+                                                    value={item.status}
+                                                    size="large"
+                                                    severity={item.status === 'INACTIVE' ? 'danger' : 'success'}
+                                                ></Badge>
+                                            </>
+                                        ),
+                                    },
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
                                         _.map(data, datum => ({
@@ -105,6 +117,8 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             { label: 'Hotel', value: 'Hotel' },
                                             { label: 'Motel', value: 'Motel' },
                                             { label: 'Resort', value: 'Resort' },
+                                            { label: 'Cottage', value: 'Cottage' },
+                                            { label: 'Apartment', value: 'Apartment' },
                                             { label: 'Houseboat', value: 'Houseboat' },
                                         ],
                                         // isGroupOptions: true,
@@ -259,6 +273,29 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
 
                                         //     return null;
                                         // },
+                                    },
+                                    {
+                                        type: 'chips',
+                                        name: 'otherReasons',
+                                        placeholder: 'Enter reasons (press enter to start new line)!',
+                                        title: 'Other Reasons',
+                                        initialValue: null,
+                                        validate: (values: any) => {
+                                            if (
+                                                _.size(values.accommodationType) === 0 &&
+                                                _.size(values.accommodationClass) === 0 &&
+                                                _.size(values.accommodationSharing) === 0 &&
+                                                _.size(values.transportationType) === 0 &&
+                                                _.size(values.transportationClass) === 0 &&
+                                                _.size(values.transportationSharing) === 0 &&
+                                                _.size(values.foodType) === 0 &&
+                                                _.size(values.foodClass) === 0 &&
+                                                !values.otherReasons
+                                            )
+                                                return 'Please at least define what differs this variant from other variants!';
+
+                                            return null;
+                                        },
                                     },
                                     {
                                         type: 'number',

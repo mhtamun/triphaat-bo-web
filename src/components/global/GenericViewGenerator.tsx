@@ -180,6 +180,7 @@ function GenericViewGenerator({
     viewAll: {
         uri: string;
         ignoredColumns?: string[];
+        scopedColumns?: any;
         actionIdentifier?: string;
         actionDatum?: any;
         onDataModify?: (data: any) => any;
@@ -209,6 +210,7 @@ function GenericViewGenerator({
     const {
         uri: getAllApiUri,
         ignoredColumns,
+        scopedColumns,
         actionIdentifier,
         actionDatum = null,
         onDataModify: getAllDataModificationCallback,
@@ -379,6 +381,7 @@ function GenericViewGenerator({
                             <DataTable
                                 data={data}
                                 ignoredColumns={ignoredColumns}
+                                scopedColumns={scopedColumns}
                                 actionIdentifier={actionIdentifier}
                                 actions={actions}
                             />

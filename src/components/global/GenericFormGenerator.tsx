@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
@@ -26,21 +26,20 @@ export default function GenericFormGenerator({
     datum = null,
     fields,
     nonEdibleFields = [],
-    // method = null,
-    // uri = null,
     callback,
     onValueModify,
-    // onShowSubmitButton = null,
+    submitButtonShow = true,
     submitButtonText,
-    resetButtonShow = true,
+    resetButtonShow = false,
     resetButtonText,
     enableReinitialize = false,
 }: {
     datum?: any;
     fields: IField[];
     nonEdibleFields?: string[];
-    callback: (values: any, resetForm: () => void) => void;
-    onValueModify?: (value: any) => void;
+    callback?: (values: any, resetForm: () => void) => void;
+    onValueModify?: (values: FormikValues) => void;
+    submitButtonShow?: boolean;
     submitButtonText?: string;
     resetButtonShow?: boolean;
     resetButtonText?: string;
@@ -119,9 +118,11 @@ export default function GenericFormGenerator({
 
             setSubmitting(false);
 
-            callback(filteredValues, () => {
-                formik.resetForm();
-            });
+            if (submitButtonShow && callback) {
+                callback(filteredValues, () => {
+                    formik.resetForm();
+                });
+            }
         },
     });
 
@@ -313,7 +314,9 @@ export default function GenericFormGenerator({
         }
     }
 
-    const submitButton = <Button type="submit" label={!submitButtonText ? 'Submit' : submitButtonText}></Button>;
+    const submitButton = !submitButtonShow ? null : (
+        <Button type="submit" label={!submitButtonText ? 'Submit' : submitButtonText}></Button>
+    );
     const resetButton = !resetButtonShow ? null : (
         <Button
             type="reset"
@@ -322,6 +325,13 @@ export default function GenericFormGenerator({
             className="ml-3"
         ></Button>
     );
+
+    // Handle data change instantly
+    useEffect(() => {
+        if (onValueModify !== undefined && onValueModify !== null && typeof onValueModify === 'function') {
+            onValueModify(formik.values);
+        }
+    }, [formik.values]);
 
     return (
         <form onSubmit={formik.handleSubmit}>

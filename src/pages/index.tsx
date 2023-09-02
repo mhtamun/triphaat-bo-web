@@ -23,7 +23,7 @@ const IndexPage = () => {
 
                             callGetApi('/api/v1/roles', null, true)
                                 .then(response => {
-                                    console.debug({ response });
+                                    // console.debug({ response });
                                 })
                                 .catch(error => {});
                         }}

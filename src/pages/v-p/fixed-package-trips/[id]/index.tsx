@@ -4,12 +4,13 @@ import React, { useMemo } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
 import _ from 'lodash';
 
 // application
 import { getAuthorized } from '../../../../libs/auth';
 import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
-import { getLocationsForVendor, getTripForVendor } from '../../../../apis';
+import { getLocations, getTripForVendor } from '../../../../apis';
 import { callPutApi } from '../../../../libs/api';
 import { getTripFields } from '../create';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
@@ -32,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Details | Trip Management', async cookies => {
         const tripId = context.query.id;
 
-        const responseGetLocations = await getLocationsForVendor();
+        const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
@@ -64,7 +65,20 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
 
     return (
         <>
-            <Card title={trip?.name} className="mb-3">
+            <Card title={trip?.name}>
+                <Button
+                    className="btn-block mb-3"
+                    icon="pi pi-plus"
+                    label={'New Booking'}
+                    severity="success"
+                    raised
+                    onClick={e => {
+                        e.preventDefault();
+
+                        router.push('/v-p/fixed-package-trips/' + tripId + '/booking');
+                    }}
+                />
+
                 <TabViewComponent
                     activeIndex={0}
                     router={router}
