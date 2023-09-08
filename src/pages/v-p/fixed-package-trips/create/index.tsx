@@ -276,7 +276,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
             };
         }
 
-        console.debug(responseGetLocations.data);
+        // console.debug(responseGetLocations.data);
 
         return {
             isVendor: true,

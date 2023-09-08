@@ -14,6 +14,8 @@ export const getPermissionTypes = () => callGetApi(apiBaseUrl + '/api/v1/permiss
 
 export const getRoles = () => callGetApi(apiBaseUrl + '/api/v1/roles');
 
+export const getFolderById = (folderId: number) => callGetApi(apiBaseUrl + '/api/v1/folders/' + folderId);
+
 // export const getVendors = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/vendors', authorization);
 
 // export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);

@@ -2,7 +2,15 @@ import React, { useEffect } from 'react';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
-import { InputField, SelectSyncField, MultiSelectSyncField, TextareaField, EditorField, ChipsField } from '../index';
+import {
+    InputField,
+    SelectSyncField,
+    MultiSelectSyncField,
+    TextareaField,
+    EditorField,
+    ChipsField,
+    FileSelectField,
+} from '../index';
 
 export interface IField {
     type: string;
@@ -19,6 +27,8 @@ export interface IField {
     isDisabled?: boolean;
     show?: (values: FormikValues) => boolean;
     col?: number;
+    acceptType?: string; // only for file select
+    maxFileSize?: number; // only for file select
     validate?: (values: FormikValues) => string | null;
 }
 
@@ -248,6 +258,26 @@ export default function GenericFormGenerator({
                     value={formik.values[field.name] ?? ''}
                     setFieldValue={formik.setFieldValue}
                     isDisabled={field.isDisabled}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'file-select')
+            return (
+                <FileSelectField
+                    key={field.name}
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    value={formik.values[field.name] ?? ''}
+                    setFieldValue={formik.setFieldValue}
+                    setFieldTouched={formik.setFieldTouched}
+                    setFieldError={formik.setFieldError}
+                    isDisabled={field.isDisabled}
+                    acceptType={field.acceptType}
+                    maxFileSize={field.maxFileSize}
                     errorMessage={errorMessage}
                 />
             );

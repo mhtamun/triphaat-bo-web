@@ -3,9 +3,10 @@ import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 import { DataTable, ModalConfirmation, Modal, GenericFormGenerator } from '../index';
 import { callGetApi, callDeleteApi, callPutApi, callPostApi } from '../../libs/api';
-import _ from 'lodash';
 import { IAction } from './DataTable';
 import { IField } from './GenericFormGenerator';
+import { getFormData } from '../../utils';
+import * as _ from 'lodash';
 
 const DeleteItemComponent = ({
     isConfirmationModalOpen,
@@ -37,7 +38,7 @@ const DeleteItemComponent = ({
                 setConfirmationModalOpen(!isConfirmationModalOpen);
                 callDeleteApi(_.replace(deleteApiUri, deleteIdentifier, datumId))
                     .then(response => {
-                        if (response.statusCode !== 200) {
+                        if (response.statusCode === 200) {
                             onSuccess();
                         }
                     })
@@ -87,7 +88,19 @@ const EditItemComponent = ({
                 callback={(data, callback) => {
                     // console.debug({ data });
 
-                    callPutApi(_.replace(putApiUri, putIdentifier, datumId), data, null, null, true)
+                    const contentType = !_.some(data, datum => datum instanceof File)
+                        ? 'application/json'
+                        : 'multipart/form-data';
+
+                    let tempData = data;
+
+                    if (contentType === 'multipart/form-data') {
+                        tempData = getFormData(data);
+                    }
+
+                    // console.debug({ tempData });
+
+                    callPutApi(_.replace(putApiUri, putIdentifier, datumId), tempData, null, contentType, true)
                         .then(response => {
                             if (response.statusCode === 200) {
                                 callback();
@@ -138,7 +151,19 @@ const AddNewItemComponent = ({
                 callback={(data, resetForm) => {
                     // console.debug({ data });
 
-                    callPostApi(postApiUri, data)
+                    const contentType = !_.some(data, datum => datum instanceof File)
+                        ? 'application/json'
+                        : 'multipart/form-data';
+
+                    let tempData = data;
+
+                    if (contentType === 'multipart/form-data') {
+                        tempData = getFormData(data);
+                    }
+
+                    // console.debug({ tempData });
+
+                    callPostApi(postApiUri, tempData, null, contentType, true)
                         .then(response => {
                             if (response.statusCode === 200) {
                                 resetForm();

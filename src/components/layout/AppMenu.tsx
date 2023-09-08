@@ -28,6 +28,11 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     ],
                 },
                 {
+                    icon: 'pi pi-fw pi-file',
+                    label: 'File Management',
+                    to: '/folders',
+                },
+                {
                     icon: 'pi pi-fw pi-th-large',
                     label: 'Vendor Management',
                     to: '/vendors',
