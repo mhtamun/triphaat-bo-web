@@ -62,6 +62,8 @@ export const getServerSideProps: GetServerSideProps = async context =>
     });
 
 const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants: any[] }) => {
+    // console.debug({ variants });
+
     const router = useRouter();
 
     return (
@@ -89,11 +91,14 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                             initialValue: null,
                             options: _.map(variants, variant => ({
                                 value: variant.id,
-                                label: !variant.offerPricePerPerson
-                                    ? variant.pricePerPerson
-                                    : !parseFloat(variant.offerPricePerPerson)
-                                    ? variant.pricePerPerson
-                                    : variant.offerPricePerPerson,
+                                label:
+                                    (!variant.offerPricePerPerson
+                                        ? variant.pricePerPerson
+                                        : !parseFloat(variant.offerPricePerPerson)
+                                        ? variant.pricePerPerson
+                                        : variant.offerPricePerPerson) +
+                                    ' - ' +
+                                    _.join(variant.otherReasons, ', '),
                             })),
                             validate: (values: any) => {
                                 if (!values.variantId) return 'Required!';
@@ -101,11 +106,25 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                 return null;
                             },
                         },
+                        {
+                            type: 'number',
+                            name: 'quantity',
+                            placeholder: 'Enter quantity',
+                            title: 'Quantity',
+                            initialValue: null,
+                            validate: (values: any) => {
+                                if (!values.quantity) return 'Required!';
+
+                                return null;
+                            },
+                        },
                     ]}
-                    submitButtonShow={false}
-                    onValueModify={(values: FormikValues) => {
+                    submitButtonShow={true}
+                    submitButtonText="Check if seat is available"
+                    callback={(values: FormikValues) => {
                         console.debug({ values });
                     }}
+                    enableReinitialize={true}
                 />
             </Card>
         </>

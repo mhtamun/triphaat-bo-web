@@ -56,7 +56,22 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 subtitle="Manage trip variants here!"
                                 viewAll={{
                                     uri: `/api/v1/trips/${tripId}/variants`,
-                                    ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
+                                    ignoredColumns: [
+                                        'id',
+                                        'tripId',
+                                        'accommodations',
+                                        'accommodationType',
+                                        'accommodationClass',
+                                        'accommodationSharing',
+                                        'transportations',
+                                        'transportationType',
+                                        'transportationClass',
+                                        'transportationSharing',
+                                        'foodType',
+                                        'foodClass',
+                                        'createdAt',
+                                        'updatedAt',
+                                    ],
                                     scopedColumns: {
                                         status: (item: any) => (
                                             <>
@@ -71,7 +86,12 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
                                         _.map(data, datum => ({
-                                            ...datum,
+                                            id: datum.id,
+                                            reasons: _.join(datum.otherReasons, ', '),
+                                            costPrice: datum.costPricePerPerson,
+                                            price: datum.pricePerPerson,
+                                            offerPrice: datum.offerPricePerPerson,
+                                            minimumTravelerRequired: datum.minRequiredTraveler,
                                         })),
                                 }}
                                 addNew={{
@@ -121,12 +141,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             { label: 'Apartment', value: 'Apartment' },
                                             { label: 'Houseboat', value: 'Houseboat' },
                                         ],
-                                        // isGroupOptions: true,
-                                        // validate: (values: any) => {
-                                        //     if (!values.reasons) return 'Required!';
-
-                                        //     return null;
-                                        // },
+                                        show: () => false,
                                     },
                                     {
                                         type: 'multi-select-sync',
@@ -143,12 +158,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             { label: '5 Star', value: '5 Star' },
                                             { label: '7 Star', value: '7 Star' },
                                         ],
-                                        // isGroupOptions: true,
-                                        // validate: (values: any) => {
-                                        //     if (!values.reasons) return 'Required!';
-
-                                        //     return null;
-                                        // },
+                                        show: () => false,
                                     },
                                     {
                                         type: 'multi-select-sync',
@@ -167,12 +177,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                                 value: 'No sharing (1 Person sharing)',
                                             },
                                         ],
-                                        // isGroupOptions: true,
-                                        // validate: (values: any) => {
-                                        //     if (!values.reasons) return 'Required!';
-
-                                        //     return null;
-                                        // },
+                                        show: () => false,
                                     },
                                     {
                                         type: 'multi-select-sync',
@@ -195,12 +200,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             { label: 'Ship', value: 'Ship' },
                                             { label: 'Cruise Ship', value: 'Cruise Ship' },
                                         ],
-                                        // isGroupOptions: true,
-                                        // validate: (values: any) => {
-                                        //     if (!values.reasons) return 'Required!';
-
-                                        //     return null;
-                                        // },
+                                        show: () => false,
                                     },
                                     {
                                         type: 'multi-select-sync',
@@ -215,12 +215,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             { label: 'Business Class', value: 'Business Class' },
                                             { label: 'Economy Class', value: 'Economy Class' },
                                         ],
-                                        // isGroupOptions: true,
-                                        // validate: (values: any) => {
-                                        //     if (!values.reasons) return 'Required!';
-
-                                        //     return null;
-                                        // },
+                                        show: () => false,
                                     },
                                     {
                                         type: 'multi-select-sync',
@@ -239,12 +234,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                                 value: 'No sharing (1 Person sharing)',
                                             },
                                         ],
-                                        // isGroupOptions: true,
-                                        // validate: (values: any) => {
-                                        //     if (!values.reasons) return 'Required!';
-
-                                        //     return null;
-                                        // },
+                                        show: () => false,
                                     },
                                     {
                                         type: 'multi-select-sync',
@@ -253,12 +243,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         title: 'Food Type',
                                         initialValue: null,
                                         options: [],
-                                        // isGroupOptions: true,
-                                        // validate: (values: any) => {
-                                        //     if (!values.reasons) return 'Required!';
-
-                                        //     return null;
-                                        // },
+                                        show: () => false,
                                     },
                                     {
                                         type: 'multi-select-sync',
@@ -267,18 +252,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         title: 'Food Class',
                                         initialValue: null,
                                         options: [],
-                                        // isGroupOptions: true,
-                                        // validate: (values: any) => {
-                                        //     if (!values.reasons) return 'Required!';
-
-                                        //     return null;
-                                        // },
+                                        show: () => false,
                                     },
                                     {
                                         type: 'chips',
                                         name: 'otherReasons',
                                         placeholder: 'Enter reasons (press enter to start new line)!',
-                                        title: 'Other Reasons',
+                                        title: 'Reasons',
                                         initialValue: null,
                                         validate: (values: any) => {
                                             if (
