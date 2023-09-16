@@ -289,7 +289,7 @@ export default function GenericFormGenerator({
         const isNotShow =
             _.isUndefined(fields[count].show) || _.isNull(fields[count].show)
                 ? false
-                : fields[count].show(formik.values) === false
+                : fields[count].show?.(formik.values) === false
                 ? true
                 : false;
 

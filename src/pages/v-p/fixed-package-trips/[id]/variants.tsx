@@ -88,9 +88,9 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         _.map(data, datum => ({
                                             id: datum.id,
                                             reasons: _.join(datum.otherReasons, ', '),
-                                            costPrice: datum.costPricePerPerson,
-                                            price: datum.pricePerPerson,
-                                            offerPrice: datum.offerPricePerPerson,
+                                            costPrice: parseFloat(datum.costPricePerPerson),
+                                            price: parseFloat(datum.pricePerPerson),
+                                            offerPrice: parseFloat(datum.offerPricePerPerson),
                                             minimumTravelerRequired: datum.minRequiredTraveler,
                                         })),
                                 }}
@@ -104,9 +104,9 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     // Prisma returning decimal values as string, so needed to parse to float
                                     onDataModify: datum => ({
                                         ...datum,
-                                        costPrice: parseFloat(datum.costPrice),
-                                        price: parseFloat(datum.price),
-                                        offerPrice: parseFloat(datum.offerPrice),
+                                        costPricePerPerson: parseFloat(datum.costPricePerPerson),
+                                        pricePerPerson: parseFloat(datum.pricePerPerson),
+                                        offerPricePerPerson: parseFloat(datum.offerPricePerPerson),
                                     }),
                                 }}
                                 editExisting={{ uri: '/api/v1/variants/{id}', identifier: '{id}' }}

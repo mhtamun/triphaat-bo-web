@@ -1,4 +1,4 @@
-import { callPostApi, callGetApi } from '../libs/api';
+import { callPostApi, callGetApi, IData } from '../libs/api';
 import { apiBaseUrl } from '../config/env';
 
 // TRIPHAAT admin APIs
@@ -48,6 +48,9 @@ export const getTotalBalancePaymentOfTripsForVendor = (authorization: string) =>
 export const getCurrentMonthBalancePaymentOfTripsForVendor = (authorization: string) =>
     callGetApi(apiBaseUrl + '/vendor/api/v1/trip-payments-balance-current-month', authorization);
 
+export const initBooking = (payload: { tripId: number; variantId: number; numberOfTraveler: number }) =>
+    callPostApi('/vendor/api/v1/init-trip-booking', payload, null, null, true);
+
 // general APIs
 
 export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
@@ -56,5 +59,3 @@ export const getTripVariants = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/api/v1/trips/' + id + '/variants', authorization);
 
 // public APIs
-
-export const initBooking = (payload: any) => callPostApi('/public/api/v1/init-trip-booking', payload);
