@@ -15,7 +15,7 @@ import { getGeneralStatusOptions } from '../../../../utils';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Highlights | Trip Management', async cookies => {
+    getAuthorized(context, 'Includes/Excludes | Trip Management', async cookies => {
         const tripId = context.query.id;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -45,7 +45,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
         <>
             <Card title={trip?.name} className="mb-3">
                 <TabViewComponent
-                    activeIndex={6}
+                    activeIndex={8}
                     router={router}
                     tripId={tripId}
                     content={useMemo(

@@ -66,19 +66,6 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
     return (
         <>
             <Card title={trip?.name}>
-                <Button
-                    className="btn-block mb-3"
-                    icon="pi pi-plus"
-                    label={'New Booking'}
-                    severity="success"
-                    raised
-                    onClick={e => {
-                        e.preventDefault();
-
-                        router.push('/v-p/fixed-package-trips/' + tripId + '/booking');
-                    }}
-                />
-
                 <TabViewComponent
                     activeIndex={0}
                     router={router}
