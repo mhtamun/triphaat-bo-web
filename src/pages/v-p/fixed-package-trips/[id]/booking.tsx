@@ -17,9 +17,25 @@ import _ from 'lodash';
 // application
 import { getAuthorized } from '../../../../libs/auth';
 import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
-import { getTripForVendor, getTripVariants, initBooking, searchCustomersForVendor } from '../../../../apis';
+import {
+    getTripForVendor,
+    getTripVariants,
+    initBooking,
+    searchCustomersForVendor,
+    submitBooking,
+} from '../../../../apis';
 import { FormikValues } from 'formik';
 import { getSeverity } from '../../../../utils';
+
+interface ICustomer {
+    id: number;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    profileImageUrl: string;
+    status: string;
+}
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Booking | Fixed Package Trip', async cookies => {
@@ -69,9 +85,11 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
 
     const router = useRouter();
 
-    const [isBookingInitiated, setBookingInitiated] = useState(false);
-    const [searchCustomerInputValue, setSearchInputValue] = useState('');
-    const [customers, setCustomers] = useState(null);
+    const [isBookingInitiated, setBookingInitiated] = useState<boolean>(false);
+    const [jobId, setJobId] = useState<number>(0);
+    const [bookingId, setBookingId] = useState<number>(0);
+    const [searchCustomerInputValue, setSearchInputValue] = useState<string>('');
+    const [customers, setCustomers] = useState<ICustomer[]>([]);
 
     const bookingInitResponseMessage = useRef(null);
 
@@ -91,19 +109,38 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
             .catch(error => {
                 console.error({ error });
 
-                setCustomers(null);
+                setCustomers([]);
             })
             .finally();
     }, []);
 
-    const customerDataItemTemplate = (customer: {
-        firstName: string;
-        lastName: string;
-        phoneNumber: string;
-        email: string;
-        profileImageUrl: string;
-        status: string;
-    }) => {
+    const submitHandler = useCallback(
+        (payload: {
+            jobId: number;
+            bookingId: number;
+            customerId?: number;
+            phoneNumber?: string;
+            firstName?: string;
+            lastName?: string;
+            email?: string;
+        }) => {
+            submitBooking(payload)
+                .then(response => {
+                    // console.debug({ response });
+
+                    if (response.statusCode !== 200) {
+                    } else {
+                    }
+                })
+                .catch(error => {
+                    // console.error(error);
+                })
+                .finally();
+        },
+        []
+    );
+
+    const customerDataItemTemplate = (customer: ICustomer) => {
         return (
             <div className="col-12">
                 <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4 card">
@@ -128,7 +165,18 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
                             <span className="text-2xl font-semibold">{customer.phoneNumber}</span>
-                            <Button disabled={customer.status !== 'ACTIVE'}>Select</Button>
+                            <Button
+                                disabled={customer.status !== 'ACTIVE'}
+                                onClick={(e: React.MouseEvent) => {
+                                    submitHandler({
+                                        jobId,
+                                        bookingId,
+                                        customerId: customer.id,
+                                    });
+                                }}
+                            >
+                                Select
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -136,7 +184,21 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
         );
     };
 
-    return (
+    return !variants || _.size(variants) === 0 ? (
+        <div className="card">
+            <h5>No Variants Found</h5>
+            <p>
+                Please add at least <strong>one</strong> trip variant
+            </p>
+            <button
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    router.push(`/v-p/fixed-package-trips/${tripId}/variants`);
+                }}
+            >
+                Go
+            </button>
+        </div>
+    ) : (
         <>
             <div className="flex justify-content-between flex-wrap mb-3">
                 <Button
@@ -180,8 +242,34 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                         ' - ' +
                                         _.join(variant.otherReasons, ', '),
                                 })),
+                                onChange: (name: string, value: any, setFieldValue) => {
+                                    console.debug({ name, value });
+
+                                    const variant = _.find(variants, variant => variant.id === value);
+
+                                    setFieldValue(
+                                        'pricePerPerson',
+                                        !variant.offerPricePerPerson
+                                            ? variant.pricePerPerson
+                                            : !parseFloat(variant.offerPricePerPerson)
+                                            ? variant.pricePerPerson
+                                            : variant.offerPricePerPerson
+                                    );
+                                },
                                 validate: (values: any) => {
                                     if (!values.variantId) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'number',
+                                name: 'pricePerPerson',
+                                placeholder: 'Enter price per person',
+                                title: 'Price Per Person',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.pricePerPerson) return 'Required!';
 
                                     return null;
                                 },
@@ -208,10 +296,11 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                             initBooking({
                                 tripId: parseInt(tripId),
                                 variantId: values.variantId,
-                                numberOfTraveler: values.numberOfTraveler,
+                                pricePerPerson: parseFloat(values.pricePerPerson),
+                                numberOfTraveler: parseInt(values.numberOfTraveler),
                             })
                                 .then(response => {
-                                    console.debug({ response });
+                                    // console.debug({ response });
 
                                     if (response.statusCode !== 200) {
                                         bookingInitResponseMessage.current.show({
@@ -222,16 +311,26 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                             closable: false,
                                         });
                                     } else {
+                                        bookingInitResponseMessage.current.show({
+                                            sticky: false,
+                                            severity: 'success',
+                                            summary: '',
+                                            detail: response.message,
+                                            closable: false,
+                                        });
+
                                         const time = new Date();
                                         time.setSeconds(time.getSeconds() + 1800);
 
                                         restart(time);
 
                                         setBookingInitiated(true);
+                                        setJobId(parseInt(response.data.job.id));
+                                        setBookingId(response.data.booking.id);
                                     }
                                 })
                                 .catch(error => {
-                                    console.error(error);
+                                    // console.error(error);
 
                                     bookingInitResponseMessage.current.show({
                                         sticky: true,
@@ -341,6 +440,15 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                             submitButtonText="Submit"
                                             callback={values => {
                                                 console.debug({ values });
+
+                                                submitHandler({
+                                                    jobId,
+                                                    bookingId,
+                                                    phoneNumber: values.phoneNumber,
+                                                    firstName: values.firstName,
+                                                    lastName: values.lastName,
+                                                    email: values.email,
+                                                });
                                             }}
                                             enableReinitialize={false}
                                         />

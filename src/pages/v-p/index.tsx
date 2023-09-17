@@ -18,24 +18,23 @@ export const getServerSideProps: GetServerSideProps = async context =>
         );
         // console.debug({ responseCountNumberOfTrips });
 
-        const responseTotalBalancePaymentOfTrips = await getTotalBalancePaymentOfTripsForVendor(
-            `${cookies.accessType} ${cookies.accessToken}`
-        );
+        // const responseTotalBalancePaymentOfTrips = await getTotalBalancePaymentOfTripsForVendor(
+        //     `${cookies.accessType} ${cookies.accessToken}`
+        // );
         // console.debug({ responseTotalBalancePaymentOfTrips });
 
-        const responseCurrentMonthBalancePaymentOfTrips = await getCurrentMonthBalancePaymentOfTripsForVendor(
-            `${cookies.accessType} ${cookies.accessToken}`
-        );
+        // const responseCurrentMonthBalancePaymentOfTrips = await getCurrentMonthBalancePaymentOfTripsForVendor(
+        //     `${cookies.accessType} ${cookies.accessToken}`
+        // );
         // console.debug({ responseCurrentMonthBalancePaymentOfTrips });
 
-        if (
-            !responseCountNumberOfTrips ||
-            responseCountNumberOfTrips.statusCode !== 200 ||
-            !responseTotalBalancePaymentOfTrips ||
-            responseTotalBalancePaymentOfTrips.statusCode !== 200 ||
-            !responseCurrentMonthBalancePaymentOfTrips ||
-            responseCurrentMonthBalancePaymentOfTrips.statusCode !== 200
-        ) {
+        // ||
+        //     !responseTotalBalancePaymentOfTrips ||
+        //     responseTotalBalancePaymentOfTrips.statusCode !== 200 ||
+        //     !responseCurrentMonthBalancePaymentOfTrips ||
+        //     responseCurrentMonthBalancePaymentOfTrips.statusCode !== 200
+
+        if (!responseCountNumberOfTrips || responseCountNumberOfTrips.statusCode !== 200) {
             return {
                 redirect: {
                     destination: '/500',
@@ -47,8 +46,8 @@ export const getServerSideProps: GetServerSideProps = async context =>
         return {
             isVendor: true,
             countNumberOfTrips: responseCountNumberOfTrips.data,
-            totalBalancePaymentOfTrips: responseTotalBalancePaymentOfTrips.data,
-            currentMonthBalancePaymentOfTrips: responseCurrentMonthBalancePaymentOfTrips.data,
+            // totalBalancePaymentOfTrips: responseTotalBalancePaymentOfTrips.data,
+            // currentMonthBalancePaymentOfTrips: responseCurrentMonthBalancePaymentOfTrips.data,
         };
     });
 

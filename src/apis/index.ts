@@ -48,8 +48,22 @@ export const getTotalBalancePaymentOfTripsForVendor = (authorization: string) =>
 export const getCurrentMonthBalancePaymentOfTripsForVendor = (authorization: string) =>
     callGetApi(apiBaseUrl + '/vendor/api/v1/trip-payments-balance-current-month', authorization);
 
-export const initBooking = (payload: { tripId: number; variantId: number; numberOfTraveler: number }) =>
-    callPostApi('/vendor/api/v1/init-trip-booking', payload, null, null, true);
+export const initBooking = (payload: {
+    tripId: number;
+    variantId: number;
+    pricePerPerson: number;
+    numberOfTraveler: number;
+}) => callPostApi('/vendor/api/v1/init-trip-booking', payload, null, null, true);
+
+export const submitBooking = (payload: {
+    jobId: number;
+    bookingId: number;
+    customerId?: number;
+    phoneNumber?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+}) => callPostApi('/vendor/api/v1/submit-trip-booking', payload, null, null, true);
 
 export const searchCustomersForVendor = (key: string) =>
     callGetApi('/vendor/api/v1/search/customers?key=' + key, null, true);

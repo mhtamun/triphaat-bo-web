@@ -99,11 +99,13 @@ export const getAuthorized = async (
         };
     }
 
-    let props = null;
+    let data = null;
 
-    if (callback) props = await callback(cookies);
+    if (callback) data = await callback(cookies);
+
+    if (data.redirect) return { redirect: data.redirect };
 
     return {
-        props: { title, ...props } ?? { title },
+        props: { title, ...data } ?? { title },
     };
 };

@@ -26,6 +26,7 @@ export interface IField {
     isGroupOptions?: boolean; // only for multi select dropdowns
     isDisabled?: boolean;
     show?: (values: FormikValues) => boolean;
+    onChange?: (name: string, value: any, callback: (name: string, value: any) => void) => void;
     col?: number;
     acceptType?: string; // only for file select
     maxFileSize?: number; // only for file select
@@ -222,7 +223,11 @@ export default function GenericFormGenerator({
                     // @ts-ignore
                     value={formik.values[field.name] ?? ''}
                     options={field.options ?? []}
-                    setFieldValue={formik.setFieldValue}
+                    setFieldValue={(name: string, value: any) => {
+                        formik.setFieldValue(name, value, true);
+
+                        if (field.onChange) field.onChange(name, value, formik.setFieldValue);
+                    }}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />
