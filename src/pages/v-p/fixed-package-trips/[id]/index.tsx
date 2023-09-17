@@ -14,6 +14,7 @@ import { getLocations, getTripForVendor } from '../../../../apis';
 import { callPutApi } from '../../../../libs/api';
 import { getTripFields } from '../create';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
+import WrapperComponent from '../../../../components/trips/WrapperComponent';
 
 export interface ILocation {
     id: number;
@@ -64,50 +65,48 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
     const router = useRouter();
 
     return (
-        <>
-            <Card title={trip?.name}>
-                <TabViewComponent
-                    activeIndex={0}
-                    router={router}
-                    tripId={tripId}
-                    content={useMemo(
-                        () =>
-                            !locations || _.size(locations) === 0 || !trip ? null : (
-                                <GenericFormGenerator
-                                    datum={{
-                                        ...trip,
-                                        startDate: trip.startDate.split('T')[0],
-                                        endDate: trip.endDate.split('T')[0],
-                                    }}
-                                    fields={getTripFields(locations)}
-                                    callback={data => {
-                                        // console.debug({ data });
+        <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
+            <TabViewComponent
+                activeIndex={0}
+                router={router}
+                tripId={tripId}
+                content={useMemo(
+                    () =>
+                        !locations || _.size(locations) === 0 || !trip ? null : (
+                            <GenericFormGenerator
+                                datum={{
+                                    ...trip,
+                                    startDate: trip.startDate.split('T')[0],
+                                    endDate: trip.endDate.split('T')[0],
+                                }}
+                                fields={getTripFields(locations)}
+                                callback={data => {
+                                    // console.debug({ data });
 
-                                        callPutApi('/vendor/api/v1/trips/' + tripId, data)
-                                            .then(response => {
-                                                if (!response) {
-                                                    // showToast('error', 'Unsuccessful!', 'Server not working!');
-                                                } else if (response.statusCode !== 200) {
-                                                    // showToast('error', 'Unsuccessful!', response.message);
-                                                } else {
-                                                    // showToast('success', 'Success!', response.message);
-                                                }
-                                            })
-                                            .catch(error => {
-                                                console.error('error', error);
+                                    callPutApi('/vendor/api/v1/trips/' + tripId, data)
+                                        .then(response => {
+                                            if (!response) {
+                                                // showToast('error', 'Unsuccessful!', 'Server not working!');
+                                            } else if (response.statusCode !== 200) {
+                                                // showToast('error', 'Unsuccessful!', response.message);
+                                            } else {
+                                                // showToast('success', 'Success!', response.message);
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('error', error);
 
-                                                // showToast('error', 'Unsuccessful!', 'Something went wrong!');
-                                            })
-                                            .finally(() => {});
-                                    }}
-                                    submitButtonText="Save"
-                                />
-                            ),
-                        [trip]
-                    )}
-                />
-            </Card>
-        </>
+                                            // showToast('error', 'Unsuccessful!', 'Something went wrong!');
+                                        })
+                                        .finally(() => {});
+                                }}
+                                submitButtonText="Save"
+                            />
+                        ),
+                    [trip]
+                )}
+            />
+        </WrapperComponent>
     );
 };
 

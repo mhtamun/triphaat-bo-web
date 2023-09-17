@@ -15,17 +15,18 @@ import { useTimer } from 'react-timer-hook';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../libs/auth';
-import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
+import { getAuthorized } from '../../../../../libs/auth';
+import GenericFormGenerator from '../../../../../components/global/GenericFormGenerator';
 import {
     getTripForVendor,
     getTripVariants,
     initBooking,
     searchCustomersForVendor,
     submitBooking,
-} from '../../../../apis';
+} from '../../../../../apis';
 import { FormikValues } from 'formik';
-import { getSeverity } from '../../../../utils';
+import { getSeverity } from '../../../../../utils';
+import WrapperComponent from '../../../../../components/trips/WrapperComponent';
 
 interface ICustomer {
     id: number;
@@ -128,8 +129,8 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                 .then(response => {
                     // console.debug({ response });
 
-                    if (response.statusCode !== 200) {
-                    } else {
+                    if (response.statusCode === 200) {
+                        router.push('/v-p/fixed-package-trips/' + tripId + '/bookings');
                     }
                 })
                 .catch(error => {
@@ -210,18 +211,18 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                     onClick={e => {
                         e.preventDefault();
 
-                        router.push('/v-p/fixed-package-trips/' + tripId);
+                        router.back();
                     }}
                 />
                 <div>
-                    <Avatar label={minutes.toString()} className="mr-2" size="large" />
-                    <Avatar label={'M'} className="mr-2" size="large" />
+                    <Avatar label={minutes.toString()} className="mr-2" size="xlarge" />
+                    <Avatar label={'M'} className="mr-2" size="xlarge" />
                     <h1 style={{ display: 'inline', padding: 0, marginRight: '5px' }}>:</h1>
-                    <Avatar label={seconds.toString()} className="mr-2" size="large" />
-                    <Avatar label={'S'} className="mr-2" size="large" />
+                    <Avatar label={seconds.toString()} className="mr-2" size="xlarge" />
+                    <Avatar label={'S'} className="mr-2" size="xlarge" />
                 </div>
             </div>
-            <Card title={trip?.name}>
+            <WrapperComponent tripId={tripId} title={trip?.name} isMenuShow={false} router={null}>
                 <Fieldset legend={'Select package variant'}>
                     <GenericFormGenerator
                         fields={[
@@ -439,7 +440,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                             submitButtonShow={true}
                                             submitButtonText="Submit"
                                             callback={values => {
-                                                console.debug({ values });
+                                                // console.debug({ values });
 
                                                 submitHandler({
                                                     jobId,
@@ -458,7 +459,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                         ),
                     [isBookingInitiated, searchCustomerInputValue, customers]
                 )}
-            </Card>
+            </WrapperComponent>
         </>
     );
 };
