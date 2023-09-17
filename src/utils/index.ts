@@ -1,13 +1,5 @@
 import * as _ from 'lodash';
 
-export const colors = {
-    success: 'success',
-    primary: 'primary',
-    info: 'info',
-    warning: 'warning',
-    danger: 'danger',
-};
-
 export const getGeneralStatusOptions = () => [
     { value: 'ACTIVE', label: 'Active' },
     { value: 'INACTIVE', label: 'Inactive' },
@@ -36,4 +28,23 @@ export const getFormData = (payload: any) => {
     // console.debug('formData', formData);
 
     return formData;
+};
+
+export const getSeverity = (key: string) => {
+    switch (key) {
+        case 'ACTIVE':
+            return 'success';
+
+        case ' INACTIVE':
+            return 'danger';
+
+        case ' PENDING':
+            return 'warning';
+
+        case ' BLOCKED':
+            return 'danger';
+
+        default:
+            return null;
+    }
 };

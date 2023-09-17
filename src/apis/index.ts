@@ -51,6 +51,9 @@ export const getCurrentMonthBalancePaymentOfTripsForVendor = (authorization: str
 export const initBooking = (payload: { tripId: number; variantId: number; numberOfTraveler: number }) =>
     callPostApi('/vendor/api/v1/init-trip-booking', payload, null, null, true);
 
+export const searchCustomersForVendor = (key: string) =>
+    callGetApi('/vendor/api/v1/search/customers?key=' + key, null, true);
+
 // general APIs
 
 export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);

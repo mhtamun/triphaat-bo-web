@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
@@ -8,14 +8,18 @@ import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Messages } from 'primereact/messages';
 import { Fieldset } from 'primereact/fieldset';
+import { InputText } from 'primereact/inputtext';
+import { DataView } from 'primereact/dataview';
+import { Tag } from 'primereact/tag';
 import { useTimer } from 'react-timer-hook';
 import _ from 'lodash';
 
 // application
 import { getAuthorized } from '../../../../libs/auth';
 import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
-import { getTripForVendor, getTripVariants, initBooking } from '../../../../apis';
+import { getTripForVendor, getTripVariants, initBooking, searchCustomersForVendor } from '../../../../apis';
 import { FormikValues } from 'formik';
+import { getSeverity } from '../../../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Booking | Fixed Package Trip', async cookies => {
@@ -66,8 +70,8 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
     const router = useRouter();
 
     const [isBookingInitiated, setBookingInitiated] = useState(false);
-    const [numberOfTraveler, setNumberOfTraveler] = useState(0);
-    console.debug({ numberOfTraveler });
+    const [searchCustomerInputValue, setSearchInputValue] = useState('');
+    const [customers, setCustomers] = useState(null);
 
     const bookingInitResponseMessage = useRef(null);
 
@@ -76,6 +80,61 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
         autoStart: false,
         expiryTimestamp: new Date(),
     });
+
+    const handleSearchCustomer = useCallback((key: string) => {
+        searchCustomersForVendor(key)
+            .then(response => {
+                console.debug({ response });
+
+                if (response.statusCode === 200) setCustomers(response.data);
+            })
+            .catch(error => {
+                console.error({ error });
+
+                setCustomers(null);
+            })
+            .finally();
+    }, []);
+
+    const customerDataItemTemplate = (customer: {
+        firstName: string;
+        lastName: string;
+        phoneNumber: string;
+        email: string;
+        profileImageUrl: string;
+        status: string;
+    }) => {
+        return (
+            <div className="col-12">
+                <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4 card">
+                    {!customer.profileImageUrl ? (
+                        <i className="pi pi-user" style={{ fontSize: '2.5rem' }}></i>
+                    ) : (
+                        <img
+                            className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                            src={customer.profileImageUrl}
+                            alt={customer.firstName}
+                        />
+                    )}
+                    <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                        <div className="flex flex-column align-items-center sm:align-items-start gap-3">
+                            <div className="text-2xl font-bold text-900">{`${customer.firstName} ${customer.lastName}`}</div>
+                            <div className="flex align-items-center gap-3">
+                                <span className="flex align-items-center gap-2">
+                                    <span className="font-semibold">{customer.email}</span>
+                                </span>
+                                <Tag value={customer.status} severity={getSeverity(customer.status)}></Tag>
+                            </div>
+                        </div>
+                        <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                            <span className="text-2xl font-semibold">{customer.phoneNumber}</span>
+                            <Button disabled={customer.status !== 'ACTIVE'}>Select</Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     return (
         <>
@@ -101,130 +160,196 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                 </div>
             </div>
             <Card title={trip?.name}>
-                <GenericFormGenerator
-                    fields={[
-                        {
-                            type: 'select-sync',
-                            name: 'variantId',
-                            placeholder: 'Select a price package!',
-                            title: 'Please Select a Price Package Variant',
-                            initialValue: null,
-                            options: _.map(variants, variant => ({
-                                value: variant.id,
-                                label:
-                                    (!variant.offerPricePerPerson
-                                        ? variant.pricePerPerson
-                                        : !parseFloat(variant.offerPricePerPerson)
-                                        ? variant.pricePerPerson
-                                        : variant.offerPricePerPerson) +
-                                    ' - ' +
-                                    _.join(variant.otherReasons, ', '),
-                            })),
-                            validate: (values: any) => {
-                                if (!values.variantId) return 'Required!';
+                <Fieldset legend={'Select package variant'}>
+                    <GenericFormGenerator
+                        fields={[
+                            {
+                                type: 'select-sync',
+                                name: 'variantId',
+                                placeholder: 'Select a price package!',
+                                title: 'Please Select a Price Package Variant',
+                                initialValue: null,
+                                options: _.map(variants, variant => ({
+                                    value: variant.id,
+                                    label:
+                                        (!variant.offerPricePerPerson
+                                            ? variant.pricePerPerson
+                                            : !parseFloat(variant.offerPricePerPerson)
+                                            ? variant.pricePerPerson
+                                            : variant.offerPricePerPerson) +
+                                        ' - ' +
+                                        _.join(variant.otherReasons, ', '),
+                                })),
+                                validate: (values: any) => {
+                                    if (!values.variantId) return 'Required!';
 
-                                return null;
+                                    return null;
+                                },
+                                col: 2,
                             },
-                            col: 2,
-                        },
-                        {
-                            type: 'number',
-                            name: 'numberOfTraveler',
-                            placeholder: 'Enter number of traveler',
-                            title: 'Number Of Traveler',
-                            initialValue: null,
-                            validate: (values: any) => {
-                                if (!values.numberOfTraveler) return 'Required!';
+                            {
+                                type: 'number',
+                                name: 'numberOfTraveler',
+                                placeholder: 'Enter number of traveler',
+                                title: 'Number Of Traveler',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.numberOfTraveler) return 'Required!';
 
-                                return null;
+                                    return null;
+                                },
                             },
-                        },
-                    ]}
-                    submitButtonShow={!isBookingInitiated}
-                    submitButtonText="Check if seat is available"
-                    callback={(values: FormikValues) => {
-                        // console.debug({ values });
+                        ]}
+                        submitButtonShow={!isBookingInitiated}
+                        submitButtonText="Check if seat is available"
+                        callback={(values: FormikValues) => {
+                            // console.debug({ values });
 
-                        initBooking({
-                            tripId: parseInt(tripId),
-                            variantId: values.variantId,
-                            numberOfTraveler: values.numberOfTraveler,
-                        })
-                            .then(response => {
-                                console.debug({ response });
+                            initBooking({
+                                tripId: parseInt(tripId),
+                                variantId: values.variantId,
+                                numberOfTraveler: values.numberOfTraveler,
+                            })
+                                .then(response => {
+                                    console.debug({ response });
 
-                                if (response.statusCode !== 200) {
+                                    if (response.statusCode !== 200) {
+                                        bookingInitResponseMessage.current.show({
+                                            sticky: false,
+                                            severity: 'error',
+                                            summary: response.error,
+                                            detail: response.message,
+                                            closable: false,
+                                        });
+                                    } else {
+                                        const time = new Date();
+                                        time.setSeconds(time.getSeconds() + 1800);
+
+                                        restart(time);
+
+                                        setBookingInitiated(true);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error(error);
+
                                     bookingInitResponseMessage.current.show({
-                                        sticky: false,
+                                        sticky: true,
                                         severity: 'error',
-                                        summary: response.error,
-                                        detail: response.message,
+                                        summary: '',
+                                        detail: 'Something went wrong!',
                                         closable: false,
                                     });
-                                } else {
-                                    const time = new Date();
-                                    time.setSeconds(time.getSeconds() + 1800);
-
-                                    restart(time);
-
-                                    setBookingInitiated(true);
-                                    setNumberOfTraveler(values.numberOfTravel);
-                                }
-                            })
-                            .catch(error => {
-                                console.error(error);
-
-                                bookingInitResponseMessage.current.show({
-                                    sticky: true,
-                                    severity: 'error',
-                                    summary: '',
-                                    detail: 'Something went wrong!',
-                                    closable: false,
-                                });
-                            })
-                            .finally();
-                    }}
-                    enableReinitialize={false}
-                />
+                                })
+                                .finally();
+                        }}
+                        enableReinitialize={false}
+                    />
+                </Fieldset>
                 <Messages ref={bookingInitResponseMessage} />
-                <div className="grid">
-                    {_.map(Array(5), (e, i) => (
-                        <div className="col-6">
-                            <Fieldset legend={'Traveler ' + (i + 1)}>
-                                <GenericFormGenerator
-                                    fields={[
-                                        {
-                                            type: 'text',
-                                            name: 'firstName',
-                                            placeholder: 'Enter first name this traveler!',
-                                            title: 'First Name',
-                                            initialValue: null,
-                                            validate: (values: any) => {
-                                                if (!values.firstName) return 'Required!';
+                {useMemo(
+                    () =>
+                        !isBookingInitiated ? null : (
+                            <Fieldset className="mt-3" legend={'Search customer'}>
+                                <div className="p-inputgroup flex-1">
+                                    <InputText
+                                        placeholder="Search customer by name or phone or email"
+                                        value={searchCustomerInputValue}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            e.preventDefault();
 
-                                                return null;
-                                            },
-                                        },
-                                        {
-                                            type: 'text',
-                                            name: 'lastName',
-                                            placeholder: 'Enter last name this traveler!',
-                                            title: 'Last Name',
-                                            initialValue: null,
-                                            validate: (values: any) => {
-                                                if (!values.lastName) return 'Required!';
+                                            setSearchInputValue(e.target.value);
+                                        }}
+                                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                            // console.debug({ e });
 
-                                                return null;
-                                            },
-                                        },
-                                    ]}
-                                    submitButtonShow={false}
-                                    enableReinitialize={false}
-                                />
+                                            if (e.key === 'Enter' && e.code === 'Enter') {
+                                                e.preventDefault();
+
+                                                handleSearchCustomer(searchCustomerInputValue);
+                                            }
+                                        }}
+                                    />
+                                    <Button
+                                        icon="pi pi-search"
+                                        className="p-button-warning"
+                                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                            e.preventDefault();
+
+                                            handleSearchCustomer(searchCustomerInputValue);
+                                        }}
+                                    />
+                                </div>
+                                {!customers ? null : (
+                                    <DataView
+                                        className="mt-3"
+                                        value={customers}
+                                        itemTemplate={customerDataItemTemplate}
+                                        emptyMessage="No customer found, please insert customer information..."
+                                        style={{ color: 'red' }}
+                                    />
+                                )}
+                                {!customers ? null : _.size(customers) > 0 ? null : (
+                                    <div className="mt-3">
+                                        <GenericFormGenerator
+                                            fields={[
+                                                {
+                                                    type: 'text',
+                                                    name: 'firstName',
+                                                    placeholder: 'Enter first name!',
+                                                    title: 'First Name',
+                                                    initialValue: null,
+                                                    validate: (values: any) => {
+                                                        if (!values.firstName) return 'Required!';
+
+                                                        return null;
+                                                    },
+                                                },
+                                                {
+                                                    type: 'text',
+                                                    name: 'lastName',
+                                                    placeholder: 'Enter last name!',
+                                                    title: 'Last Name',
+                                                    initialValue: null,
+                                                    validate: (values: any) => {
+                                                        if (!values.lastName) return 'Required!';
+
+                                                        return null;
+                                                    },
+                                                },
+                                                {
+                                                    type: 'text',
+                                                    name: 'phoneNumber',
+                                                    placeholder: 'Enter phone number!',
+                                                    title: 'Phone Number',
+                                                    initialValue: null,
+                                                    validate: (values: any) => {
+                                                        if (!values.phoneNumber) return 'Required!';
+
+                                                        return null;
+                                                    },
+                                                },
+                                                {
+                                                    type: 'text',
+                                                    name: 'email',
+                                                    placeholder: 'Enter email address!',
+                                                    title: 'Email Address',
+                                                    initialValue: null,
+                                                },
+                                            ]}
+                                            submitButtonShow={true}
+                                            submitButtonText="Submit"
+                                            callback={values => {
+                                                console.debug({ values });
+                                            }}
+                                            enableReinitialize={false}
+                                        />
+                                    </div>
+                                )}
                             </Fieldset>
-                        </div>
-                    ))}
-                </div>
+                        ),
+                    [isBookingInitiated, searchCustomerInputValue, customers]
+                )}
             </Card>
         </>
     );
