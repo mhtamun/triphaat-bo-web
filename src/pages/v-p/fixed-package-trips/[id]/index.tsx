@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 
-// third-party
+// third-party libraries
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import _ from 'lodash';
 
-// application
+// application libraries
 import { getAuthorized } from '../../../../libs/auth';
 import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
 import { getLocations, getTripForVendor } from '../../../../apis';

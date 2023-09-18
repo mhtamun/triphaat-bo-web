@@ -39,7 +39,7 @@ interface ICustomer {
 }
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Booking | Fixed Package Trip', async cookies => {
+    getAuthorized(context, 'Create | Booking | Fixed Package Trip', async cookies => {
         const tripId = context.query.id;
         // console.debug({
         //     tripId,
