@@ -17,7 +17,7 @@ import WrapperComponent from '../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Variants | Trip Management', async cookies => {
-        const tripId = context.query.id;
+        const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore

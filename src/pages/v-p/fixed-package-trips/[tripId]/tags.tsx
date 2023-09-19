@@ -16,8 +16,8 @@ import TabViewComponent from '../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Videos | Trip Management', async cookies => {
-        const tripId = context.query.id;
+    getAuthorized(context, 'Tags | Trip Management', async cookies => {
+        const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -45,17 +45,17 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={3}
+                activeIndex={4}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
                     () => (
                         <GenericViewGenerator
-                            name={'Video'}
-                            title="Trip Videos"
-                            subtitle="Manage trip videos here!"
+                            name={'Tag'}
+                            title="Trip Tags"
+                            subtitle="Manage trip tags here!"
                             viewAll={{
-                                uri: `/api/v1/trips/${tripId}/videos`,
+                                uri: `/api/v1/trips/${tripId}/tags`,
                                 ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                 scopedColumns: {
                                     status: (item: any) => (
@@ -75,13 +75,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     })),
                             }}
                             addNew={{
-                                uri: `/api/v1/videos`,
-                                buttonText: 'Add Video',
+                                uri: `/api/v1/tags`,
+                                buttonText: 'Add Tag',
                             }}
-                            viewOne={{ uri: '/api/v1/videos/{id}', identifier: '{id}' }}
-                            editExisting={{ uri: '/api/v1/videos/{id}', identifier: '{id}' }}
+                            viewOne={{ uri: '/api/v1/tags/{id}', identifier: '{id}' }}
+                            editExisting={{ uri: '/api/v1/tags/{id}', identifier: '{id}' }}
                             removeOne={{
-                                uri: '/api/v1/videos/{id}',
+                                uri: '/api/v1/tags/{id}',
                                 identifier: '{id}',
                             }}
                             fields={[
@@ -99,29 +99,15 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 },
                                 {
                                     type: 'text',
-                                    name: 'url',
-                                    placeholder: 'Enter image URL for this trip!',
-                                    title: 'URL',
+                                    name: 'tag',
+                                    placeholder: 'Enter a TAG for this trip!',
+                                    title: 'TAG',
                                     initialValue: null,
                                     validate: (values: any) => {
-                                        if (!values.url) return 'Required!';
+                                        if (!values.tag) return 'Required!';
 
                                         return null;
                                     },
-                                },
-                                {
-                                    type: 'text',
-                                    name: 'title',
-                                    placeholder: 'Enter title for this image!',
-                                    title: 'Title',
-                                    initialValue: null,
-                                },
-                                {
-                                    type: 'text',
-                                    name: 'description',
-                                    placeholder: 'Enter description for this image!',
-                                    title: 'Description',
-                                    initialValue: null,
                                 },
                                 {
                                     type: 'number',

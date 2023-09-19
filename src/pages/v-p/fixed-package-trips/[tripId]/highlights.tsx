@@ -16,8 +16,8 @@ import TabViewComponent from '../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Images | Trip Management', async cookies => {
-        const tripId = context.query.id;
+    getAuthorized(context, 'Highlights | Trip Management', async cookies => {
+        const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -45,25 +45,19 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={2}
+                activeIndex={5}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
                     () => (
                         <GenericViewGenerator
-                            name={'Image'}
-                            title="Trip Images"
-                            subtitle="Manage trip images here!"
+                            name={'Highlight'}
+                            title="Trip Highlights"
+                            subtitle="Manage trip highlights here!"
                             viewAll={{
-                                uri: `/api/v1/trips/${tripId}/images`,
+                                uri: `/api/v1/trips/${tripId}/highlights`,
                                 ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                 scopedColumns: {
-                                    url: (item: any) => (
-                                        <>
-                                            <span className="p-column-title">{item.title}</span>
-                                            <img src={item.url} alt={item.title} className="shadow-2" width="100" />
-                                        </>
-                                    ),
                                     status: (item: any) => (
                                         <>
                                             <Badge
@@ -81,13 +75,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     })),
                             }}
                             addNew={{
-                                uri: `/api/v1/images`,
-                                buttonText: 'Add Image',
+                                uri: `/api/v1/highlights`,
+                                buttonText: 'Add Highlight',
                             }}
-                            viewOne={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
-                            editExisting={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+                            viewOne={{ uri: '/api/v1/highlights/{id}', identifier: '{id}' }}
+                            editExisting={{ uri: '/api/v1/highlights/{id}', identifier: '{id}' }}
                             removeOne={{
-                                uri: '/api/v1/images/{id}',
+                                uri: '/api/v1/highlights/{id}',
                                 identifier: '{id}',
                             }}
                             fields={[
@@ -105,29 +99,15 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 },
                                 {
                                     type: 'text',
-                                    name: 'url',
-                                    placeholder: 'Enter image URL for this trip!',
-                                    title: 'URL',
+                                    name: 'note',
+                                    placeholder: 'Enter a highlight note for this trip!',
+                                    title: 'Note',
                                     initialValue: null,
                                     validate: (values: any) => {
-                                        if (!values.url) return 'Required!';
+                                        if (!values.note) return 'Required!';
 
                                         return null;
                                     },
-                                },
-                                {
-                                    type: 'text',
-                                    name: 'title',
-                                    placeholder: 'Enter title for this image!',
-                                    title: 'Title',
-                                    initialValue: null,
-                                },
-                                {
-                                    type: 'text',
-                                    name: 'description',
-                                    placeholder: 'Enter description for this image!',
-                                    title: 'Description',
-                                    initialValue: null,
                                 },
                                 {
                                     type: 'number',

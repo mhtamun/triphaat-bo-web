@@ -33,16 +33,20 @@ export const getFormData = (payload: any) => {
 export const getSeverity = (key: string) => {
     switch (key) {
         case 'ACTIVE':
+        case 'CONFIRMED':
+        case 'COMPLETED':
             return 'success';
 
-        case ' INACTIVE':
+        case 'INACTIVE':
+        case 'EXPIRED':
+        case 'CANCELED':
+        case 'BLOCKED':
             return 'danger';
 
-        case ' PENDING':
+        case 'PENDING':
+        case 'LOCKED':
+        case 'REFUNDED':
             return 'warning';
-
-        case ' BLOCKED':
-            return 'danger';
 
         default:
             return null;

@@ -32,7 +32,7 @@ export interface ILocation {
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Details | Trip Management', async cookies => {
-        const tripId = context.query.id;
+        const tripId = context.query.tripId;
 
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment

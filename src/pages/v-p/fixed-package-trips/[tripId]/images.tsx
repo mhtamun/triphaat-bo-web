@@ -16,8 +16,8 @@ import TabViewComponent from '../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Includes/Excludes | Trip Management', async cookies => {
-        const tripId = context.query.id;
+    getAuthorized(context, 'Images | Trip Management', async cookies => {
+        const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -45,19 +45,25 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={8}
+                activeIndex={2}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
                     () => (
                         <GenericViewGenerator
-                            name={'Include/Exclude'}
-                            title="Trip Include/Exclude List"
-                            subtitle="Manage trip include/exclude here!"
+                            name={'Image'}
+                            title="Trip Images"
+                            subtitle="Manage trip images here!"
                             viewAll={{
-                                uri: `/api/v1/trips/${tripId}/includes`,
+                                uri: `/api/v1/trips/${tripId}/images`,
                                 ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                 scopedColumns: {
+                                    url: (item: any) => (
+                                        <>
+                                            <span className="p-column-title">{item.title}</span>
+                                            <img src={item.url} alt={item.title} className="shadow-2" width="100" />
+                                        </>
+                                    ),
                                     status: (item: any) => (
                                         <>
                                             <Badge
@@ -71,20 +77,17 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 actionIdentifier: 'id',
                                 onDataModify: data =>
                                     _.map(data, datum => ({
-                                        id: datum.id,
-                                        note: datum.note,
-                                        type: !datum.not ? 'Include' : 'Exclude',
-                                        status: datum.status,
+                                        ...datum,
                                     })),
                             }}
                             addNew={{
-                                uri: `/api/v1/includes`,
-                                buttonText: 'Add Include/Exclude',
+                                uri: `/api/v1/images`,
+                                buttonText: 'Add Image',
                             }}
-                            viewOne={{ uri: '/api/v1/includes/{id}', identifier: '{id}' }}
-                            editExisting={{ uri: '/api/v1/includes/{id}', identifier: '{id}' }}
+                            viewOne={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+                            editExisting={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
                             removeOne={{
-                                uri: '/api/v1/includes/{id}',
+                                uri: '/api/v1/images/{id}',
                                 identifier: '{id}',
                             }}
                             fields={[
@@ -102,34 +105,29 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 },
                                 {
                                     type: 'text',
-                                    name: 'note',
-                                    placeholder: 'Enter a include/exclude note for this trip!',
-                                    title: 'Note',
+                                    name: 'url',
+                                    placeholder: 'Enter image URL for this trip!',
+                                    title: 'URL',
                                     initialValue: null,
                                     validate: (values: any) => {
-                                        if (!values.note) return 'Required!';
+                                        if (!values.url) return 'Required!';
 
                                         return null;
                                     },
                                 },
                                 {
-                                    type: 'select-sync',
-                                    name: 'not',
-                                    placeholder: 'Select include/exclude!',
-                                    title: 'Include/Exclude',
-                                    initialValue: false,
-                                    options: [
-                                        {
-                                            value: false,
-                                            label: 'Include',
-                                        },
-                                        { value: true, label: 'Exclude' },
-                                    ],
-                                    validate: (values: any) => {
-                                        if (values.not === null || values.not === undefined) return 'Required!';
-
-                                        return null;
-                                    },
+                                    type: 'text',
+                                    name: 'title',
+                                    placeholder: 'Enter title for this image!',
+                                    title: 'Title',
+                                    initialValue: null,
+                                },
+                                {
+                                    type: 'text',
+                                    name: 'description',
+                                    placeholder: 'Enter description for this image!',
+                                    title: 'Description',
+                                    initialValue: null,
                                 },
                                 {
                                     type: 'number',

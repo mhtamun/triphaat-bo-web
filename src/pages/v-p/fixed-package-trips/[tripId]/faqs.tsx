@@ -16,8 +16,8 @@ import TabViewComponent from '../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Activities | Trip Management', async cookies => {
-        const tripId = context.query.id;
+    getAuthorized(context, 'FAQs | Trip Management', async cookies => {
+        const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -45,17 +45,17 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={6}
+                activeIndex={7}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
                     () => (
                         <GenericViewGenerator
-                            name={'Activity'}
-                            title="Trip Activities"
-                            subtitle="Manage trip activities here!"
+                            name={'FAQ'}
+                            title="Trip FAQs"
+                            subtitle="Manage trip faqs here!"
                             viewAll={{
-                                uri: `/api/v1/trips/${tripId}/activities`,
+                                uri: `/api/v1/trips/${tripId}/faqs`,
                                 ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                 scopedColumns: {
                                     status: (item: any) => (
@@ -72,17 +72,16 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 onDataModify: data =>
                                     _.map(data, datum => ({
                                         ...datum,
-                                        locations: _.map(datum.locations, location => location + ', '),
                                     })),
                             }}
                             addNew={{
-                                uri: `/api/v1/activities`,
-                                buttonText: 'Add Activity',
+                                uri: `/api/v1/faqs`,
+                                buttonText: 'Add FAQ',
                             }}
-                            viewOne={{ uri: '/api/v1/activities/{id}', identifier: '{id}' }}
-                            editExisting={{ uri: '/api/v1/activities/{id}', identifier: '{id}' }}
+                            viewOne={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
+                            editExisting={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
                             removeOne={{
-                                uri: '/api/v1/activities/{id}',
+                                uri: '/api/v1/faqs/{id}',
                                 identifier: '{id}',
                             }}
                             fields={[
@@ -100,41 +99,27 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 },
                                 {
                                     type: 'text',
-                                    name: 'imageUrl',
-                                    placeholder: 'Enter image URL for this activity!',
-                                    title: 'Image URL',
-                                    initialValue: null,
-                                },
-                                {
-                                    type: 'text',
-                                    name: 'title',
-                                    placeholder: 'Enter title for this activity!',
-                                    title: 'Title',
+                                    name: 'question',
+                                    placeholder: 'Enter a question for this FAQ!',
+                                    title: 'Question',
                                     initialValue: null,
                                     validate: (values: any) => {
-                                        if (!values.title) return 'Required!';
+                                        if (!values.question) return 'Required!';
 
                                         return null;
                                     },
                                 },
                                 {
                                     type: 'text',
-                                    name: 'body',
-                                    placeholder: 'Enter body for this activity!',
-                                    title: 'Body (Description)',
+                                    name: 'answer',
+                                    placeholder: 'Enter a answer for this FAQ!',
+                                    title: 'Answer',
                                     initialValue: null,
                                     validate: (values: any) => {
-                                        if (!values.body) return 'Required!';
+                                        if (!values.answer) return 'Required!';
 
                                         return null;
                                     },
-                                },
-                                {
-                                    type: 'chips',
-                                    name: 'locations',
-                                    placeholder: 'Enter locations for this activity!',
-                                    title: 'Locations (Enter multiple if required)',
-                                    initialValue: null,
                                 },
                                 {
                                     type: 'number',

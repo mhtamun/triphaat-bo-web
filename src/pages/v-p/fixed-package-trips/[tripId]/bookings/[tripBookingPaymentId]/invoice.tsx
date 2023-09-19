@@ -7,14 +7,15 @@ import { PDFViewer } from '@react-pdf/renderer';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../../libs/auth';
-import { getTripForVendor } from '../../../../../apis';
-import WrapperComponent from '../../../../../components/trips/WrapperComponent';
-import Invoice from '../../../../../components/reports/invoice';
+import { getAuthorized } from '../../../../../../libs/auth';
+import { getTripForVendor } from '../../../../../../apis';
+import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
+import Invoice from '../../../../../../components/reports/invoice';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Invoice | Bookings | Trip Management', async cookies => {
-        const tripId = context.query.id;
+        const tripId = context.query.tripId;
+        const tripBookingPaymentId = context.query.tripBookingPaymentId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore

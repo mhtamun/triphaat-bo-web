@@ -12,10 +12,11 @@ import { getAuthorized } from '../../../../../libs/auth';
 import GenericViewGenerator from '../../../../../components/global/GenericViewGenerator';
 import { getTripForVendor } from '../../../../../apis';
 import WrapperComponent from '../../../../../components/trips/WrapperComponent';
+import { getSeverity } from '../../../../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Bookings | Trip Management', async cookies => {
-        const tripId = context.query.id;
+        const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -45,17 +46,24 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
             <GenericViewGenerator
                 name="Booking List"
                 viewAll={{
-                    uri: `/vendor/api/v1/trips/${tripId}/trip-bookings`,
+                    uri: `/vendor/api/v1/trips/${tripId}/trip-booking-payments`,
                     ignoredColumns: ['id', 'createdAt', 'updatedAt'],
                     scopedColumns: {
-                        status: (item: any) => (
+                        paymentStatus: (item: any) => (
                             <>
                                 <Badge
-                                    value={item.status}
-                                    size="large"
-                                    severity={
-                                        item.status === 'LOCKED' || item.status === 'PENDING' ? 'warning' : 'success'
-                                    }
+                                    value={item.paymentStatus}
+                                    size="normal"
+                                    severity={getSeverity(item.paymentStatus)}
+                                ></Badge>
+                            </>
+                        ),
+                        bookingStatus: (item: any) => (
+                            <>
+                                <Badge
+                                    value={item.bookingStatus}
+                                    size="normal"
+                                    severity={getSeverity(item.bookingStatus)}
                                 ></Badge>
                             </>
                         ),
@@ -63,10 +71,14 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                     actionIdentifier: 'id',
                     onDataModify: data =>
                         _.map(data, datum => ({
-                            customerName: datum.customer?.firstName + ' ' + datum.customer?.lastName,
-                            pricePerPerson: datum.pricePerPerson,
-                            numberOfTraveler: datum.numberOfTraveler,
-                            status: datum.booking?.status,
+                            id: datum.id,
+                            customerName:
+                                datum.tripBooking?.customer?.firstName + ' ' + datum.tripBooking?.customer?.lastName,
+                            pricePerPerson: datum.tripBooking?.pricePerPerson,
+                            numberOfTraveler: datum.tripBooking?.numberOfTraveler,
+                            totalAmount: datum.amount,
+                            paymentStatus: datum.status,
+                            bookingStatus: datum.tripBooking?.booking?.status,
                         })),
                 }}
                 customActions={[
@@ -75,7 +87,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                         icon: PrimeIcons.ARROW_RIGHT,
                         text: 'Invoice',
                         callback: identifier => {
-                            router.push(``);
+                            router.push(`/v-p/fixed-package-trips/${tripId}/bookings/${identifier}/invoice`);
                         },
                     },
                 ]}
