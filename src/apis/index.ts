@@ -68,6 +68,9 @@ export const submitBooking = (payload: {
 export const searchCustomersForVendor = (key: string) =>
     callGetApi('/vendor/api/v1/search/customers?key=' + key, null, true);
 
+export const getTripBookingPaymentForVendor = (tripId: string, tripBookingPaymentId: string, authorization?: string) =>
+    callGetApi(`/vendor/api/v1/trips/${tripId}/trip-booking-payments/${tripBookingPaymentId}`, authorization, false);
+
 // general APIs
 
 export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
