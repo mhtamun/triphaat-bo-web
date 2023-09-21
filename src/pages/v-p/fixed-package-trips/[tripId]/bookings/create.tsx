@@ -32,7 +32,7 @@ interface ICustomer {
     id: number;
     firstName: string;
     lastName: string;
-    phoneNumber: string;
+    phone: string;
     email: string;
     profileImageUrl: string;
     status: string;
@@ -120,7 +120,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
             jobId: number;
             bookingId: number;
             customerId?: number;
-            phoneNumber?: string;
+            phone?: string;
             firstName?: string;
             lastName?: string;
             email?: string;
@@ -165,7 +165,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                             </div>
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                            <span className="text-2xl font-semibold">{customer.phoneNumber}</span>
+                            <span className="text-2xl font-semibold">{customer.phone}</span>
                             <Button
                                 disabled={customer.status !== 'ACTIVE'}
                                 onClick={(e: React.MouseEvent) => {
@@ -419,12 +419,12 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                                 },
                                                 {
                                                     type: 'text',
-                                                    name: 'phoneNumber',
+                                                    name: 'phone',
                                                     placeholder: 'Enter phone number!',
                                                     title: 'Phone Number',
                                                     initialValue: null,
                                                     validate: (values: any) => {
-                                                        if (!values.phoneNumber) return 'Required!';
+                                                        if (!values.phone) return 'Required!';
 
                                                         return null;
                                                     },
@@ -445,7 +445,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                                 submitHandler({
                                                     jobId,
                                                     bookingId,
-                                                    phoneNumber: values.phoneNumber,
+                                                    phone: values.phone,
                                                     firstName: values.firstName,
                                                     lastName: values.lastName,
                                                     email: values.email,

@@ -14,6 +14,7 @@ import _ from 'lodash';
 import { getAuthorized } from '../../../../../../libs/auth';
 import { getTripBookingPaymentForVendor } from '../../../../../../apis';
 import Invoice from '../../../../../../components/reports/invoice';
+import { DATE_FORMAT, getFormattedDatetime } from '../../../../../../utils/date';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Invoice | Bookings | Trip Management', async cookies => {
@@ -42,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         };
     });
 
-const Page = ({ tripId, trip }: { tripId: string; trip: any; tripBookingPayment: any }) => {
+const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayment: any }) => {
     const router = useRouter();
 
     const [isClient, setIsClient] = useState(false);
@@ -51,6 +52,12 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any; tripBookingPayment:
         setIsClient(true);
     }, []);
 
+    console.debug({ tripBookingPayment });
+    // console.debug({
+    //     paymentMethod:
+
+    // });
+
     return !isClient ? null : (
         <div className="grid">
             <div className="xl:col-9 lg:col-8 md:col-8 sm:col-12">
@@ -58,22 +65,42 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any; tripBookingPayment:
                     <PDFViewer style={{ width: '100%', minHeight: '1280px' }}>
                         <Invoice
                             data={{
+                                report: {
+                                    invoiceNumber: tripBookingPayment.id,
+                                    invoiceDate: getFormattedDatetime(
+                                        tripBookingPayment.createdAt,
+                                        DATE_FORMAT.DATE_REPORT
+                                    ),
+                                    bookingStatus: tripBookingPayment?.tripBooking?.booking?.status,
+                                    bookingDate: getFormattedDatetime(
+                                        tripBookingPayment?.tripBooking?.booking?.createdAt,
+                                        DATE_FORMAT.DATE_REPORT
+                                    ),
+                                    paymentMethod:
+                                        tripBookingPayment.method === 'OTHER'
+                                            ? tripBookingPayment.otherMethod ?? 'OTHER'
+                                            : tripBookingPayment.method === 'MFS'
+                                            ? tripBookingPayment.mfsMethod ?? 'MFS'
+                                            : tripBookingPayment.method,
+                                    paymentStatus: tripBookingPayment.status,
+                                    paymentDate: !tripBookingPayment.date
+                                        ? ''
+                                        : getFormattedDatetime(tripBookingPayment.date, DATE_FORMAT.DATE_REPORT),
+                                },
                                 from: {
-                                    name: 'TripHaat As Vendor',
-                                    address: 'Dhaka',
-                                    phone: '+8801828048282',
-                                    email: 'vendor@triphaat.com',
+                                    name: tripBookingPayment?.tripBooking?.vendor?.businessName,
+                                    address: tripBookingPayment?.tripBooking?.vendor?.businessAddress,
+                                    phone: tripBookingPayment?.tripBooking?.vendor?.phone,
+                                    email: tripBookingPayment?.tripBooking?.vendor?.email,
                                 },
                                 to: {
-                                    name: 'TripHaat As Customer',
-                                    address: 'Dhaka',
-                                    phone: '+8801828048282',
-                                    email: 'customer@triphaat.com',
-                                },
-                                report: {
-                                    number: '01',
-                                    date: '2023-09-19',
-                                    status: 'Pending',
+                                    name:
+                                        tripBookingPayment?.tripBooking?.customer?.firstName +
+                                        ' ' +
+                                        tripBookingPayment?.tripBooking?.customer?.lastName,
+                                    address: tripBookingPayment?.tripBooking?.customer?.address,
+                                    phone: tripBookingPayment?.tripBooking?.customer?.phone,
+                                    email: tripBookingPayment?.tripBooking?.customer?.email,
                                 },
                                 items:
                                     [

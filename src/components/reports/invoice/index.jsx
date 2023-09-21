@@ -44,7 +44,7 @@ const PurchaseOrderPDF = ({ data }) => (
                 </View>
                 <View style={{ ...styles.title }}>
                     <ReportTitle title="Invoice" />
-                    <ReportNumber number={data.report.number} date={data.report.date} status={data.report.status} />
+                    <ReportNumber {...data.report} />
                 </View>
             </View>
             <View style={{ ...styles.header, ...styles.infoSection }}>

@@ -59,7 +59,7 @@ export const submitBooking = (payload: {
     jobId: number;
     bookingId: number;
     customerId?: number;
-    phoneNumber?: string;
+    phone?: string;
     firstName?: string;
     lastName?: string;
     email?: string;
