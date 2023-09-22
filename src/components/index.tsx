@@ -6,6 +6,7 @@ import UrlBasedColumnItem from './global/UrlBasedColumnItem';
 
 // Fields
 import InputText from './global/InputText';
+import InputCalender from './global/InputCalender';
 import Dropdown from './global/Dropdown';
 import InputTextarea from './global/InputTextarea';
 import Editor from './global/Editor';
@@ -23,7 +24,8 @@ export {
     ModalConfirmation,
     UrlBasedColumnItem,
     // Fields
-    InputText as InputField,
+    InputText as InputTextField,
+    InputCalender as InputDateField,
     Dropdown as SelectSyncField,
     InputTextarea as TextareaField,
     Editor as EditorField,

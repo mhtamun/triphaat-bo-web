@@ -64,6 +64,12 @@ export const getServerSideProps: GetServerSideProps = async context =>
 const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocation[]; trip: any }) => {
     const router = useRouter();
 
+    console.debug({
+        startDate: trip.startDate,
+        endDate: trip.endDate,
+        expiryDateOfBooking: trip.expiryDateOfBooking,
+    });
+
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
@@ -76,8 +82,6 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
                             <GenericFormGenerator
                                 datum={{
                                     ...trip,
-                                    startDate: trip.startDate.split('T')[0],
-                                    endDate: trip.endDate.split('T')[0],
                                 }}
                                 fields={getTripFields(locations)}
                                 callback={data => {

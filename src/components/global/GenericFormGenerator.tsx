@@ -3,7 +3,8 @@ import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
 import {
-    InputField,
+    InputTextField,
+    InputDateField,
     SelectSyncField,
     MultiSelectSyncField,
     TextareaField,
@@ -24,13 +25,16 @@ export interface IField {
         items?: { value: boolean | number | string; label: string }[];
     }[];
     isGroupOptions?: boolean; // only for multi select dropdowns
-    isDisabled?: boolean;
-    show?: (values: FormikValues) => boolean;
-    onChange?: (name: string, value: any, callback: (name: string, value: any) => void) => void;
-    col?: number;
+    isRange?: boolean; // only for date picker
+    minDate?: Date; // only for date picker
+    maxDate?: Date; // only for date picker
     acceptType?: string; // only for file select
     maxFileSize?: number; // only for file select
+    isDisabled?: boolean;
+    show?: (values: FormikValues) => boolean;
     validate?: (values: FormikValues) => string | null;
+    onChange?: (name: string, value: any, callback: (name: string, value: any) => void) => void;
+    col?: number;
 }
 
 export default function GenericFormGenerator({
@@ -154,16 +158,15 @@ export default function GenericFormGenerator({
             !formik.touched[field.name] && !formik.errors[field.name] ? '' : formik.errors[field.name];
 
         if (
-            field.type === 'date' ||
-            field.type === 'email' ||
             field.type === 'hidden' ||
+            field.type === 'email' ||
             field.type === 'number' ||
             field.type === 'password' ||
             field.type === 'tel' ||
             field.type === 'text'
         )
             return (
-                <InputField
+                <InputTextField
                     key={field.name}
                     type={field.type}
                     name={field.name}
@@ -191,6 +194,27 @@ export default function GenericFormGenerator({
                     value={formik.values[field.name] ?? ''}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    isDisabled={field.isDisabled}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'date')
+            return (
+                <InputDateField
+                    key={field.name}
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    value={formik.values[field.name] ?? ''}
+                    setFieldValue={formik.setFieldValue}
+                    setFieldTouched={formik.setFieldTouched}
+                    setFieldError={formik.setFieldError}
+                    isRange={field.isRange}
+                    minDate={field.minDate}
+                    maxDate={field.maxDate}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />
@@ -323,7 +347,10 @@ export default function GenericFormGenerator({
 
             for (let i = 0; i < numberOfColumn; i++) {
                 insideItems.push(
-                    <div key={'inside-' + (i + 1) + '-column'} className={`field col`}>
+                    <div
+                        key={'inside-' + (i + 1) + '-column'}
+                        className={`field sm:col-12 md:col-${12 / numberOfColumn} xl:col-${12 / numberOfColumn}`}
+                    >
                         {getField(fields[count])}
                     </div>
                 );

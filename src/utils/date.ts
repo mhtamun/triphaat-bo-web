@@ -31,3 +31,15 @@ export const isDateExpired = (date: string) => {
         return false;
     }
 };
+
+export const convertDateToIsoString = (date: Date): string => {
+    const tempDate = moment(date).format(DATE_FORMAT.YEAR_MM_DD);
+
+    console.debug({ tempDate });
+
+    return new Date(tempDate).toISOString();
+};
+
+export const convertIsoStringToDate = (isoString: string): Date => {
+    return moment(isoString, DATE_FORMAT.DATETIME_SERVER).tz('Asia/Dhaka').toDate();
+};

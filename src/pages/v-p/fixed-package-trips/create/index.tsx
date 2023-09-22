@@ -155,6 +155,7 @@ export const getTripFields = (locations: ILocation[]) => [
         placeholder: 'Enter start date for this trip!',
         title: 'Start Date',
         initialValue: null,
+        minDate: new Date(),
         validate: (values: any) => {
             if (!values.startDate) return 'Required!';
 
@@ -168,6 +169,7 @@ export const getTripFields = (locations: ILocation[]) => [
         placeholder: 'Enter end date for this trip!',
         title: 'End Date',
         initialValue: null,
+        minDate: new Date(),
         validate: (values: any) => {
             if (!values.endDate) return 'Required!';
 
@@ -180,6 +182,7 @@ export const getTripFields = (locations: ILocation[]) => [
         placeholder: 'Enter date of expiration for this trip!',
         title: 'Expiration Date Of Booking',
         initialValue: null,
+        // minDate: new Date(),
         validate: (values: any) => {
             if (!values.expiryDateOfBooking) return 'Required!';
 
