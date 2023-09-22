@@ -3,6 +3,9 @@ import React from 'react';
 // third-party libraries
 import type { AppProps } from 'next/app';
 import PrimeReact from 'primereact/api';
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
 
 // application libraries
 import type { Page } from '../types/types';
@@ -16,9 +19,9 @@ import 'primeicons/primeicons.css';
 import '../styles/layout/layout.scss';
 
 PrimeReact.zIndex = {
-    modal: 1100,
+    modal: 999999,
     overlay: 1000,
-    menu: 9999,
+    menu: 99999,
     tooltip: 1100,
     toast: 1200,
 };
