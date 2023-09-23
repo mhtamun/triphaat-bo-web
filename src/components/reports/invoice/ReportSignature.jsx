@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, View, StyleSheet } from '@react-pdf/renderer';
-// import theme from '../../../data/theme';
 
 const borderColor = 'black';
 

@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '200px',
+        width: '170px',
         marginTop: '10px',
     },
     labelContainer: {

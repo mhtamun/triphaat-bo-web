@@ -53,10 +53,6 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
     }, []);
 
     console.debug({ tripBookingPayment });
-    // console.debug({
-    //     paymentMethod:
-
-    // });
 
     return !isClient ? null : (
         <div className="grid">
@@ -102,23 +98,22 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                     phone: tripBookingPayment?.tripBooking?.customer?.phone,
                                     email: tripBookingPayment?.tripBooking?.customer?.email,
                                 },
-                                items:
-                                    [
-                                        {
-                                            serial: '1',
-                                            description: 'Test',
-                                            amount: 123.12,
+                                items: [
+                                    {
+                                        description: {
+                                            tripName: tripBookingPayment?.tripBooking?.trip?.name,
+                                            tripLocation: tripBookingPayment?.tripBooking?.trip?.location?.name,
+                                            tripDuration:
+                                                tripBookingPayment?.tripBooking?.trip?.durationInDays +
+                                                ' day(s)/' +
+                                                tripBookingPayment?.tripBooking?.trip?.durationInNights +
+                                                'night(s)',
                                         },
-                                    ] ?? [],
-                                // subtotal: _.reduce(items, (result, value, index) => result + value.amount, 0),
-                                // discountAmount: invoice.discountAmount ?? 0,
-                                // netTotalAmount:
-                                //     _.reduce(items, (result, value, index) => result + value.amount, 0) -
-                                //         invoice.discountAmount ?? 0,
-                                // advanceAmount: invoice.advanceAmount ?? 0,
-                                // dueAmount:
-                                //     (_.reduce(items, (result, value, index) => result + value.amount, 0) -
-                                //         invoice.discountAmount ?? 0) - invoice.advanceAmount ?? 0,
+                                        numberOfTraveler: tripBookingPayment?.tripBooking?.numberOfTraveler,
+                                        pricePerPerson: tripBookingPayment?.tripBooking?.pricePerPerson,
+                                    },
+                                ],
+                                amount: tripBookingPayment?.amount,
                             }}
                         />
                     </PDFViewer>

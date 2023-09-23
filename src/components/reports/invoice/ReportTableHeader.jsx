@@ -1,8 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet } from '@react-pdf/renderer';
-// import theme from '../../../data/theme';
 
-const borderColor = 'rgba(255,255,255,0)';
+const borderColor = 'black';
 export const tableHeaderBaseCSS = {
     padding: '8px',
     textAlign: 'center',
@@ -19,21 +18,16 @@ export const tableCSS = {
         borderBottomColor: borderColor,
         borderBottomWidth: 1,
     },
-    serial: {
-        width: '5%',
-        ...tableHeaderBaseCSS,
-        ...tableHeaderBorderCSS,
-        textAlign: 'center',
-    },
     description: {
-        width: '35%',
+        width: '60%',
         ...tableHeaderBaseCSS,
         ...tableHeaderBorderCSS,
         textAlign: 'center',
     },
     amount: {
-        width: '25%',
+        width: '20%',
         ...tableHeaderBaseCSS,
+        ...tableHeaderBorderCSS,
         textAlign: 'center',
     },
 };
@@ -44,10 +38,9 @@ const styles = StyleSheet.create({
 
 const InvoiceTableHeader = () => (
     <View style={styles.container}>
-        <Text style={styles.serial}>#</Text>
         <Text style={styles.description}>DESCRIPTION</Text>
-        <Text style={styles.description}>EVENT</Text>
-        <Text style={styles.amount}>AMOUNT</Text>
+        <Text style={styles.amount}>NUMBER OF TRAVELER(S)</Text>
+        <Text style={styles.amount}>PRICE PER PERSON</Text>
     </View>
 );
 

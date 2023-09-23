@@ -56,8 +56,8 @@ const PurchaseOrderPDF = ({ data }) => (
                     email={data.from.email}
                 />
             </View>
-            <ReportTable {..._.omit(data, ['report', 'from', 'to'])} />
-            <ReportSignature />
+            <ReportTable items={data.items} amount={data.amount} />
+            {/* <ReportSignature /> */}
         </Page>
     </Document>
 );

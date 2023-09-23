@@ -6,25 +6,22 @@ const styles = StyleSheet.create({
     container: { ...tableCSS.container, borderBottom: 'none' },
     title: {
         ...tableCSS.description,
-        width: '75%',
+        width: '60%',
         textAlign: 'right',
     },
     value: {
         ...tableCSS.amount,
+        width: '40%',
         textAlign: 'left',
     },
 });
 
-const InvoiceTableFooter = ({ title, value, multipleBy = 1, currency = 'BDT' }) => (
+const ReportTableFooter = ({ title, value, currency = 'BDT' }) => (
     <Fragment>
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
-            <Text style={styles.value}>
-                {!currency
-                    ? Number.parseFloat(value).toFixed(2) * multipleBy
-                    : `${currency} ${Number.parseFloat(value).toFixed(2) * multipleBy}`}
-            </Text>
+            <Text style={styles.value}>{currency + ' ' + value}</Text>
         </View>
     </Fragment>
 );
-export default InvoiceTableFooter;
+export default ReportTableFooter;
