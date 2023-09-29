@@ -176,7 +176,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                     });
                                 }}
                             >
-                                Select
+                                Reserve Trip
                             </Button>
                         </div>
                     </div>
@@ -438,7 +438,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                                 },
                                             ]}
                                             submitButtonShow={true}
-                                            submitButtonText="Submit"
+                                            submitButtonText="Reserve Trip"
                                             callback={values => {
                                                 // console.debug({ values });
 

@@ -1,4 +1,4 @@
-import { callPostApi, callGetApi, IData } from '../libs/api';
+import { callPostApi, callGetApi, IData, callPutApi } from '../libs/api';
 import { apiBaseUrl } from '../config/env';
 
 // TRIPHAAT admin APIs
@@ -70,6 +70,24 @@ export const searchCustomersForVendor = (key: string) =>
 
 export const getTripBookingPaymentForVendor = (tripId: string, tripBookingPaymentId: string, authorization?: string) =>
     callGetApi(`/vendor/api/v1/trips/${tripId}/trip-booking-payments/${tripBookingPaymentId}`, authorization, false);
+
+export const postManualTripBookingConfirm = (tripId: string, tripBookingPaymentId: string) =>
+    callPutApi(
+        `/vendor/api/v1/trips/${tripId}/trip-booking-payments/${tripBookingPaymentId}/manual-confirmation`,
+        {},
+        null,
+        null,
+        true
+    );
+
+export const postManualTripBookingCancel = (tripId: string, tripBookingPaymentId: string) =>
+    callPutApi(
+        `/vendor/api/v1/trips/${tripId}/trip-booking-payments/${tripBookingPaymentId}/manual-cancelation`,
+        {},
+        null,
+        null,
+        true
+    );
 
 // general APIs
 

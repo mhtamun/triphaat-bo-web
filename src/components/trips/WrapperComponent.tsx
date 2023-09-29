@@ -6,21 +6,19 @@ import { NextRouter } from 'next/router';
 
 // Component for fixed package
 const WrapperComponent = ({
-    tripId,
     title,
-    isMenuShow = true,
+    tripId,
     router,
     children,
 }: {
-    tripId: string;
     title: string;
-    isMenuShow?: boolean;
+    tripId?: string | null;
     router?: NextRouter | null;
     children: React.ReactNode;
 }) => {
     return (
         <Panel header={title}>
-            {!isMenuShow || !router ? null : (
+            {!tripId || !router ? null : (
                 <Menubar
                     model={[
                         {
