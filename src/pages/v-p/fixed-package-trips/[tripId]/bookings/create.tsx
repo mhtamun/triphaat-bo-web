@@ -278,12 +278,12 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                             },
                             {
                                 type: 'number',
-                                name: 'numberOfTraveler',
+                                name: 'numberOfTravelers',
                                 placeholder: 'Enter number of traveler',
                                 title: 'Number Of Traveler',
                                 initialValue: null,
                                 validate: (values: any) => {
-                                    if (!values.numberOfTraveler) return 'Required!';
+                                    if (!values.numberOfTravelers) return 'Required!';
 
                                     return null;
                                 },
@@ -298,7 +298,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                 tripId: parseInt(tripId),
                                 variantId: values.variantId,
                                 pricePerPerson: parseFloat(values.pricePerPerson),
-                                numberOfTraveler: parseInt(values.numberOfTraveler),
+                                numberOfTravelers: parseInt(values.numberOfTravelers),
                             })
                                 .then(response => {
                                     // console.debug({ response });

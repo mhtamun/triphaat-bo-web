@@ -52,7 +52,7 @@ export const initBooking = (payload: {
     tripId: number;
     variantId: number;
     pricePerPerson: number;
-    numberOfTraveler: number;
+    numberOfTravelers: number;
 }) => callPostApi('/vendor/api/v1/init-trip-booking', payload, null, null, true);
 
 export const submitBooking = (payload: {
@@ -85,6 +85,13 @@ export const postManualTripBookingCancel = (tripId: string, tripBookingPaymentId
         `/vendor/api/v1/trips/${tripId}/trip-booking-payments/${tripBookingPaymentId}/manual-cancelation`,
         {},
         null,
+        null,
+        true
+    );
+
+export const sendInvoiceViaEmail = (tripId: string, tripBookingPaymentId: string) =>
+    callGetApi(
+        `/vendor/api/v1/trips/${tripId}/trip-booking-payments/${tripBookingPaymentId}/send-invoice-email`,
         null,
         true
     );

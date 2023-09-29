@@ -75,7 +75,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                             customerName:
                                 datum.tripBooking?.customer?.firstName + ' ' + datum.tripBooking?.customer?.lastName,
                             pricePerPerson: datum.tripBooking?.pricePerPerson,
-                            numberOfTraveler: datum.tripBooking?.numberOfTraveler,
+                            numberOfTravelers: datum.tripBooking?.numberOfTravelers,
                             totalAmount: datum.amount,
                             paymentStatus: datum.status,
                             bookingStatus: datum.tripBooking?.booking?.status,

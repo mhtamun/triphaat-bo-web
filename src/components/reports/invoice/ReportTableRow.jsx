@@ -16,7 +16,7 @@ const ReportTableRow = ({ items }) => {
                 {', '}
                 <Text>{item.description.tripDuration}</Text>
             </Text>
-            <Text style={styles.amount}>{item.numberOfTraveler}</Text>
+            <Text style={styles.amount}>{item.numberOfTravelers}</Text>
             <Text style={styles.amount}>{item.pricePerPerson}</Text>
         </View>
     ));

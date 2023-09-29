@@ -16,6 +16,7 @@ import {
     getTripBookingPaymentForVendor,
     postManualTripBookingConfirm,
     postManualTripBookingCancel,
+    sendInvoiceViaEmail,
 } from '../../../../../../apis';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 import Invoice from '../../../../../../components/reports/invoice';
@@ -127,6 +128,10 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                         raised
                                         onClick={e => {
                                             e.preventDefault();
+
+                                            sendInvoiceViaEmail(tripId, tripBookingPayment.id).then(response => {
+                                                console.debug({ response });
+                                            });
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faEnvelope} className="mr-3" />
@@ -203,7 +208,7 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                                     tripBookingPayment?.tripBooking?.trip?.durationInNights +
                                                     'night(s)',
                                             },
-                                            numberOfTraveler: tripBookingPayment?.tripBooking?.numberOfTraveler,
+                                            numberOfTravelers: tripBookingPayment?.tripBooking?.numberOfTravelers,
                                             pricePerPerson: tripBookingPayment?.tripBooking?.pricePerPerson,
                                         },
                                     ],
