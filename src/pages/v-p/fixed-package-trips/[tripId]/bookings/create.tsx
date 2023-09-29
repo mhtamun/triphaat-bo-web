@@ -22,7 +22,7 @@ import {
     getTripVariants,
     initBooking,
     searchCustomersForVendor,
-    submitBooking,
+    lockBooking,
 } from '../../../../../apis';
 import { FormikValues } from 'formik';
 import { getSeverity } from '../../../../../utils';
@@ -125,7 +125,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
             lastName?: string;
             email?: string;
         }) => {
-            submitBooking(payload)
+            lockBooking(payload)
                 .then(response => {
                     // console.debug({ response });
 

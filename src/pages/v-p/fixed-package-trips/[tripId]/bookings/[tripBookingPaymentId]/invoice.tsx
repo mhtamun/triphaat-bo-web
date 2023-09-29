@@ -17,6 +17,7 @@ import {
     postManualTripBookingConfirm,
     postManualTripBookingCancel,
     sendInvoiceViaEmail,
+    reserveBooking,
 } from '../../../../../../apis';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 import Invoice from '../../../../../../components/reports/invoice';
@@ -85,6 +86,8 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                                 response => {
                                                     console.debug({ response });
 
+                                                    if (!response) throw new Error('API call not resolved!');
+
                                                     if (response.statusCode === 200) router.reload();
                                                 }
                                             );
@@ -103,6 +106,8 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                             postManualTripBookingCancel(tripId, tripBookingPayment.id).then(
                                                 response => {
                                                     console.debug({ response });
+
+                                                    if (!response) throw new Error('API call not resolved!');
 
                                                     if (response.statusCode === 200) router.reload();
                                                 }
@@ -129,9 +134,28 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                         onClick={e => {
                                             e.preventDefault();
 
-                                            sendInvoiceViaEmail(tripId, tripBookingPayment.id).then(response => {
-                                                console.debug({ response });
-                                            });
+                                            sendInvoiceViaEmail(tripId, tripBookingPayment.id)
+                                                .then(response => {
+                                                    console.debug({ response });
+
+                                                    if (!response) throw new Error('API call not resolved!');
+
+                                                    if (response.statusCode === 200) {
+                                                        return reserveBooking({ bookingId: response.data.bookingId });
+                                                    }
+
+                                                    return null;
+                                                })
+                                                .then(response => {
+                                                    console.debug({ response });
+
+                                                    if (!response) throw new Error('Previous API call not resolved!');
+
+                                                    if (response.statusCode === 200) router.reload();
+                                                })
+                                                .catch(error => {
+                                                    console.error(error);
+                                                });
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faEnvelope} className="mr-3" />

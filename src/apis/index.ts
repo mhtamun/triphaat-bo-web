@@ -55,7 +55,7 @@ export const initBooking = (payload: {
     numberOfTravelers: number;
 }) => callPostApi('/vendor/api/v1/init-trip-booking', payload, null, null, true);
 
-export const submitBooking = (payload: {
+export const lockBooking = (payload: {
     jobId: number;
     bookingId: number;
     customerId?: number;
@@ -63,7 +63,7 @@ export const submitBooking = (payload: {
     firstName?: string;
     lastName?: string;
     email?: string;
-}) => callPostApi('/vendor/api/v1/submit-trip-booking', payload, null, null, true);
+}) => callPostApi('/vendor/api/v1/lock-trip-booking', payload, null, null, true);
 
 export const searchCustomersForVendor = (key: string) =>
     callGetApi('/vendor/api/v1/search/customers?key=' + key, null, true);
@@ -95,6 +95,9 @@ export const sendInvoiceViaEmail = (tripId: string, tripBookingPaymentId: string
         null,
         true
     );
+
+export const reserveBooking = (payload: { bookingId: number }) =>
+    callPostApi('/vendor/api/v1/reserve-trip-booking', payload, null, null, true);
 
 // general APIs
 
