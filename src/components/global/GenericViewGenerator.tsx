@@ -85,7 +85,7 @@ const EditItemComponent = ({
                 datum={datum}
                 fields={fields}
                 nonEdibleFields={nonEdibleFields}
-                callback={(data, callback) => {
+                callback={(data, resetForm) => {
                     // console.debug({ data });
 
                     const contentType = !_.some(data, datum => datum instanceof File)
@@ -103,7 +103,7 @@ const EditItemComponent = ({
                     callPutApi(_.replace(putApiUri, putIdentifier, datumId), tempData, null, contentType, true)
                         .then(response => {
                             if (response.statusCode === 200) {
-                                callback();
+                                if (resetForm) resetForm();
 
                                 setFormModalOpen(false);
 
@@ -166,7 +166,7 @@ const AddNewItemComponent = ({
                     callPostApi(postApiUri, tempData, null, contentType, true)
                         .then(response => {
                             if (response.statusCode === 200) {
-                                resetForm();
+                                if (resetForm) resetForm();
 
                                 setFormModalOpen(false);
 
@@ -403,6 +403,7 @@ function GenericViewGenerator({
                                     right={rightToolbarTemplate}
                                 ></Toolbar>
                             )}
+                            {!filtration ? null : <div className="mb-4">{filtration}</div>}
                             <DataTable
                                 data={data}
                                 ignoredColumns={ignoredColumns}
@@ -410,6 +411,7 @@ function GenericViewGenerator({
                                 actionIdentifier={actionIdentifier}
                                 actions={actions}
                             />
+                            {!pagination ? null : <div className="mt-4">{pagination}</div>}
                         </>
                     ),
                 // eslint-disable-next-line react-hooks/exhaustive-deps

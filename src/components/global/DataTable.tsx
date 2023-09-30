@@ -34,6 +34,7 @@ const DataTable = ({
                 key,
                 label: _.upperCase(key),
                 headerStyle: { minWidth: '10rem' },
+                frozen: false,
                 body: !scopedColumns ? undefined : scopedColumns[key],
             });
         });
@@ -43,6 +44,8 @@ const DataTable = ({
                 key: 'actions',
                 label: 'ACTIONS',
                 headerStyle: { minWidth: '10rem' },
+                style: { width: 'auto' },
+                frozen: true,
                 body: undefined,
             });
         }
@@ -100,7 +103,7 @@ const DataTable = ({
             columnResizeMode="expand"
             resizableColumns
             showGridlines
-            scrollable
+            scrollable={true}
             scrollHeight="100vh"
         >
             {_.map(columnHeads, item => {
@@ -111,6 +114,8 @@ const DataTable = ({
                         header={item.label}
                         sortable={!_.isEqual(item.key, 'actions')}
                         headerStyle={item.headerStyle}
+                        frozen={item.frozen}
+                        alignFrozen="right"
                         body={item.body}
                     ></Column>
                 );

@@ -308,7 +308,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                                             } else if (response.statusCode !== 200) {
                                                 // showToast('error', 'Unsuccessful!', response.message);
                                             } else {
-                                                resetForm();
+                                                if (resetForm) resetForm();
 
                                                 // showToast('success', 'Success!', response.message);
 

@@ -31,6 +31,9 @@ const Modal = (props: {
             <Dialog
                 modal={true}
                 visible={visible}
+                maximizable={true}
+                draggable={false}
+                resizable={false}
                 header={header}
                 footer={basicDialogFooter}
                 onHide={onHide}

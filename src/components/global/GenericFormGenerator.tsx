@@ -52,7 +52,7 @@ export default function GenericFormGenerator({
     datum?: any;
     fields: IField[];
     nonEdibleFields?: string[];
-    callback?: (values: any, resetForm: () => void) => void;
+    callback?: (values: any, resetForm?: () => void) => void;
     onValueModify?: (values: FormikValues) => void;
     submitButtonShow?: boolean;
     submitButtonText?: string;
@@ -103,7 +103,7 @@ export default function GenericFormGenerator({
             );
         },
 
-        onSubmit: (values, { setSubmitting }) => {
+        onSubmit: (values: FormikValues, { setSubmitting }) => {
             // console.debug({ values });
 
             setSubmitting(true);
@@ -139,6 +139,14 @@ export default function GenericFormGenerator({
                 });
             }
         },
+
+        onReset: (values: FormikValues) => {
+            // console.debug({ values });
+
+            if (submitButtonShow && callback) {
+                callback(null);
+            }
+        },
     });
 
     // function onKeyDown(keyEvent) {
@@ -163,7 +171,8 @@ export default function GenericFormGenerator({
             field.type === 'number' ||
             field.type === 'password' ||
             field.type === 'tel' ||
-            field.type === 'text'
+            field.type === 'text' ||
+            field.type === 'time'
         )
             return (
                 <InputTextField
@@ -377,7 +386,11 @@ export default function GenericFormGenerator({
     }
 
     const submitButton = !submitButtonShow ? null : (
-        <Button type="submit" label={!submitButtonText ? 'Submit' : submitButtonText}></Button>
+        <Button
+            type="submit"
+            label={!submitButtonText ? 'Submit' : submitButtonText}
+            // onClick={formik.handleSubmit}
+        ></Button>
     );
     const resetButton = !resetButtonShow ? null : (
         <Button

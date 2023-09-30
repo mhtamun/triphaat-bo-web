@@ -1,5 +1,10 @@
 import * as _ from 'lodash';
 
+export const getUserStatusOptions = () => [
+    { value: 'ACTIVE', label: 'ACTIVE' },
+    { value: 'BLOCKED', label: 'BLOCKED' },
+];
+
 export const getGeneralStatusOptions = () => [
     { value: 'ACTIVE', label: 'Active' },
     { value: 'INACTIVE', label: 'Inactive' },
@@ -52,3 +57,16 @@ export const getSeverity = (key: string) => {
             return null;
     }
 };
+
+export const generateQueryPath = (query: any, ignorePathParams?: string[]) =>
+    _.reduce(
+        query,
+        (result, value, key) => {
+            // console.debug({ result, value, key });
+
+            if (ignorePathParams?.includes(key)) return result;
+
+            return `${result}${result === '' ? '?' : '&'}${key}=${value}`;
+        },
+        ''
+    );
