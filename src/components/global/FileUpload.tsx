@@ -30,7 +30,7 @@ const FileSelectField = ({
     setFieldTouched: (field: string, touched: boolean) => void;
     setFieldError: (field: string, value: string) => void;
     isDisabled?: boolean;
-    acceptType?: string;
+    acceptType?: 'image/*' | 'video/*' | 'application/*' | '*/*';
     maxFileSize?: number;
     errorMessage?: string;
 }) => {

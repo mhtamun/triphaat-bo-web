@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Card } from 'primereact/card';
 import { Badge } from 'primereact/badge';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 // application
 import { getAuthorized } from '../../../../libs/auth';
@@ -14,6 +14,7 @@ import { getTripForVendor } from '../../../../apis';
 import { getGeneralStatusOptions } from '../../../../utils';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../components/trips/WrapperComponent';
+import { IField } from '../../../../components/global/GenericFormGenerator';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Images | Trip Management', async cookies => {
@@ -104,17 +105,60 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                 },
                                 {
-                                    type: 'text',
+                                    type: 'file-select',
                                     name: 'url',
-                                    placeholder: 'Enter image URL for this trip!',
-                                    title: 'URL',
+                                    placeholder: 'Select image file!',
+                                    title: 'File',
                                     initialValue: null,
+                                    acceptType: 'image/*',
                                     validate: (values: any) => {
                                         if (!values.url) return 'Required!';
 
                                         return null;
                                     },
                                 },
+                                {
+                                    type: 'text',
+                                    name: 'title',
+                                    placeholder: 'Enter title for this image!',
+                                    title: 'Title',
+                                    initialValue: null,
+                                },
+                                {
+                                    type: 'text',
+                                    name: 'description',
+                                    placeholder: 'Enter description for this image!',
+                                    title: 'Description',
+                                    initialValue: null,
+                                },
+                                {
+                                    type: 'number',
+                                    name: 'serial',
+                                    placeholder: 'Enter serial number for sorting!',
+                                    title: 'Serial',
+                                    initialValue: 9999,
+                                    validate: (values: any) => {
+                                        if (!values.serial) return 'Required!';
+
+                                        return null;
+                                    },
+                                    col: 2,
+                                },
+                                {
+                                    type: 'select-sync',
+                                    name: 'status',
+                                    placeholder: 'Select status!',
+                                    title: 'Status',
+                                    initialValue: 'ACTIVE',
+                                    options: getGeneralStatusOptions(),
+                                    validate: (values: any) => {
+                                        if (!values.status) return 'Required!';
+
+                                        return null;
+                                    },
+                                },
+                            ]}
+                            editFields={[
                                 {
                                     type: 'text',
                                     name: 'title',

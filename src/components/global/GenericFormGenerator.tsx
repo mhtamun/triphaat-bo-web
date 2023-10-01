@@ -28,7 +28,7 @@ export interface IField {
     isRange?: boolean; // only for date picker
     minDate?: Date; // only for date picker
     maxDate?: Date; // only for date picker
-    acceptType?: string; // only for file select
+    acceptType?: 'image/*' | 'video/*' | 'application/*' | '*/*'; // only for file select
     maxFileSize?: number; // only for file select
     isDisabled?: boolean;
     show?: (values: FormikValues) => boolean;

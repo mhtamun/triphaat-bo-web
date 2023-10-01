@@ -103,7 +103,7 @@ export const getAuthorized = async (
 
     if (callback) data = await callback(cookies);
 
-    if (data.redirect) return { redirect: data.redirect };
+    if (data?.redirect) return { redirect: data.redirect };
 
     return {
         props: { title, ...data } ?? { title },
