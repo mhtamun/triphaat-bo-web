@@ -12,7 +12,9 @@ import { getAuthorized } from '../../../../../libs/auth';
 import GenericViewGenerator from '../../../../../components/global/GenericViewGenerator';
 import { getTripForVendor } from '../../../../../apis';
 import WrapperComponent from '../../../../../components/trips/WrapperComponent';
-import { getSeverity } from '../../../../../utils';
+import { generateQueryPath, getBookingStatusOptions, getPaymentStatusOptions, getSeverity } from '../../../../../utils';
+import FilterComponent from '../../../../../components/global/Filter';
+import PaginatorComponent from '../../../../../components/global/Paginator';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Bookings | Trip Management', async cookies => {
@@ -40,13 +42,18 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
 const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     const router = useRouter();
+    console.debug({ router });
 
     return (
         <WrapperComponent tripId={tripId} title={'Bookings: ' + trip?.name} router={router}>
             <GenericViewGenerator
                 name="Booking List"
                 viewAll={{
-                    uri: `/vendor/api/v1/trips/${tripId}/trip-booking-payments`,
+                    uri: `/vendor/api/v1/trips/${tripId}/trip-booking-payments${generateQueryPath(
+                        '',
+                        { tripId: router.query.tripId },
+                        router.query
+                    )}`,
                     ignoredColumns: ['id', 'createdAt', 'updatedAt'],
                     scopedColumns: {
                         paymentStatus: (item: any) => (
@@ -91,6 +98,65 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                         },
                     },
                 ]}
+                filtration={
+                    <FilterComponent
+                        fields={[
+                            {
+                                type: 'text',
+                                name: 'search',
+                                placeholder: 'Search by name...',
+                                title: 'Search',
+                                initialValue: null,
+                            },
+                            {
+                                type: 'date',
+                                name: 'startDate',
+                                placeholder: 'Enter start date for date range filter...',
+                                title: 'Date Range (Start Date)',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.startDate && values.endDate)
+                                        return 'Please select both date for range!';
+
+                                    return null;
+                                },
+                                col: 2,
+                            },
+                            {
+                                type: 'date',
+                                name: 'endDate',
+                                placeholder: 'Enter start date for date range filter...',
+                                title: 'Date Range (End Date)',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (values.startDate && !values.endDate)
+                                        return 'Please select both date for range!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'select-sync',
+                                name: 'paymentStatus',
+                                placeholder: 'Select payment status!',
+                                title: 'Payment Status',
+                                initialValue: null,
+                                options: getPaymentStatusOptions(),
+                            },
+                            {
+                                type: 'select-sync',
+                                name: 'bookingStatus',
+                                placeholder: 'Select booking status!',
+                                title: 'Booking Status',
+                                initialValue: null,
+                                options: getBookingStatusOptions(),
+                            },
+                        ]}
+                        router={router}
+                        pathParams={{ tripId: router.query.tripId }}
+                    />
+                }
+                pagination={<PaginatorComponent router={router} pathParams={{ tripId: router.query.tripId }} />}
             />
         </WrapperComponent>
     );

@@ -8,11 +8,11 @@ import { generateQueryPath } from '../../utils';
 const FilterComponent = ({
     fields,
     router,
-    ignorePathParams,
+    pathParams,
 }: {
     fields: IField[];
     router: NextRouter;
-    ignorePathParams?: string[];
+    pathParams?: any | {} | null;
 }) => {
     // console.debug({ pathname: router.pathname, url: router.route });
     // console.debug({ router });
@@ -21,13 +21,12 @@ const FilterComponent = ({
         // console.debug({ values });
 
         if (!values || _.isEmpty(values)) {
-            router.replace(router.asPath.split('?')[0]);
-        } else {
-            const path = `${router.asPath.split('?')[0]}${generateQueryPath(
-                { ...values, skip: 0, take: 10 },
-                ignorePathParams
-            )}`;
+            const path = generateQueryPath(router.pathname, pathParams);
+            // console.debug({ path });
 
+            router.replace(path);
+        } else {
+            const path = generateQueryPath(router.pathname, pathParams, { ...values, skip: 0, take: 10 });
             // console.debug({ path });
 
             router.replace(path);

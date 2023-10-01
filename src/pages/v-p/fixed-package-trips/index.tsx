@@ -62,6 +62,8 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                         name={'Trip'}
                         viewAll={{
                             uri: `/vendor/api/v1/date-types/FIXED/accommodation-types/FIXED/transportation-types/FIXED/trips${generateQueryPath(
+                                '',
+                                null,
                                 router.query
                             )}`,
                             ignoredColumns: [

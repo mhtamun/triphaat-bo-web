@@ -6,11 +6,11 @@ import { generateQueryPath } from '../../utils';
 
 const PaginatorComponent = ({
     router,
-    ignorePathParams,
+    pathParams,
     totalRecords = 10000,
 }: {
     router: NextRouter;
-    ignorePathParams?: string[];
+    pathParams?: any | {} | null;
     totalRecords?: number;
 }) => {
     const skip = !router.query.skip ? 0 : parseInt(router.query.skip as string);
@@ -56,15 +56,11 @@ const PaginatorComponent = ({
             onPageChange={event => {
                 // console.debug({ event });
 
-                const path = `${router.asPath.split('?')[0]}${generateQueryPath(
-                    {
-                        ...router.query,
-                        skip: event.first,
-                        take: event.rows,
-                    },
-                    ignorePathParams
-                )}`;
-
+                const path = generateQueryPath(router.pathname, pathParams, {
+                    ...router.query,
+                    skip: event.first,
+                    take: event.rows,
+                });
                 // console.debug({ path });
 
                 router.replace(path);

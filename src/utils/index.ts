@@ -15,6 +15,22 @@ export const getGenderOptions = () => [
     { value: 'Female', label: 'Female' },
 ];
 
+export const getPaymentStatusOptions = () => [
+    { value: 'PENDING', label: 'PENDING' },
+    { value: 'COMPLETED', label: 'COMPLETED' },
+    { value: 'CANCELED', label: 'CANCELED' },
+    { value: 'REFUNDED', label: 'REFUNDED' },
+];
+
+export const getBookingStatusOptions = () => [
+    { value: 'PENDING', label: 'PENDING' },
+    { value: 'LOCKED', label: 'LOCKED' },
+    { value: 'RESERVED', label: 'RESERVED' },
+    { value: 'CONFIRMED', label: 'CONFIRMED' },
+    { value: 'CANCELED', label: 'CANCELED' },
+    { value: 'EXPIRED', label: 'EXPIRED' },
+];
+
 export const getFormData = (payload: any) => {
     const formData = new FormData();
 
@@ -58,15 +74,50 @@ export const getSeverity = (key: string) => {
     }
 };
 
-export const generateQueryPath = (query: any, ignorePathParams?: string[]) =>
-    _.reduce(
-        query,
+export const generateQueryPath = (
+    pathname: string,
+    pathParams?: any | {} | null,
+    queryParams?: any | {} | null
+): string => {
+    // console.debug({ pathname, pathParams, queryParams });
+
+    let path: string = pathname;
+
+    if (
+        !_.isEmpty(pathname) &&
+        _.includes(pathname, '[') &&
+        _.includes(pathname, ']') &&
+        !_.isUndefined(pathParams) &&
+        !_.isNull(pathParams) &&
+        !_.isEmpty(pathParams)
+    ) {
+        path = _.reduce(
+            pathParams,
+            (result, value, key) => {
+                // console.debug({ result, value, key });
+
+                return _.replace(result, `[${key}]`, value);
+            },
+            pathname
+        );
+    }
+
+    return _.reduce(
+        queryParams,
         (result, value, key) => {
             // console.debug({ result, value, key });
 
-            if (ignorePathParams?.includes(key)) return result;
+            // If query param property is same as path param
+            if (
+                !_.isUndefined(pathParams) &&
+                !_.isNull(pathParams) &&
+                !_.isEmpty(pathParams) &&
+                Boolean(pathParams[key])
+            )
+                return result;
 
-            return `${result}${result === '' ? '?' : '&'}${key}=${value}`;
+            return `${result}${result === path ? '?' : '&'}${key}=${value}`;
         },
-        ''
+        path
     );
+};
