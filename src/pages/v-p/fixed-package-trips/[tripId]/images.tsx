@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 // third-party
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { Card } from 'primereact/card';
 import { Badge } from 'primereact/badge';
 import * as _ from 'lodash';
 
@@ -14,10 +13,9 @@ import { getTripForVendor } from '../../../../apis';
 import { getGeneralStatusOptions } from '../../../../utils';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../components/trips/WrapperComponent';
-import { IField } from '../../../../components/global/GenericFormGenerator';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Images | Trip Management', async cookies => {
+    getAuthorized(context, 'Images | Fixed Package Trip Management', async cookies => {
         const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -108,9 +106,10 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     type: 'file-select',
                                     name: 'url',
                                     placeholder: 'Select image file!',
-                                    title: 'File',
+                                    title: 'Image Upload',
                                     initialValue: null,
                                     acceptType: 'image/*',
+                                    maxFileSize: 1048576,
                                     validate: (values: any) => {
                                         if (!values.url) return 'Required!';
 

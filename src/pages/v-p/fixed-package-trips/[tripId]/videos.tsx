@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 // third-party
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { Card } from 'primereact/card';
 import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
@@ -16,7 +15,7 @@ import TabViewComponent from '../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Videos | Trip Management', async cookies => {
+    getAuthorized(context, 'Videos | Fixed package Trip Management', async cookies => {
         const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -58,6 +57,12 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 uri: `/api/v1/trips/${tripId}/videos`,
                                 ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                 scopedColumns: {
+                                    url: (item: any) => (
+                                        <>
+                                            <span className="p-column-title">{item.title}</span>
+                                            <video src={item.url} about={item.title} className="shadow-2" width="100" />
+                                        </>
+                                    ),
                                     status: (item: any) => (
                                         <>
                                             <Badge
@@ -98,17 +103,61 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                 },
                                 {
-                                    type: 'text',
+                                    type: 'file-select',
                                     name: 'url',
-                                    placeholder: 'Enter image URL for this trip!',
-                                    title: 'URL',
+                                    placeholder: 'Select video file!',
+                                    title: 'Video Upload',
                                     initialValue: null,
+                                    acceptType: 'video/*',
+                                    maxFileSize: 5242880,
                                     validate: (values: any) => {
                                         if (!values.url) return 'Required!';
 
                                         return null;
                                     },
                                 },
+                                {
+                                    type: 'text',
+                                    name: 'title',
+                                    placeholder: 'Enter title for this image!',
+                                    title: 'Title',
+                                    initialValue: null,
+                                },
+                                {
+                                    type: 'text',
+                                    name: 'description',
+                                    placeholder: 'Enter description for this image!',
+                                    title: 'Description',
+                                    initialValue: null,
+                                },
+                                {
+                                    type: 'number',
+                                    name: 'serial',
+                                    placeholder: 'Enter serial number for sorting!',
+                                    title: 'Serial',
+                                    initialValue: 9999,
+                                    validate: (values: any) => {
+                                        if (!values.serial) return 'Required!';
+
+                                        return null;
+                                    },
+                                    col: 2,
+                                },
+                                {
+                                    type: 'select-sync',
+                                    name: 'status',
+                                    placeholder: 'Select status!',
+                                    title: 'Status',
+                                    initialValue: 'ACTIVE',
+                                    options: getGeneralStatusOptions(),
+                                    validate: (values: any) => {
+                                        if (!values.status) return 'Required!';
+
+                                        return null;
+                                    },
+                                },
+                            ]}
+                            editFields={[
                                 {
                                     type: 'text',
                                     name: 'title',
