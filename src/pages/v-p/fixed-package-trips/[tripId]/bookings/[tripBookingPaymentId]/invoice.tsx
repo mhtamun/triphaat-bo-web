@@ -63,7 +63,7 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
 
     return !isClient ? null : (
         <WrapperComponent
-            title={'Trip: ' + tripBookingPayment?.tripBooking?.trip?.name}
+            title={`Trip: ${tripBookingPayment?.tripBooking?.trip?.name}, Invoice`}
             tripId={tripId}
             router={router}
         >
@@ -93,7 +93,7 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                             );
                                         }}
                                     >
-                                        <FontAwesomeIcon icon={faCircleCheck} className="mr-3" />
+                                        <FontAwesomeIcon icon={faCircleCheck} className="mr-2" />
                                         CONFIRM
                                     </Button>
                                     <Button
@@ -114,7 +114,7 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                             );
                                         }}
                                     >
-                                        <FontAwesomeIcon icon={faCircleExclamation} className="mr-3" />
+                                        <FontAwesomeIcon icon={faCircleExclamation} className="mr-2" />
                                         REJECT
                                     </Button>
                                 </div>
@@ -158,7 +158,7 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                                 });
                                         }}
                                     >
-                                        <FontAwesomeIcon icon={faEnvelope} className="mr-3" />
+                                        <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
                                         EMAIL
                                     </Button>
                                     <Button
@@ -169,7 +169,7 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                                             e.preventDefault();
                                         }}
                                     >
-                                        <FontAwesomeIcon icon={faCommentSms} className="mr-3" />
+                                        <FontAwesomeIcon icon={faCommentSms} className="mr-2" />
                                         SMS
                                     </Button>
                                 </div>

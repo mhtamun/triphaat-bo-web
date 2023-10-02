@@ -99,6 +99,9 @@ export const sendInvoiceViaEmail = (tripId: string, tripBookingPaymentId: string
 export const reserveBooking = (payload: { bookingId: number }) =>
     callPostApi('/vendor/api/v1/reserve-trip-booking', payload, null, null, true);
 
+export const getTripBookingFacts = (tripId: string, authorization?: string) =>
+    callGetApi(`/vendor/api/v1/trips/${tripId}/trip-booking-facts`, authorization);
+
 // general APIs
 
 export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);

@@ -5,12 +5,14 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Badge } from 'primereact/badge';
 import { PrimeIcons } from 'primereact/api';
+import { faFileAlt, faFile, faFileArchive, faChair } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
 
 // application
 import { getAuthorized } from '../../../../../libs/auth';
 import GenericViewGenerator from '../../../../../components/global/GenericViewGenerator';
-import { getTripForVendor } from '../../../../../apis';
+import { getTripBookingFacts, getTripForVendor } from '../../../../../apis';
 import WrapperComponent from '../../../../../components/trips/WrapperComponent';
 import { generateQueryPath, getBookingStatusOptions, getPaymentStatusOptions, getSeverity } from '../../../../../utils';
 import FilterComponent from '../../../../../components/global/Filter';
@@ -18,13 +20,20 @@ import PaginatorComponent from '../../../../../components/global/Paginator';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Bookings | Trip Management', async cookies => {
-        const tripId = context.query.tripId;
+        const tripId = context.query.tripId as string;
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
+        const responseGetTripBookingFacts = await getTripBookingFacts(
+            tripId,
+            `${cookies.accessType} ${cookies.accessToken}`
+        );
 
-        if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
+        if (
+            !responseGetTrip ||
+            responseGetTrip.statusCode !== 200 ||
+            !responseGetTripBookingFacts ||
+            responseGetTripBookingFacts.statusCode !== 200
+        ) {
             return {
                 redirect: {
                     destination: '/500',
@@ -37,15 +46,102 @@ export const getServerSideProps: GetServerSideProps = async context =>
             isVendor: true,
             tripId,
             trip: responseGetTrip.data,
+            facts: responseGetTripBookingFacts.data,
         };
     });
 
-const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
+const Page = ({
+    tripId,
+    trip,
+    facts,
+}: {
+    tripId: string;
+    trip: any;
+    facts: {
+        seatsLeft: number;
+        totalSeats: number;
+        pendingBookings: number;
+        confirmedBookings: number;
+        canceledBookings: number;
+    };
+}) => {
     const router = useRouter();
     console.debug({ router });
 
     return (
-        <WrapperComponent tripId={tripId} title={'Bookings: ' + trip?.name} router={router}>
+        <WrapperComponent tripId={tripId} title={`Trip: ${trip?.name}, Bookings`} router={router}>
+            <div className="grid mb-3">
+                <div className="col-12 lg:col-6 xl:col-3 ">
+                    <div className="card mb-0 bg-gray-100">
+                        <div className="flex justify-content-between mb-3">
+                            <div>
+                                <span className="block text-500 font-medium mb-3">Seats left</span>
+                                <div className="text-900 font-medium text-xl">{facts.seatsLeft}</div>
+                            </div>
+                            <div
+                                className="flex align-items-center justify-content-center bg-gray-100 border-round"
+                                style={{ width: '2.5rem', height: '2.5rem' }}
+                            >
+                                <FontAwesomeIcon icon={faChair} className="text-black-500 text-xl" />
+                            </div>
+                        </div>
+
+                        <span className="text-500">out of total</span>
+                        <span className="text-green-500 font-medium"> {facts.totalSeats} seats</span>
+                    </div>
+                </div>
+                <div className="col-12 lg:col-6 xl:col-3">
+                    <div className="card mb-0 bg-yellow-100">
+                        <div className="flex justify-content-between mb-3">
+                            <div>
+                                <span className="block text-500 font-medium mb-3">Booking</span>
+                                <div className="text-900 font-medium text-xl">{facts.pendingBookings}</div>
+                            </div>
+                            <div
+                                className="flex align-items-center justify-content-center bg-yellow-100 border-round"
+                                style={{ width: '2.5rem', height: '2.5rem' }}
+                            >
+                                <FontAwesomeIcon icon={faFileAlt} className="text-yellow-500 text-xl" />
+                            </div>
+                        </div>
+                        <span className="text-500">Pending, locked or reserved</span>
+                    </div>
+                </div>
+                <div className="col-12 lg:col-6 xl:col-3">
+                    <div className="card mb-0 bg-green-100 ">
+                        <div className="flex justify-content-between mb-3">
+                            <div>
+                                <span className="block text-500 font-medium mb-3">Booking</span>
+                                <div className="text-900 font-medium text-xl">{facts.confirmedBookings}</div>
+                            </div>
+                            <div
+                                className="flex align-items-center justify-content-center bg-green-100 border-round"
+                                style={{ width: '2.5rem', height: '2.5rem' }}
+                            >
+                                <FontAwesomeIcon icon={faFile} className="text-green-500 text-xl" />
+                            </div>
+                        </div>
+                        <span className="text-500">Confirmed</span>
+                    </div>
+                </div>
+                <div className="col-12 lg:col-6 xl:col-3">
+                    <div className="card mb-0 bg-red-100">
+                        <div className="flex justify-content-between mb-3">
+                            <div>
+                                <span className="block text-500 font-medium mb-3">Booking</span>
+                                <div className="text-900 font-medium text-xl">{facts.canceledBookings}</div>
+                            </div>
+                            <div
+                                className="flex align-items-center justify-content-center bg-red-100 border-round"
+                                style={{ width: '2.5rem', height: '2.5rem' }}
+                            >
+                                <FontAwesomeIcon icon={faFileArchive} className="text-red-500 text-xl" />
+                            </div>
+                        </div>
+                        <span className="text-500">Canceled or expired</span>
+                    </div>
+                </div>
+            </div>
             <GenericViewGenerator
                 name="Booking List"
                 viewAll={{
