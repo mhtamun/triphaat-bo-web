@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
+import { Card } from 'primereact/card';
 import _ from 'lodash';
 
 // application
@@ -113,7 +114,7 @@ const Page = () => {
     ];
 
     return (
-        <>
+        <Card>
             {useMemo(
                 () => (
                     <GenericViewGenerator
@@ -156,7 +157,7 @@ const Page = () => {
                 ),
                 [roles]
             )}
-        </>
+        </Card>
     );
 };
 

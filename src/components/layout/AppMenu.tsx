@@ -10,9 +10,12 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
 
     const triphaatAdminMenuModel = [
         {
+            label: 'Home',
+            items: [{ icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' }],
+        },
+        {
             label: 'Menu',
             items: [
-                { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/' },
                 {
                     icon: 'pi pi-fw pi-user',
                     label: 'User Management',
@@ -48,14 +51,35 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
 
     const vendorAdminMenuModel = [
         {
-            label: 'Menu',
+            label: 'Home',
+            items: [{ icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/v-p' }],
+        },
+        {
+            label: 'Administration',
             items: [
-                { icon: 'pi pi-fw pi-home', label: 'Dashboard', to: '/v-p' },
-                { icon: 'pi pi-fw pi-user', label: 'User Management', to: '/v-p/users' },
+                { icon: 'pi pi-fw pi pi-user', label: 'Profile', to: '/v-p/profile' },
+                { icon: 'pi pi-fw pi-users', label: 'User Management', to: '/v-p/users' },
+            ],
+        },
+        {
+            label: 'Trips',
+            items: [
+                { icon: 'pi pi-bars', label: 'Fixed Package Trips', to: '/v-p/fixed-package-trips' },
+                { icon: 'pi pi-bars', label: 'Full board Package Trips', to: '' },
+            ],
+        },
+        {
+            label: 'Accounts',
+            items: [
                 {
-                    icon: 'pi pi-fw pi-image',
-                    label: 'Trip Management',
-                    items: [{ label: 'Fixed Package Management', to: '/v-p/fixed-package-trips' }],
+                    icon: 'pi pi-fw pi-money-bill',
+                    label: 'Expenses',
+                    to: '',
+                },
+                {
+                    icon: 'pi pi-fw pi-money-bill',
+                    label: 'Revenues',
+                    to: '',
                 },
             ],
         },

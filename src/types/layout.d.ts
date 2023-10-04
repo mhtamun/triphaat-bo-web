@@ -12,20 +12,20 @@ type Page<
 };
 
 /* Breadcrumb Types */
-export interface AppBreadcrumbProps {
-    className?: string;
-}
+// export interface AppBreadcrumbProps {
+//     className?: string;
+// }
 
-export interface Breadcrumb {
-    labels?: string[];
-    to?: string;
-}
+// export interface Breadcrumb {
+//     labels?: string[];
+//     to?: string;
+// }
 
-export interface BreadcrumbItem {
-    label: string;
-    to?: string;
-    items?: BreadcrumbItem[];
-}
+// export interface BreadcrumbItem {
+//     label: string;
+//     to?: string;
+//     items?: BreadcrumbItem[];
+// }
 
 /* Context Types */
 export type LayoutState = {

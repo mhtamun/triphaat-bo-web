@@ -35,12 +35,12 @@ export const getServerSideProps: GetServerSideProps = async context =>
         //     responseCurrentMonthBalancePaymentOfTrips.statusCode !== 200
 
         if (!responseCountNumberOfTrips || responseCountNumberOfTrips.statusCode !== 200) {
-            return {
-                redirect: {
-                    destination: '/500',
-                    permanent: false,
-                },
-            };
+            // return {
+            //     redirect: {
+            //         destination: '/500',
+            //         permanent: false,
+            //     },
+            // };
         }
 
         return {

@@ -1,15 +1,21 @@
+import React, { useEffect, useContext } from 'react';
+
+// third-party imports
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Ripple } from 'primereact/ripple';
 import { classNames } from 'primereact/utils';
-import React, { useEffect, useContext } from 'react';
 import { CSSTransition } from 'react-transition-group';
+
+// application imports
 import { MenuContext } from './context/menucontext';
 import { AppMenuItemProps } from '../../types/types';
 
 const AppMenuitem = (props: AppMenuItemProps) => {
-    const { activeMenu, setActiveMenu } = useContext(MenuContext);
     const router = useRouter();
+
+    const { activeMenu, setActiveMenu } = useContext(MenuContext);
+
     const item = props.item;
     const key = props.parentKey ? props.parentKey + '-' + props.index : String(props.index);
     const isActiveRoute = item!.to && router.pathname === item!.to;

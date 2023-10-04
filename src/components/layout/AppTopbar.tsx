@@ -1,11 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
-
 import React, { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
+
+// third-party imports
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { classNames } from 'primereact/utils';
 import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
+
+// application imports
 import { AppTopbarRef } from '../../types/types';
 import { LayoutContext } from './context/layoutcontext';
 import { destroyLogin } from '../../libs/auth';
@@ -32,12 +34,12 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     return (
         <div className="layout-topbar">
             <Link href="/" className="layout-topbar-logo">
-                {/* <img
-                    src={`/layout/images/logo-${layoutConfig.colorScheme !== 'light' ? 'white' : 'dark'}.svg`}
+                <img
+                    src={`https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg`}
                     width="47.22px"
                     height={'35px'}
                     alt="logo"
-                /> */}
+                />
                 <span>CRUD</span>
             </Link>
 
@@ -50,14 +52,14 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                 <i className="pi pi-bars" />
             </button>
 
-            <button
+            {/* <button
                 ref={topbarmenubuttonRef}
                 type="button"
                 className="p-link layout-topbar-menu-button layout-topbar-button"
                 onClick={showProfileSidebar}
             >
                 <i className="pi pi-ellipsis-v" />
-            </button>
+            </button> */}
 
             <div
                 ref={topbarmenuRef}
@@ -71,6 +73,9 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                         {
                             label: 'Profile',
                             icon: 'pi pi-user',
+                            command: () => {
+                                router.push('/v-p/profile');
+                            },
                         },
                         {
                             separator: true,

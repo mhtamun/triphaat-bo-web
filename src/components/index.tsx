@@ -3,6 +3,7 @@ import DataTable from './global/DataTable';
 import Modal from './global/Modal';
 import ModalConfirmation from './global/ModalConfirmation';
 import UrlBasedColumnItem from './global/UrlBasedColumnItem';
+import BreadCrumb from './global/BreadCrumb';
 
 // Fields
 import InputText from './global/InputText';
@@ -23,6 +24,7 @@ export {
     Modal,
     ModalConfirmation,
     UrlBasedColumnItem,
+    BreadCrumb,
     // Fields
     InputText as InputTextField,
     InputCalender as InputDateField,
