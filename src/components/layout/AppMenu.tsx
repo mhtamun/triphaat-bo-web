@@ -62,13 +62,6 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
             ],
         },
         {
-            label: 'Trips',
-            items: [
-                { icon: 'pi pi-bars', label: 'Fixed Package Trips', to: '/v-p/fixed-package-trips' },
-                { icon: 'pi pi-bars', label: 'Full board Package Trips', to: '' },
-            ],
-        },
-        {
             label: 'Accounts',
             items: [
                 {
@@ -81,6 +74,13 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     label: 'Revenues',
                     to: '',
                 },
+            ],
+        },
+        {
+            label: 'Trips',
+            items: [
+                { icon: 'pi pi-bars', label: 'Fixed Package Trips', to: '/v-p/fixed-package-trips' },
+                { icon: 'pi pi-bars', label: 'Full-Board Package Trips', to: '' },
             ],
         },
     ];

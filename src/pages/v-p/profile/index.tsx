@@ -4,13 +4,15 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Card } from 'primereact/card';
+import { Image } from 'primereact/image';
+import { Badge } from 'primereact/badge';
 
 // application
 import { getAuthorized } from '../../../libs/auth';
 import { BreadCrumb } from '../../../components';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Dashboard | Vendor Panel', async cookies => {
+    getAuthorized(context, 'Profile | Administration | Vendor Panel', async cookies => {
         return {
             isVendor: true,
         };
@@ -23,11 +25,17 @@ const IndexPage = ({}: {}) => {
         <>
             <BreadCrumb router={router} />
             <Card title="Profile" subTitle="Manage your profile">
-                <p className="m-0">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error
-                    repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam
-                    perferendis esse, cupiditate neque quas!
-                </p>
+                <div className="card flex flex-row flex-wrap justify-content-between align-content-center">
+                    <div>
+                        <Badge value="Status" size="xlarge" severity="success" />
+                    </div>
+                    <Image
+                        className="align-items-center"
+                        src="https://primefaces.org/cdn/primereact/images/galleria/galleria7.jpg"
+                        alt="Image"
+                        width="250"
+                    />
+                </div>
             </Card>
         </>
     );
