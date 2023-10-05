@@ -16,7 +16,7 @@ export const roles = [
 ];
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'User Management', () => {
+    getAuthorized(context, 'User Management | Administration | Vendor Panel | TripHaat', () => {
         return {
             isVendor: true,
         };
