@@ -40,7 +40,7 @@ const PurchaseOrderPDF = ({ data }) => (
         <Page size="A4" style={styles.page}>
             <View style={{ ...styles.header }}>
                 <View style={{ ...styles.logo }}>
-                    <ReportLogo />
+                    <ReportLogo src={data.logo} />
                 </View>
                 <View style={{ ...styles.title }}>
                     <ReportTitle title="Invoice" />

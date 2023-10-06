@@ -22,6 +22,7 @@ import {
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 import Invoice from '../../../../../../components/reports/invoice';
 import { DATE_FORMAT, getFormattedDatetime } from '../../../../../../utils/date';
+import { IVendor } from '../../../../../../types';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Invoice | Bookings | Trip Management', async cookies => {
@@ -45,12 +46,13 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
         return {
             isVendor: true,
+            vendor: JSON.parse(cookies.vendor),
             tripId,
             tripBookingPayment: responseGetTripBookingPayment.data,
         };
     });
 
-const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayment: any }) => {
+const Page = ({ vendor, tripId, tripBookingPayment }: { vendor: IVendor; tripId: string; tripBookingPayment: any }) => {
     const router = useRouter();
 
     const [isClient, setIsClient] = useState(false);
@@ -59,6 +61,7 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
         setIsClient(true);
     }, []);
 
+    // console.debug({ vendor });
     // console.debug({ tripBookingPayment });
 
     return !isClient ? null : (
@@ -184,6 +187,7 @@ const Page = ({ tripId, tripBookingPayment }: { tripId: string; tripBookingPayme
                         <PDFViewer style={{ width: '100%', minHeight: '1280px' }}>
                             <Invoice
                                 data={{
+                                    logo: !vendor.logoImageUrl ? '/images/image-placeholder.png' : vendor.logoImageUrl,
                                     report: {
                                         invoiceNumber: tripBookingPayment.id,
                                         invoiceDate: getFormattedDatetime(

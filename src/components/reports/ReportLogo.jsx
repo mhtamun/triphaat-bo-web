@@ -10,15 +10,6 @@ const styles = StyleSheet.create({
     },
 });
 
-const ReportLogo = () => (
-    <View>
-        {
-            <Image
-                style={styles.logo}
-                src={`https://images.pexels.com/photos/1337384/pexels-photo-1337384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`}
-            />
-        }
-    </View>
-);
+const ReportLogo = ({ src }) => <View>{<Image style={styles.logo} src={src} />}</View>;
 
 export default ReportLogo;
