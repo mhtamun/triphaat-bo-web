@@ -2,18 +2,24 @@ import React, { useMemo } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { PrimeIcons } from 'primereact/api';
+import { Card } from 'primereact/card';
+import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
 // application
 import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
-import { getGeneralStatusOptions } from '../../utils';
+import { getMonths, getVendorStatusOptions } from '../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context, 'Vendor Management');
 
 const Page = () => {
+    const router = useRouter();
+
     return (
-        <>
+        <Card>
             {useMemo(
                 () => (
                     <GenericViewGenerator
@@ -23,22 +29,113 @@ const Page = () => {
                         viewAll={{
                             uri: `/api/v1/vendors`,
                             ignoredColumns: ['id', 'createdAt', 'updatedAt'],
+                            scopedColumns: {
+                                logoImageUrl: (item: any) => (
+                                    <>
+                                        <span className="p-column-title">{item.title}</span>
+                                        <img src={item.logoImageUrl} alt="" className="shadow-2" width="100" />
+                                    </>
+                                ),
+                                licenseImageUrl: (item: any) => (
+                                    <>
+                                        <span className="p-column-title">{item.title}</span>
+                                        <img src={item.licenseImageUrl} alt="" className="shadow-2" width="100" />
+                                    </>
+                                ),
+                                responsiblePersonImageUrl: (item: any) => (
+                                    <>
+                                        <span className="p-column-title">{item.title}</span>
+                                        <img
+                                            src={item.responsiblePersonImageUrl}
+                                            alt=""
+                                            className="shadow-2"
+                                            width="100"
+                                        />
+                                    </>
+                                ),
+                                responsiblePersonNIDImageUrl: (item: any) => (
+                                    <>
+                                        <span className="p-column-title">{item.title}</span>
+                                        <img
+                                            src={item.responsiblePersonNIDImageUrl}
+                                            alt=""
+                                            className="shadow-2"
+                                            width="100"
+                                        />
+                                    </>
+                                ),
+                                status: (item: any) => (
+                                    <>
+                                        <Badge
+                                            value={item.status}
+                                            size="large"
+                                            severity={item.status === 'BANNED' ? 'danger' : 'success'}
+                                        ></Badge>
+                                    </>
+                                ),
+                            },
                             actionIdentifier: 'id',
                             onDataModify: data =>
                                 _.map(data, datum => ({
                                     ...datum,
+                                    onSeasonMonths: _.join(datum.onSeasonMonths, ', '),
+                                    offSeasonMonths: _.join(datum.offSeasonMonths, ', '),
                                 })),
                         }}
                         addNew={{
                             uri: `/api/v1/vendors`,
                         }}
-                        viewOne={{ uri: '/api/v1/vendors/{id}', identifier: '{id}' }}
+                        viewOne={{
+                            uri: '/api/v1/vendors/{id}',
+                            identifier: '{id}',
+                            onDataModify: datum => ({
+                                ...datum,
+                                manualBookingCommission: parseFloat(datum.manualBookingCommission),
+                                onlyPgwUseCommission: parseFloat(datum.onlyPgwUseCommission),
+                                websiteBookingOnCommission: parseFloat(datum.websiteBookingOnCommission),
+                                websiteBookingOffCommission: parseFloat(datum.websiteBookingOffCommission),
+                            }),
+                        }}
                         editExisting={{ uri: '/api/v1/vendors/{id}', identifier: '{id}' }}
                         removeOne={{
                             uri: '/api/v1/vendors/{id}',
                             identifier: '{id}',
                         }}
+                        customActions={[
+                            {
+                                color: 'info',
+                                icon: PrimeIcons.ARROW_RIGHT,
+                                text: 'Users',
+                                callback: identifier => {
+                                    router.push(`/vendors/${identifier}/users`);
+                                },
+                            },
+                        ]}
                         fields={[
+                            {
+                                type: 'text',
+                                name: 'businessName',
+                                placeholder: 'Enter business name!',
+                                title: 'Business Name',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.businessName) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'text',
+                                name: 'businessAddress',
+                                placeholder: 'Enter business address!',
+                                title: 'Business Address',
+                                initialValue: null,
+                                validate: (values: any) => {
+                                    if (!values.businessAddress) return 'Required!';
+
+                                    return null;
+                                },
+                            },
                             {
                                 type: 'email',
                                 name: 'email',
@@ -67,76 +164,75 @@ const Page = () => {
                                 },
                             },
                             {
-                                type: 'text',
-                                name: 'businessName',
-                                placeholder: 'Enter business name!',
-                                title: 'Business Name',
+                                type: 'number',
+                                name: 'manualBookingCommission',
+                                placeholder: '',
+                                title: 'Manual Booking Commission',
                                 initialValue: null,
                                 validate: (values: any) => {
-                                    if (!values.businessName) return 'Required!';
+                                    if (values.manualBookingCommission === '') return 'Required!';
 
                                     return null;
                                 },
                             },
                             {
-                                type: 'text',
-                                name: 'businessAddress',
-                                placeholder: 'Enter business address!',
-                                title: 'Business Address',
+                                type: 'number',
+                                name: 'onlyPgwUseCommission',
+                                placeholder: '',
+                                title: 'Only Pgw Use Commission',
                                 initialValue: null,
                                 validate: (values: any) => {
-                                    if (!values.businessAddress) return 'Required!';
+                                    if (values.onlyPgwUseCommission === '') return 'Required!';
 
                                     return null;
                                 },
                             },
                             {
-                                type: 'text',
-                                name: 'responsiblePersonName',
-                                placeholder: 'Enter responsible person name!',
-                                title: 'Responsible Person Name',
+                                type: 'number',
+                                name: 'websiteBookingOnCommission',
+                                placeholder: '',
+                                title: 'Website Booking On Season Commission',
                                 initialValue: null,
                                 validate: (values: any) => {
-                                    if (!values.responsiblePersonName) return 'Required!';
+                                    if (values.websiteBookingOnCommission === '') return 'Required!';
 
                                     return null;
                                 },
                             },
                             {
-                                type: 'text',
-                                name: 'responsiblePersonEmail',
-                                placeholder: 'Enter responsible person email address!',
-                                title: 'Responsible Person Email Address',
+                                type: 'number',
+                                name: 'websiteBookingOffCommission',
+                                placeholder: '',
+                                title: 'Website Booking Off Season Commission',
                                 initialValue: null,
                                 validate: (values: any) => {
-                                    if (!values.responsiblePersonEmail) return 'Required!';
+                                    if (values.websiteBookingOffCommission === '') return 'Required!';
 
                                     return null;
                                 },
                             },
                             {
-                                type: 'text',
-                                name: 'responsiblePersonPhone',
-                                placeholder: 'Enter responsible person phone number!',
-                                title: 'Responsible Person Phone Number',
+                                type: 'multi-select-sync',
+                                name: 'onSeasonMonths',
+                                placeholder: 'Select on season months!',
+                                title: 'On Season Months',
                                 initialValue: null,
+                                options: getMonths(),
                                 validate: (values: any) => {
-                                    if (!values.responsiblePersonPhone) return 'Required!';
-
-                                    if (values.phone && !values.phone.startsWith('+880'))
-                                        return 'Please enter code +880 before number!';
+                                    if (_.size(values.onSeasonMonths) === 0) return 'Required!';
 
                                     return null;
                                 },
                             },
                             {
-                                type: 'text',
-                                name: 'responsiblePersonNid',
-                                placeholder: 'Enter responsible person NID number!',
-                                title: 'Responsible Person NID Number',
+                                type: 'multi-select-sync',
+                                name: 'offSeasonMonths',
+                                placeholder: 'Select off season months!',
+                                title: 'Off Season Months',
                                 initialValue: null,
+                                options: getMonths(),
                                 validate: (values: any) => {
-                                    if (!values.responsiblePersonNid) return 'Required!';
+                                    if (_.size(values.offSeasonMonths) === 0) return 'Required!';
 
                                     return null;
                                 },
@@ -147,7 +243,7 @@ const Page = () => {
                                 placeholder: 'Select status!',
                                 title: 'Status',
                                 initialValue: 'ACTIVE',
-                                options: getGeneralStatusOptions(),
+                                options: getVendorStatusOptions(),
                                 validate: (values: any) => {
                                     if (!values.status) return 'Required!';
 
@@ -159,7 +255,7 @@ const Page = () => {
                 ),
                 []
             )}
-        </>
+        </Card>
     );
 };
 

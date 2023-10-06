@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { PrimeIcons } from 'primereact/api';
+import { Card } from 'primereact/card';
 import _ from 'lodash';
 
 // application
@@ -16,7 +17,7 @@ const Page = () => {
     const router = useRouter();
 
     return (
-        <>
+        <Card>
             {useMemo(
                 () => (
                     <GenericViewGenerator
@@ -70,7 +71,7 @@ const Page = () => {
                 ),
                 []
             )}
-        </>
+        </Card>
     );
 };
 

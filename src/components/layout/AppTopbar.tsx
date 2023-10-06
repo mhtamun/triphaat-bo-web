@@ -74,7 +74,11 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                             label: 'Profile',
                             icon: 'pi pi-user',
                             command: () => {
-                                router.push('/v-p/profile');
+                                if (router.pathname.includes('/v-p/') || router.pathname === '/v-p') {
+                                    router.push('/v-p/auth/profile');
+                                } else {
+                                    router.push('/auth/profile');
+                                }
                             },
                         },
                         {
@@ -85,8 +89,6 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                             icon: 'pi pi-sign-out',
                             command: () => {
                                 const success = destroyLogin();
-
-                                console.debug(router.pathname);
 
                                 if (success) {
                                     if (router.pathname.includes('/v-p/') || router.pathname === '/v-p') {

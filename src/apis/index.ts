@@ -16,7 +16,8 @@ export const getRoles = () => callGetApi(apiBaseUrl + '/api/v1/roles');
 
 export const getFolderById = (folderId: number) => callGetApi(apiBaseUrl + '/api/v1/folders/' + folderId);
 
-// export const getVendors = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/vendors', authorization);
+export const getVendorById = (vendorId: string, authorization: string) =>
+    callGetApi(apiBaseUrl + '/api/v1/vendors/' + vendorId, authorization);
 
 // export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
 
@@ -121,5 +122,7 @@ export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '
 
 export const getTripVariants = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/api/v1/trips/' + id + '/variants', authorization);
+
+export const getProfile = (authorization: string) => callGetApi(apiBaseUrl + `/api/v1/user-profile`, authorization);
 
 // public APIs
