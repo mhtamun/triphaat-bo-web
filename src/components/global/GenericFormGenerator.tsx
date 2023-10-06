@@ -88,8 +88,15 @@ export default function GenericFormGenerator({
             return _.reduce(
                 fields,
                 (errors, field) => {
-                    const result =
-                        _.isUndefined(field.validate) || _.isNull(field.validate) ? null : field.validate(values);
+                    let result = null;
+
+                    if (!_.isUndefined(field.validate) && !_.isNull(field.validate)) {
+                        result = field.validate(values);
+                    }
+
+                    if (field.show && !field.show(values)) {
+                        result = null;
+                    }
 
                     if (!_.isNull(result))
                         return {
@@ -386,16 +393,13 @@ export default function GenericFormGenerator({
     }
 
     const submitButton = !submitButtonShow ? null : (
-        <Button
-            type="submit"
-            label={!submitButtonText ? 'Submit' : submitButtonText}
-            // onClick={formik.handleSubmit}
-        ></Button>
+        <Button type="submit" label={!submitButtonText ? 'Submit' : submitButtonText} severity="info"></Button>
     );
     const resetButton = !resetButtonShow ? null : (
         <Button
             type="reset"
             label={!resetButtonText ? 'Reset' : resetButtonText}
+            severity="help"
             onClick={formik.handleReset}
             className="ml-3"
         ></Button>

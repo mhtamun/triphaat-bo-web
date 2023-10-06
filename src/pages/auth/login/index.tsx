@@ -14,7 +14,7 @@ import { Page } from '../../../types/types';
 import { login } from '../../../apis/';
 import { createLogin } from '../../../libs/auth';
 // third party libraries
-import { useFormik } from 'formik';
+import { FormikValues, useFormik } from 'formik';
 import * as Yup from 'yup';
 
 const LoginPage: Page = () => {
@@ -40,7 +40,7 @@ const LoginPage: Page = () => {
             password: Yup.string().required('Required'),
         }),
 
-        onSubmit: (values, { setSubmitting }) => {
+        onSubmit: (values: FormikValues, { setSubmitting }) => {
             setSubmitting(true);
 
             login({ email: values.email, password: values.password, type: 'TRIPHAAT_ADMIN' })

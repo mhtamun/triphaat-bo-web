@@ -102,6 +102,19 @@ export const reserveBooking = (payload: { bookingId: number }) =>
 export const getTripBookingFacts = (tripId: string, authorization?: string) =>
     callGetApi(`/vendor/api/v1/trips/${tripId}/trip-booking-facts`, authorization);
 
+export const getVendorProfile = (authorization?: string) => callGetApi(`/api/v1/vendor-profile`, authorization);
+
+export const updateVendorProfile = (payload: any, authorization?: string) =>
+    callPutApi(`/api/v1/vendor-profile`, payload, null, null, true);
+export const updateVendorProfileLogo = (payload: any, authorization?: string) =>
+    callPutApi(`/api/v1/vendor-profile-logo`, payload, null, 'multipart/form-data', true);
+export const updateVendorProfileLicense = (payload: any, authorization?: string) =>
+    callPutApi(`/api/v1/vendor-profile-license`, payload, null, 'multipart/form-data', true);
+export const updateVendorProfileRp = (payload: any, authorization?: string) =>
+    callPutApi(`/api/v1/vendor-profile-rp`, payload, null, 'multipart/form-data', true);
+export const updateVendorProfileRpNid = (payload: any, authorization?: string) =>
+    callPutApi(`/api/v1/vendor-profile-rp-nid`, payload, null, 'multipart/form-data', true);
+
 // general APIs
 
 export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
