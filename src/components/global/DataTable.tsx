@@ -2,6 +2,8 @@ import React from 'react';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable as Table } from 'primereact/datatable';
+import { faLightbulb, faComputerMouse } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
 
 export interface IAction {
@@ -99,7 +101,14 @@ const DataTable = ({
                 )
             }
             header={dummyHeaderFooterForEmptyDataset}
-            footer={dummyHeaderFooterForEmptyDataset}
+            footer={
+                <p style={{ color: 'orangered' }}>
+                    <FontAwesomeIcon icon={faLightbulb} className="mr-2" />
+                    "Did you know? You can scroll horizontally by holding down the Shift key and using your mouse scroll
+                    wheel. Try it out to navigate wide web pages or spreadsheets more easily!" - Rafi Hasnain
+                    <FontAwesomeIcon icon={faComputerMouse} className="ml-2" />
+                </p>
+            }
             columnResizeMode="expand"
             resizableColumns
             showGridlines
