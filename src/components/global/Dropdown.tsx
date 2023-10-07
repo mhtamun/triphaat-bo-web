@@ -13,11 +13,22 @@ const SelectSyncField = (props: {
     placeholder?: string;
     value?: string;
     options: ISelectOption[];
+    isGroupOptions?: boolean;
     setFieldValue: (name: string, value: any) => void;
     isDisabled?: boolean;
     errorMessage?: string;
 }) => {
-    const { name, title, placeholder, value, options, setFieldValue, isDisabled = false, errorMessage = '' } = props;
+    const {
+        name,
+        title,
+        placeholder,
+        value,
+        options,
+        setFieldValue,
+        isGroupOptions,
+        isDisabled = false,
+        errorMessage = '',
+    } = props;
 
     // console.debug({ name, title, placeholder, value, options });
 
@@ -32,6 +43,8 @@ const SelectSyncField = (props: {
                 options={options}
                 optionLabel="label"
                 optionValue="value"
+                optionGroupLabel={!isGroupOptions ? undefined : 'label'}
+                optionGroupChildren={!isGroupOptions ? undefined : 'items'}
                 showClear
                 filter
                 disabled={isDisabled}

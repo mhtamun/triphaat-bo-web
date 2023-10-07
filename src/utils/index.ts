@@ -51,25 +51,95 @@ export const getBookingStatusOptions = () => [
     { value: 'EXPIRED', label: 'EXPIRED' },
 ];
 
-export const getFormData = (payload: any) => {
-    const formData = new FormData();
+export const getExpenseCategoryOptions = () => [
+    {
+        label: 'Office Supplies',
+        items: [
+            { label: 'Office Supplies', value: 'Office Supplies' },
+            { label: 'Pens, Pencils, and Markers', value: 'Pens, Pencils, and Markers' },
+            { label: 'Paper and Notebooks', value: 'Paper and Notebooks' },
+            { label: 'Envelopes and Mailers', value: 'Envelopes and Mailers' },
+            { label: 'Printer Ink and Toner', value: 'Printer Ink and Toner' },
+            { label: 'Staplers and Staples', value: 'Staplers and Staples' },
+            { label: 'Desk Accessories', value: 'Desk Accessories' },
+        ],
+    },
+    {
+        label: 'Technology and Electronics',
+        items: [
+            { label: 'Technology and Electronics', value: 'Technology and Electronics' },
+            { label: 'Computers and Laptops', value: 'Computers and Laptops' },
+            { label: 'Monitors and Displays', value: 'Monitors and Displays' },
+            { label: 'Printers and Scanners', value: 'Printers and Scanners' },
+            { label: 'Software Licenses', value: 'Software Licenses' },
+            { label: 'Networking Equipment', value: 'Networking Equipment' },
+            { label: 'Mobile Phones and Accessories', value: 'Mobile Phones and Accessories' },
+        ],
+    },
+    {
+        label: 'Furniture and Fixtures',
+        items: [
+            { label: 'Furniture and Fixtures', value: 'Furniture and Fixtures' },
+            { label: 'Desks and Chairs', value: 'Desks and Chairs' },
+            { label: 'File Cabinets', value: 'File Cabinets' },
+            { label: 'Shelving Units', value: 'Shelving Units' },
+            { label: 'Office Decor', value: 'Office Decor' },
+            { label: 'Lighting Fixtures', value: 'Lighting Fixtures' },
+        ],
+    },
+    {
+        label: 'Rent and Leasing',
+        items: [
+            { label: 'Rent and Leasing', value: 'Rent and Leasing' },
+            { label: 'Office Space Rent', value: 'Office Space Rent' },
+            { label: 'Equipment Leases', value: 'Equipment Leases' },
+        ],
+    },
+    {
+        label: 'Utilities',
+        items: [
+            { label: 'Utilities', value: 'Utilities' },
+            { label: 'Electricity', value: 'Electricity' },
+            { label: 'Water', value: 'Water' },
+            { label: 'Internet and Phone Service', value: 'Internet and Phone Service' },
+        ],
+    },
+    {
+        label: 'Business',
+        items: [
+            { label: 'Business Travel', value: 'Business Travel' },
+            { label: 'Flights and Accommodation', value: 'Flights and Accommodation' },
+            { label: 'Meals and Entertainment', value: 'Meals and Entertainment' },
+            { label: 'Transportation (Bus, Cars, ...)', value: 'Transportation (Bus, Cars, ...)' },
+        ],
+    },
+    {
+        label: 'Marketing and Advertising',
+        items: [
+            { label: 'Marketing and Advertising', value: 'Marketing and Advertising' },
+            { label: 'Advertising Campaigns', value: 'Advertising Campaigns' },
+            { label: 'Promotional Materials', value: 'Promotional Materials' },
+            { label: 'Marketing Software and Tools', value: 'Marketing Software and Tools' },
+        ],
+    },
+    {
+        label: 'Employee Expenses',
+        items: [
+            { label: 'Employee Expenses', value: 'Employee Expenses' },
+            { label: 'Salaries and Wages', value: 'Salaries and Wages' },
+            { label: 'Employee Benefits', value: 'Employee Benefits' },
+            { label: 'Employee Training', value: 'Employee Training' },
+        ],
+    },
+];
 
-    for (let key in payload) {
-        // console.debug(key, payload[key], payload[key].name);
-
-        if (_.isUndefined(payload[key]) || _.isNull(payload[key])) continue;
-
-        if (payload[key] instanceof File) {
-            formData.append(key, payload[key], payload[key].name);
-        } else {
-            formData.append(key, payload[key]);
-        }
-    }
-
-    // console.debug('formData', formData);
-
-    return formData;
-};
+export const getRevenueCategoryOptions = () => [
+    { label: 'Service Revenue', value: 'Service Revenue' },
+    { label: 'Product Sales', value: 'Product Sales' },
+    { label: 'Interest Income', value: 'Interest Income' },
+    { label: 'Investment Income', value: 'Investment Income' },
+    { label: 'Other Revenue', value: 'Other Revenue' },
+];
 
 export const getSeverity = (key: string) => {
     switch (key) {
@@ -92,6 +162,26 @@ export const getSeverity = (key: string) => {
         default:
             return null;
     }
+};
+
+export const getFormData = (payload: any) => {
+    const formData = new FormData();
+
+    for (let key in payload) {
+        // console.debug(key, payload[key], payload[key].name);
+
+        if (_.isUndefined(payload[key]) || _.isNull(payload[key])) continue;
+
+        if (payload[key] instanceof File) {
+            formData.append(key, payload[key], payload[key].name);
+        } else {
+            formData.append(key, payload[key]);
+        }
+    }
+
+    // console.debug('formData', formData);
+
+    return formData;
 };
 
 export const generateQueryPath = (
