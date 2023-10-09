@@ -154,7 +154,6 @@ const Page = ({ folderId }: { folderId: string }) => {
                                 uri: '/api/v1/files/{id}',
                                 identifier: '{id}',
                             }}
-                            contentType="multipart/form-data"
                             fields={[
                                 ...fields,
                                 {

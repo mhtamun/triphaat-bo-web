@@ -54,6 +54,7 @@ export const getBookingStatusOptions = () => [
 export const getExpenseCategoryOptions = () => [
     {
         label: 'Office Supplies',
+        value: 'Office Supplies',
         items: [
             { label: 'Office Supplies', value: 'Office Supplies' },
             { label: 'Pens, Pencils, and Markers', value: 'Pens, Pencils, and Markers' },
@@ -66,6 +67,7 @@ export const getExpenseCategoryOptions = () => [
     },
     {
         label: 'Technology and Electronics',
+        value: 'Technology and Electronics',
         items: [
             { label: 'Technology and Electronics', value: 'Technology and Electronics' },
             { label: 'Computers and Laptops', value: 'Computers and Laptops' },
@@ -78,6 +80,7 @@ export const getExpenseCategoryOptions = () => [
     },
     {
         label: 'Furniture and Fixtures',
+        value: 'Furniture and Fixtures',
         items: [
             { label: 'Furniture and Fixtures', value: 'Furniture and Fixtures' },
             { label: 'Desks and Chairs', value: 'Desks and Chairs' },
@@ -89,6 +92,7 @@ export const getExpenseCategoryOptions = () => [
     },
     {
         label: 'Rent and Leasing',
+        value: 'Rent and Leasing',
         items: [
             { label: 'Rent and Leasing', value: 'Rent and Leasing' },
             { label: 'Office Space Rent', value: 'Office Space Rent' },
@@ -97,6 +101,7 @@ export const getExpenseCategoryOptions = () => [
     },
     {
         label: 'Utilities',
+        value: 'Utilities',
         items: [
             { label: 'Utilities', value: 'Utilities' },
             { label: 'Electricity', value: 'Electricity' },
@@ -106,6 +111,7 @@ export const getExpenseCategoryOptions = () => [
     },
     {
         label: 'Business',
+        value: 'Business',
         items: [
             { label: 'Business Travel', value: 'Business Travel' },
             { label: 'Flights and Accommodation', value: 'Flights and Accommodation' },
@@ -115,6 +121,7 @@ export const getExpenseCategoryOptions = () => [
     },
     {
         label: 'Marketing and Advertising',
+        value: 'Marketing and Advertising',
         items: [
             { label: 'Marketing and Advertising', value: 'Marketing and Advertising' },
             { label: 'Advertising Campaigns', value: 'Advertising Campaigns' },
@@ -124,6 +131,7 @@ export const getExpenseCategoryOptions = () => [
     },
     {
         label: 'Employee Expenses',
+        value: 'Employee Expenses',
         items: [
             { label: 'Employee Expenses', value: 'Employee Expenses' },
             { label: 'Salaries and Wages', value: 'Salaries and Wages' },
@@ -139,6 +147,15 @@ export const getRevenueCategoryOptions = () => [
     { label: 'Interest Income', value: 'Interest Income' },
     { label: 'Investment Income', value: 'Investment Income' },
     { label: 'Other Revenue', value: 'Other Revenue' },
+];
+
+export const getPaymentMethodOptions = () => [
+    { value: 'CASH', label: 'CASH' },
+    { value: 'CREDIT_CARD', label: 'CREDIT CARD' },
+    { value: 'DEBIT_CARD', label: 'DEBIT CARD' },
+    { value: 'MFS', label: 'MFS' },
+    { value: 'BANK_TRANSFER', label: 'BANK TRANSFER' },
+    { value: 'OTHER', label: 'OTHER' },
 ];
 
 export const getSeverity = (key: string) => {

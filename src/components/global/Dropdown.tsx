@@ -1,9 +1,11 @@
 import React from 'react';
 import { Dropdown } from 'primereact/dropdown';
+import { faDotCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
 
 export interface ISelectOption {
-    value: boolean | number | string;
+    value?: boolean | number | string;
     label: string;
 }
 
@@ -30,7 +32,16 @@ const SelectSyncField = (props: {
         errorMessage = '',
     } = props;
 
-    // console.debug({ name, title, placeholder, value, options });
+    console.debug({ name, title, placeholder, value, options });
+
+    const groupedItemTemplate = (option: ISelectOption) => {
+        return (
+            <div className="flex align-items-center">
+                <FontAwesomeIcon icon={faDotCircle} className="mr-2" />
+                <div>{option.label}</div>
+            </div>
+        );
+    };
 
     return (
         <div className="field p-fluid">
@@ -45,6 +56,7 @@ const SelectSyncField = (props: {
                 optionValue="value"
                 optionGroupLabel={!isGroupOptions ? undefined : 'label'}
                 optionGroupChildren={!isGroupOptions ? undefined : 'items'}
+                optionGroupTemplate={groupedItemTemplate}
                 showClear
                 filter
                 disabled={isDisabled}

@@ -67,12 +67,12 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                 {
                     icon: 'pi pi-fw pi-money-bill',
                     label: 'Expenses',
-                    to: '',
+                    to: '/v-p/accounting/expenses',
                 },
                 {
                     icon: 'pi pi-fw pi-money-bill',
                     label: 'Revenues',
-                    to: '',
+                    to: '/v-p/accounting/revenues',
                 },
             ],
         },

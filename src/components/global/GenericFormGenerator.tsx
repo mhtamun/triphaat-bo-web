@@ -20,7 +20,7 @@ export interface IField {
     placeholder: string;
     initialValue: string | number | boolean | null;
     options?: {
-        value: boolean | number | string;
+        value?: boolean | number | string;
         label: string;
         items?: { value: boolean | number | string; label: string }[];
     }[];
@@ -263,6 +263,7 @@ export default function GenericFormGenerator({
                     // @ts-ignore
                     value={formik.values[field.name] ?? ''}
                     options={field.options ?? []}
+                    isGroupOptions={field.isGroupOptions}
                     setFieldValue={(name: string, value: any) => {
                         formik.setFieldValue(name, value, true);
 
