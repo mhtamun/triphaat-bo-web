@@ -4,6 +4,8 @@ import Modal from './global/Modal';
 import ModalConfirmation from './global/ModalConfirmation';
 import UrlBasedColumnItem from './global/UrlBasedColumnItem';
 import BreadCrumb from './global/BreadCrumb';
+import FilterComponent from './global/Filter';
+import PaginatorComponent from './global/Paginator';
 
 // Fields
 import InputText from './global/InputText';
@@ -25,6 +27,8 @@ export {
     ModalConfirmation,
     UrlBasedColumnItem,
     BreadCrumb,
+    FilterComponent,
+    PaginatorComponent,
     // Fields
     InputText as InputTextField,
     InputCalender as InputDateField,

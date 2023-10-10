@@ -13,15 +13,15 @@ import GenericViewGenerator from '../../../components/global/GenericViewGenerato
 import { FilterComponent, PaginatorComponent } from '../../../components/';
 import {
     generateQueryPath,
-    getExpenseCategoryOptions,
     getPaymentMethodOptions,
     getPaymentStatusOptions,
+    getRevenueCategoryOptions,
     getSeverity,
 } from '../../../utils';
 import { DATE_FORMAT, getFormattedDatetime } from '../../../utils/date';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Expenses Management | Accounting | Vendor Panel | TripHaat', () => {
+    getAuthorized(context, 'Revenues Management | Accounting | Vendor Panel | TripHaat', () => {
         return {
             isVendor: true,
         };
@@ -35,11 +35,11 @@ const Page = () => {
             {useMemo(
                 () => (
                     <GenericViewGenerator
-                        name={'Expense'}
-                        title="Expenses"
-                        subtitle="Manage expense here!"
+                        name={'Revenue'}
+                        title="Revenues"
+                        subtitle="Manage revenue here!"
                         viewAll={{
-                            uri: `/vendor/api/v1/expenses${generateQueryPath('', null, router.query)}`,
+                            uri: `/vendor/api/v1/revenues${generateQueryPath('', null, router.query)}`,
                             ignoredColumns: ['id', 'vendorId', 'tripId', 'createdAt', 'updatedAt'],
                             scopedColumns: {
                                 payDate: (item: any) => (
@@ -56,12 +56,12 @@ const Page = () => {
                                 })),
                         }}
                         addNew={{
-                            uri: `/vendor/api/v1/expenses`,
+                            uri: `/vendor/api/v1/revenues`,
                         }}
-                        // viewOne={{ uri: '/vendor/api/v1/expenses/{id}', identifier: '{id}' }}
-                        // editExisting={{ uri: '/vendor/api/v1/expenses/{id}', identifier: '{id}' }}
+                        // viewOne={{ uri: '/vendor/api/v1/revenues/{id}', identifier: '{id}' }}
+                        // editExisting={{ uri: '/vendor/api/v1/revenues/{id}', identifier: '{id}' }}
                         removeOne={{
-                            uri: '/vendor/api/v1/expenses/{id}',
+                            uri: '/vendor/api/v1/revenues/{id}',
                             identifier: '{id}',
                         }}
                         fields={[
@@ -74,17 +74,17 @@ const Page = () => {
                             },
                             {
                                 type: 'text',
-                                name: 'payTo',
-                                placeholder: 'Enter a pay to name (Example: Supplier Name)',
-                                title: 'Pay To',
+                                name: 'receiveFrom',
+                                placeholder: 'Enter a receive from name (Example: Customer Name)',
+                                title: 'Receive From',
                                 initialValue: null,
                                 col: 2,
                             },
                             {
                                 type: 'date',
-                                name: 'payDate',
-                                placeholder: 'Enter a pay date!',
-                                title: 'Pay Date',
+                                name: 'receiveDate',
+                                placeholder: 'Enter payment receive date!',
+                                title: 'Payment Receive Date',
                                 initialValue: null,
                             },
                             {
@@ -93,8 +93,7 @@ const Page = () => {
                                 placeholder: 'Select a category!',
                                 title: 'Category',
                                 initialValue: null,
-                                options: getExpenseCategoryOptions(),
-                                isGroupOptions: true,
+                                options: getRevenueCategoryOptions(),
                                 validate: (values: any) => {
                                     if (!values.category) return 'Required!';
 
@@ -200,7 +199,7 @@ const Page = () => {
                             {
                                 type: 'select-sync',
                                 name: 'status',
-                                placeholder: 'Select expense status!',
+                                placeholder: 'Select revenue status!',
                                 title: 'Status',
                                 initialValue: 'COMPLETED',
                                 options: getPaymentStatusOptions(),

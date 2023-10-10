@@ -15,8 +15,7 @@ import GenericViewGenerator from '../../../components/global/GenericViewGenerato
 import { getLocations } from '../../../apis';
 import { DATE_FORMAT, getFormattedDatetime } from '../../../utils/date';
 import { generateQueryPath, getGeneralStatusOptions } from '../../../utils';
-import FilterComponent from '../../../components/global/Filter';
-import PaginatorComponent from '../../../components/global/Paginator';
+import { FilterComponent, PaginatorComponent } from '../../../components/';
 import { ILocation } from './create';
 
 export const getServerSideProps: GetServerSideProps = async context =>
