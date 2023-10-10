@@ -163,12 +163,14 @@ export const getSeverity = (key: string) => {
         case 'ACTIVE':
         case 'CONFIRMED':
         case 'COMPLETED':
+        case 'REVENUE':
             return 'success';
 
         case 'INACTIVE':
         case 'EXPIRED':
         case 'CANCELED':
         case 'BLOCKED':
+        case 'EXPENSE':
             return 'danger';
 
         case 'PENDING':

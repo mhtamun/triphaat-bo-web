@@ -76,8 +76,8 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                 },
                 {
                     icon: 'pi pi-fw pi-money-bill',
-                    label: 'Balance',
-                    to: '/v-p/accounting/balance',
+                    label: 'Statement',
+                    to: '/v-p/accounting/statement',
                 },
             ],
         },
