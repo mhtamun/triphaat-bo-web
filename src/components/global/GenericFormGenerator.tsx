@@ -394,14 +394,22 @@ export default function GenericFormGenerator({
     }
 
     const submitButton = !submitButtonShow ? null : (
-        <Button type="submit" label={!submitButtonText ? 'Submit' : submitButtonText} severity="info"></Button>
+        <Button
+            type="button"
+            label={!submitButtonText ? 'Submit' : submitButtonText}
+            onClick={e => {
+                formik.submitForm();
+            }}
+        ></Button>
     );
+
     const resetButton = !resetButtonShow ? null : (
         <Button
-            type="reset"
+            type="button"
             label={!resetButtonText ? 'Reset' : resetButtonText}
-            severity="help"
-            onClick={formik.handleReset}
+            onClick={e => {
+                formik.resetForm();
+            }}
             className="ml-3"
         ></Button>
     );

@@ -10,7 +10,7 @@ const PaginatorComponent = ({
     totalRecords = 10000,
 }: {
     router: NextRouter;
-    pathParams?: any | {} | null;
+    pathParams?: any | null;
     totalRecords?: number;
 }) => {
     const skip = !router.query.skip ? 0 : parseInt(router.query.skip as string);

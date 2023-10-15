@@ -104,8 +104,7 @@ const DataTable = ({
             footer={
                 <p style={{ color: 'orangered' }}>
                     <FontAwesomeIcon icon={faLightbulb} className="mr-2" />
-                    "Did you know? You can scroll horizontally by holding down the Shift key and using your mouse scroll
-                    wheel. Try it out to navigate wide web pages or spreadsheets more easily!" - Rafi Hasnain
+                    {`"Did you know? You can scroll horizontally by holding down the Shift key and using your mouse scroll wheel. Try it out to navigate wide web pages or spreadsheets more easily!" - Rafi Hasnain`}
                     <FontAwesomeIcon icon={faComputerMouse} className="ml-2" />
                 </p>
             }

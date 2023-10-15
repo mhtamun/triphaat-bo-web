@@ -88,6 +88,8 @@ const EditItemComponent = ({
                 callback={(data, resetForm) => {
                     // console.debug({ data });
 
+                    if (!data) return;
+
                     const contentType = !_.some(data, datum => datum instanceof File)
                         ? 'application/json'
                         : 'multipart/form-data';
@@ -150,6 +152,8 @@ const AddNewItemComponent = ({
                 nonEdibleFields={nonEdibleFields}
                 callback={(data, resetForm) => {
                     // console.debug({ data });
+
+                    if (!data) return;
 
                     const contentType = !_.some(data, datum => datum instanceof File)
                         ? 'application/json'

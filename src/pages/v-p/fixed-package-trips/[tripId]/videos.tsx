@@ -60,7 +60,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     url: (item: any) => (
                                         <>
                                             <span className="p-column-title">{item.title}</span>
-                                            <video src={item.url} about={item.title} className="shadow-2" width="100" />
+                                            <video src={item.url} className="shadow-2" width="100" />
                                         </>
                                     ),
                                     status: (item: any) => (

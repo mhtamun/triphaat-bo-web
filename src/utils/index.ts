@@ -186,7 +186,7 @@ export const getSeverity = (key: string) => {
 export const getFormData = (payload: any) => {
     const formData = new FormData();
 
-    for (let key in payload) {
+    for (const key in payload) {
         // console.debug(key, payload[key], payload[key].name);
 
         if (_.isUndefined(payload[key]) || _.isNull(payload[key])) continue;
@@ -197,17 +197,9 @@ export const getFormData = (payload: any) => {
             formData.append(key, payload[key]);
         }
     }
-
-    // console.debug('formData', formData);
-
-    return formData;
 };
 
-export const generateQueryPath = (
-    pathname: string,
-    pathParams?: any | {} | null,
-    queryParams?: any | {} | null
-): string => {
+export const generateQueryPath = (pathname: string, pathParams?: any | null, queryParams?: any | null): string => {
     // console.debug({ pathname, pathParams, queryParams });
 
     let path: string = pathname;

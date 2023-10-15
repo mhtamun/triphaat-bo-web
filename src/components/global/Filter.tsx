@@ -14,7 +14,7 @@ const FilterComponent = ({
 }: {
     fields: IField[];
     router: NextRouter;
-    pathParams?: any | {} | null;
+    pathParams?: any | null;
 }) => {
     // console.debug({ pathname: router.pathname, url: router.route });
     // console.debug({ router });
