@@ -159,6 +159,8 @@ const AddNewItemComponent = ({
                         ? 'application/json'
                         : 'multipart/form-data';
 
+                    // console.debug({ contentType });
+
                     let tempData = data;
 
                     if (contentType === 'multipart/form-data') {

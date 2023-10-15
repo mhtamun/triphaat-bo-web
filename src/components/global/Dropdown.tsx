@@ -32,7 +32,7 @@ const SelectSyncField = (props: {
         errorMessage = '',
     } = props;
 
-    console.debug({ name, title, placeholder, value, options });
+    // console.debug({ name, title, placeholder, value, options });
 
     const groupedItemTemplate = (option: ISelectOption) => {
         return (

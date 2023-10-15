@@ -197,6 +197,8 @@ export const getFormData = (payload: any) => {
             formData.append(key, payload[key]);
         }
     }
+
+    return formData;
 };
 
 export const generateQueryPath = (pathname: string, pathParams?: any | null, queryParams?: any | null): string => {

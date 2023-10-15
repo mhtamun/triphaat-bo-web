@@ -63,6 +63,8 @@ instance.interceptors.response.use(
 );
 
 const getHeaders = (authorization?: string | null, contentType?: string | null) => {
+    // console.debug({ authorization, contentType });
+
     return {
         'Content-Type': !contentType ? 'application/json' : contentType,
         Authorization: !authorization
@@ -80,6 +82,8 @@ export const callPostApi = (
     contentType?: string | null,
     showLoader?: boolean
 ): Promise<IData> => {
+    // console.debug({ url, payload, headers: getHeaders(authorization, contentType) });
+
     const promise: Promise<IData> = instance.post(url, payload, {
         headers: getHeaders(authorization, contentType),
     });
