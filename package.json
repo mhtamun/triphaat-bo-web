@@ -7,7 +7,7 @@
         "lint-fix": "next lint --fix",
         "start:dev": "yarn && rm -Rf .next && next dev -p 8081",
         "build": "next build",
-        "start": "next start -p 8081"
+        "start": "next start"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.4.2",
