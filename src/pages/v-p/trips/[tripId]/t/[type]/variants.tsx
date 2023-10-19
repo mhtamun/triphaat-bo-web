@@ -85,7 +85,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 onDataModify: data =>
                                     _.map(data, datum => ({
                                         id: datum.id,
-                                        reasons: _.join(datum.otherReasons, ', '),
+                                        reasons: _.join(datum.reasons, ', '),
                                         costPrice: parseFloat(datum.costPricePerPerson),
                                         price: parseFloat(datum.pricePerPerson),
                                         offerPrice: parseFloat(datum.offerPricePerPerson),
@@ -254,7 +254,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 },
                                 {
                                     type: 'chips',
-                                    name: 'otherReasons',
+                                    name: 'reasons',
                                     placeholder: 'Enter reasons (press enter to start new line)!',
                                     title: 'Reasons',
                                     initialValue: null,
@@ -268,7 +268,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             _.size(values.transportationSharing) === 0 &&
                                             _.size(values.foodType) === 0 &&
                                             _.size(values.foodClass) === 0 &&
-                                            !values.otherReasons
+                                            !values.reasons
                                         )
                                             return 'Please at least define what differs this variant from other variants!';
 

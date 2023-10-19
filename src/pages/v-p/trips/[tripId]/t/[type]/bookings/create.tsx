@@ -239,7 +239,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                         ? variant.pricePerPerson
                                         : variant.offerPricePerPerson) +
                                     ' - ' +
-                                    _.join(variant.otherReasons, ', '),
+                                    _.join(variant.reasons, ', '),
                             })),
                             onChange: (name: string, value: any, setFieldValue) => {
                                 console.debug({ name, value });

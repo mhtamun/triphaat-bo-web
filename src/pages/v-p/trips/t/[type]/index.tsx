@@ -124,7 +124,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                                 text: '',
                                 tooltip: 'Enter trip management',
                                 callback: identifier => {
-                                    router.push(`/v-p/trips/t/${router.query.type}/${identifier}`);
+                                    router.push(`/v-p/trips/${identifier}/t/${router.query.type}`);
                                 },
                             },
                         ]}

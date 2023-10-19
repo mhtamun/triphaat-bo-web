@@ -15,16 +15,16 @@ const TabViewComponent = ({
     content: React.ReactNode;
 }) => {
     const onTabChange = useCallback((e: TabViewTabChangeEvent, router: NextRouter, tripId: string) => {
-        if (e.index === 0) router.push(`/v-p/trips/t/${router.query.type}/${tripId}`);
-        if (e.index === 1) router.push(`/v-p/trips/t/${router.query.type}/${tripId}/variants`);
-        if (e.index === 2) router.push(`/v-p/trips/t/${router.query.type}/${tripId}/images`);
-        if (e.index === 3) router.push(`/v-p/trips/t/${router.query.type}/${tripId}/videos`);
-        if (e.index === 4) router.push(`/v-p/trips/t/${router.query.type}/${tripId}/tags`);
-        if (e.index === 5) router.push(`/v-p/trips/t/${router.query.type}/${tripId}/highlights`);
-        if (e.index === 6) router.push(`/v-p/trips/t/${router.query.type}/${tripId}/activities`);
-        if (e.index === 7) router.push(`/v-p/trips/t/${router.query.type}/${tripId}/itinerary`);
-        if (e.index === 8) router.push(`/v-p/trips/t/${router.query.type}/${tripId}/includes`);
-        if (e.index === 9) router.push(`/v-p/trips/t/${router.query.type}/${tripId}/faqs`);
+        if (e.index === 0) router.push(`/v-p/trips/${tripId}/t/${router.query.type}`);
+        if (e.index === 1) router.push(`/v-p/trips/${tripId}/t/${router.query.type}/variants`);
+        if (e.index === 2) router.push(`/v-p/trips/${tripId}/t/${router.query.type}/images`);
+        if (e.index === 3) router.push(`/v-p/trips/${tripId}/t/${router.query.type}/videos`);
+        if (e.index === 4) router.push(`/v-p/trips/${tripId}/t/${router.query.type}/tags`);
+        if (e.index === 5) router.push(`/v-p/trips/${tripId}/t/${router.query.type}/highlights`);
+        if (e.index === 6) router.push(`/v-p/trips/${tripId}/t/${router.query.type}/activities`);
+        if (e.index === 7) router.push(`/v-p/trips/${tripId}/t/${router.query.type}/itinerary`);
+        if (e.index === 8) router.push(`/v-p/trips/${tripId}/t/${router.query.type}/includes`);
+        if (e.index === 9) router.push(`/v-p/trips/${tripId}/t/${router.query.type}/faqs`);
     }, []);
 
     return (
