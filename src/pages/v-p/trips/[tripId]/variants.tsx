@@ -17,10 +17,8 @@ import WrapperComponent from '../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Variants | Trip Management', async cookies => {
-        const tripId = context.query.tripId;
+        const tripId = context.query.tripId as string;
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {

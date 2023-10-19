@@ -7,11 +7,11 @@ import { Card } from 'primereact/card';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../libs/auth';
-import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
-import { getLocations } from '../../../../apis';
-import { getGeneralStatusOptions } from '../../../../utils';
-import { callPostApi } from '../../../../libs/api';
+import { getAuthorized } from '../../../../../libs/auth';
+import GenericFormGenerator from '../../../../../components/global/GenericFormGenerator';
+import { getLocations } from '../../../../../apis';
+import { getGeneralStatusOptions } from '../../../../../utils';
+import { callPostApi } from '../../../../../libs/api';
 
 export interface ILocation {
     id: number;
@@ -267,7 +267,7 @@ export const getTripFields = (locations: ILocation[]) => [
 ];
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Create A Trip | Fixed Package Trip Management', async cookies => {
+    getAuthorized(context, 'Create A Trip | Trip Management', async cookies => {
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetLocations || responseGetLocations.statusCode !== 200) {
@@ -312,7 +312,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
 
                                                 // showToast('success', 'Success!', response.message);
 
-                                                router.push(`/v-p/fixed-package-trips/${response.data.id}`);
+                                                router.push(`/v-p/trips/${response.data.id}`);
                                             }
                                         })
                                         .catch(error => {

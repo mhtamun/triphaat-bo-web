@@ -12,7 +12,7 @@ import { getAuthorized } from '../../../../libs/auth';
 import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
 import { getLocations, getTripForVendor } from '../../../../apis';
 import { callPutApi } from '../../../../libs/api';
-import { getTripFields } from '../create';
+import { getTripFields } from '../type/[type]/create';
 import TabViewComponent from '../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../components/trips/WrapperComponent';
 

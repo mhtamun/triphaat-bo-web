@@ -40,7 +40,7 @@ const WrapperComponent = ({
                                     command: (e: MenuItemCommandEvent) => {
                                         e.originalEvent.preventDefault();
 
-                                        router.push('/v-p/fixed-package-trips/' + tripId + '/bookings/create');
+                                        router.push('/v-p/trips/' + tripId + '/bookings/create');
                                     },
                                 },
                                 {
@@ -49,7 +49,7 @@ const WrapperComponent = ({
                                     command: (e: MenuItemCommandEvent) => {
                                         e.originalEvent.preventDefault();
 
-                                        router.push('/v-p/fixed-package-trips/' + tripId + '/bookings');
+                                        router.push('/v-p/trips/' + tripId + '/bookings');
                                     },
                                 },
                             ],

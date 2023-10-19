@@ -34,6 +34,7 @@
         "primeicons": "^6.0.1",
         "primereact": "9.2.3",
         "react": "18.2.0",
+        "react-big-calendar": "^1.8.4",
         "react-dom": "18.2.0",
         "react-router-dom": "5.2.0",
         "react-timer-hook": "^3.0.7",

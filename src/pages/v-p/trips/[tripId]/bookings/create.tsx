@@ -129,7 +129,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                     // console.debug({ response });
 
                     if (response.statusCode === 200) {
-                        router.push('/v-p/fixed-package-trips/' + tripId + '/bookings');
+                        router.push('/v-p/trips/' + tripId + '/bookings');
                     }
                 })
                 .catch(error => {
@@ -192,7 +192,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
             </p>
             <button
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    router.push(`/v-p/fixed-package-trips/${tripId}/variants`);
+                    router.push(`/v-p/trips/${tripId}/variants`);
                 }}
             >
                 Go

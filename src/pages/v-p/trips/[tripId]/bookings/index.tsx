@@ -190,7 +190,7 @@ const Page = ({
                         icon: PrimeIcons.ARROW_RIGHT,
                         text: 'Invoice',
                         callback: identifier => {
-                            router.push(`/v-p/fixed-package-trips/${tripId}/bookings/${identifier}/invoice`);
+                            router.push(`/v-p/trips/${tripId}/bookings/${identifier}/invoice`);
                         },
                     },
                 ]}

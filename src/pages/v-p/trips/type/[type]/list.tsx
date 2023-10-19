@@ -10,16 +10,16 @@ import { PrimeIcons } from 'primereact/api';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../libs/auth';
-import GenericViewGenerator from '../../../components/global/GenericViewGenerator';
-import { getLocations } from '../../../apis';
-import { DATE_FORMAT, getFormattedDatetime } from '../../../utils/date';
-import { generateQueryPath, getGeneralStatusOptions } from '../../../utils';
-import { FilterComponent, PaginatorComponent } from '../../../components/';
+import { getAuthorized } from '../../../../../libs/auth';
+import GenericViewGenerator from '../../../../../components/global/GenericViewGenerator';
+import { getLocations } from '../../../../../apis';
+import { DATE_FORMAT, getFormattedDatetime } from '../../../../../utils/date';
+import { generateQueryPath, getGeneralStatusOptions } from '../../../../../utils';
+import { FilterComponent, PaginatorComponent } from '../../../../../components';
 import { ILocation } from './create';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Fix Package Trips | Trip Trip Management', async cookies => {
+    getAuthorized(context, 'Trips | Trip Management', async cookies => {
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetLocations || responseGetLocations.statusCode !== 200) {
@@ -41,6 +41,16 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
 const Page = ({ locations }: { locations: ILocation[] }) => {
     const router = useRouter();
+    // console.debug({ query: router.query });
+
+    const types = {} as any;
+
+    if (router.query.type === '0000') {
+        types.dateType = 'FIXED';
+        types.accommodationType = 'FIXED';
+        types.transportationType = 'FIXED';
+        types.foodType = 'FIXED';
+    }
 
     return (
         <Card title="Trips" subTitle="Manage trips here!">
@@ -52,7 +62,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                 onClick={e => {
                     e.preventDefault();
 
-                    router.push(`/v-p/fixed-package-trips/create`);
+                    router.push(`/v-p/trips/type/${router.query.type}/create`);
                 }}
             />
             {useMemo(
@@ -60,10 +70,12 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                     <GenericViewGenerator
                         name={'Trip'}
                         viewAll={{
-                            uri: `/vendor/api/v1/date-types/FIXED/accommodation-types/FIXED/transportation-types/FIXED/trips${generateQueryPath(
+                            uri: `/vendor/api/v1/date-types/${types.dateType}/accommodation-types/${
+                                types.accommodationType
+                            }/transportation-types/${types.transportationType}/trips${generateQueryPath(
                                 '',
-                                null,
-                                router.query
+                                { type: router.query.type },
+                                { ..._.omit(router.query, ['type']) }
                             )}`,
                             ignoredColumns: [
                                 'id',
@@ -106,7 +118,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                                 icon: PrimeIcons.ARROW_RIGHT,
                                 text: 'Detail',
                                 callback: identifier => {
-                                    router.push(`/v-p/fixed-package-trips/${identifier}`);
+                                    router.push(`/v-p/trips/${identifier}`);
                                 },
                             },
                         ]}
@@ -169,9 +181,10 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                                     },
                                 ]}
                                 router={router}
+                                pathParams={{ type: router.query.type }}
                             />
                         }
-                        pagination={<PaginatorComponent router={router} />}
+                        pagination={<PaginatorComponent router={router} pathParams={{ type: router.query.type }} />}
                     />
                 ),
                 [router]

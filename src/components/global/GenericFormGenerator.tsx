@@ -149,10 +149,10 @@ export default function GenericFormGenerator({
 
         onReset: (values: FormikValues) => {
             // console.debug({ values });
-
-            if (submitButtonShow && callback) {
-                callback(null);
-            }
+            // if (submitButtonShow && callback) {
+            //     callback(null);
+            // }
+            // toto: Fix
         },
     });
 
