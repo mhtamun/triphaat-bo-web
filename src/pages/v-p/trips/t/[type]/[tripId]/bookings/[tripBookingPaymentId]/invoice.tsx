@@ -11,18 +11,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../../../libs/auth';
+import { getAuthorized } from '../../../../../../../../libs/auth';
 import {
     getTripBookingPaymentForVendor,
     postManualTripBookingConfirm,
     postManualTripBookingCancel,
     sendInvoiceViaEmail,
     reserveBooking,
-} from '../../../../../../apis';
-import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
-import Invoice from '../../../../../../components/reports/invoice';
-import { DATE_FORMAT, getFormattedDatetime } from '../../../../../../utils/date';
-import { IVendor } from '../../../../../../types';
+} from '../../../../../../../../apis';
+import WrapperComponent from '../../../../../../../../components/trips/WrapperComponent';
+import Invoice from '../../../../../../../../components/reports/invoice';
+import { DATE_FORMAT, getFormattedDatetime } from '../../../../../../../../utils/date';
+import { IVendor } from '../../../../../../../../types';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Invoice | Bookings | Trip Management', async cookies => {

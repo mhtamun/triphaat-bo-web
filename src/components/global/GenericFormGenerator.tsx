@@ -25,7 +25,6 @@ export interface IField {
         items?: { value: boolean | number | string; label: string }[];
     }[];
     isGroupOptions?: boolean; // only for multi select dropdowns
-    isRange?: boolean; // only for date picker
     minDate?: Date; // only for date picker
     maxDate?: Date; // only for date picker
     acceptType?: 'image/*' | 'video/*' | 'application/*' | '*/*'; // only for file select
@@ -228,7 +227,50 @@ export default function GenericFormGenerator({
                     setFieldValue={formik.setFieldValue}
                     setFieldTouched={formik.setFieldTouched}
                     setFieldError={formik.setFieldError}
-                    isRange={field.isRange}
+                    minDate={field.minDate}
+                    maxDate={field.maxDate}
+                    isDisabled={field.isDisabled}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'date-multiple')
+            return (
+                <InputDateField
+                    key={field.name}
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    value={formik.values[field.name] ?? ''}
+                    setFieldValue={formik.setFieldValue}
+                    setFieldTouched={formik.setFieldTouched}
+                    setFieldError={formik.setFieldError}
+                    isRange={false}
+                    isMultiple={true}
+                    minDate={field.minDate}
+                    maxDate={field.maxDate}
+                    isDisabled={field.isDisabled}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'date-range')
+            return (
+                <InputDateField
+                    key={field.name}
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    value={formik.values[field.name] ?? ''}
+                    setFieldValue={formik.setFieldValue}
+                    setFieldTouched={formik.setFieldTouched}
+                    setFieldError={formik.setFieldError}
+                    isRange={true}
+                    isMultiple={false}
                     minDate={field.minDate}
                     maxDate={field.maxDate}
                     isDisabled={field.isDisabled}

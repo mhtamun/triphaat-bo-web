@@ -13,6 +13,7 @@ const InputDateField = (props: {
     setFieldTouched: (field: string, touched: boolean) => void;
     setFieldError: (field: string, value: string) => void;
     isRange?: boolean;
+    isMultiple?: boolean;
     minDate?: Date;
     maxDate?: Date;
     isDisabled?: boolean;
@@ -28,6 +29,7 @@ const InputDateField = (props: {
         setFieldTouched,
         setFieldError,
         isRange,
+        isMultiple,
         minDate,
         maxDate,
         isDisabled = false,
@@ -61,13 +63,15 @@ const InputDateField = (props: {
 
                     setFieldTouched(name, true);
                 }}
-                selectionMode={!isRange ? 'single' : 'range'}
-                readOnlyInput={isRange}
+                selectionMode={!isRange ? (!isMultiple ? 'single' : 'multiple') : 'range'}
+                readOnlyInput={isRange || isMultiple}
                 minDate={minDate}
                 maxDate={maxDate}
                 showIcon
                 showButtonBar
-                touchUI
+                // touchUI
+                inline={isMultiple}
+                numberOfMonths={!isMultiple ? 1 : 2}
                 disabled={isDisabled}
                 className={!errorMessage ? '' : 'p-invalid'}
                 aria-describedby={`${name}-help`}

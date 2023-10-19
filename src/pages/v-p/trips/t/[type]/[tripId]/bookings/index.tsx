@@ -10,13 +10,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../../libs/auth';
-import GenericViewGenerator from '../../../../../components/global/GenericViewGenerator';
-import { getTripBookingFacts, getTripForVendor } from '../../../../../apis';
-import WrapperComponent from '../../../../../components/trips/WrapperComponent';
-import { generateQueryPath, getBookingStatusOptions, getPaymentStatusOptions, getSeverity } from '../../../../../utils';
-import FilterComponent from '../../../../../components/global/Filter';
-import PaginatorComponent from '../../../../../components/global/Paginator';
+import { getAuthorized } from '../../../../../../../libs/auth';
+import GenericViewGenerator from '../../../../../../../components/global/GenericViewGenerator';
+import { getTripBookingFacts, getTripForVendor } from '../../../../../../../apis';
+import WrapperComponent from '../../../../../../../components/trips/WrapperComponent';
+import {
+    generateQueryPath,
+    getBookingStatusOptions,
+    getPaymentStatusOptions,
+    getSeverity,
+} from '../../../../../../../utils';
+import FilterComponent from '../../../../../../../components/global/Filter';
+import PaginatorComponent from '../../../../../../../components/global/Paginator';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Bookings | Trip Management', async cookies => {

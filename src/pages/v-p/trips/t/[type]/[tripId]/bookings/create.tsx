@@ -14,18 +14,18 @@ import { useTimer } from 'react-timer-hook';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../../libs/auth';
-import GenericFormGenerator from '../../../../../components/global/GenericFormGenerator';
+import { getAuthorized } from '../../../../../../../libs/auth';
+import GenericFormGenerator from '../../../../../../../components/global/GenericFormGenerator';
 import {
     getTripForVendor,
     getTripVariants,
     initBooking,
     searchCustomersForVendor,
     lockBooking,
-} from '../../../../../apis';
+} from '../../../../../../../apis';
 import { FormikValues } from 'formik';
-import { getSeverity } from '../../../../../utils';
-import WrapperComponent from '../../../../../components/trips/WrapperComponent';
+import { getSeverity } from '../../../../../../../utils';
+import WrapperComponent from '../../../../../../../components/trips/WrapperComponent';
 
 interface ICustomer {
     id: number;

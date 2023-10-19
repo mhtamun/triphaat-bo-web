@@ -8,13 +8,13 @@ import { Button } from 'primereact/button';
 import _ from 'lodash';
 
 // application libraries
-import { getAuthorized } from '../../../../libs/auth';
-import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
-import { getLocations, getTripForVendor } from '../../../../apis';
-import { callPutApi } from '../../../../libs/api';
-import { getTripFields } from '../type/[type]/create';
-import TabViewComponent from '../../../../components/trips/TabViewComponent';
-import WrapperComponent from '../../../../components/trips/WrapperComponent';
+import { getAuthorized } from '../../../../../../libs/auth';
+import GenericFormGenerator from '../../../../../../components/global/GenericFormGenerator';
+import { getLocations, getTripForVendor } from '../../../../../../apis';
+import { callPutApi } from '../../../../../../libs/api';
+import { getTripFields } from '../create';
+import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
+import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 
 export interface ILocation {
     id: number;
@@ -64,14 +64,28 @@ export const getServerSideProps: GetServerSideProps = async context =>
 const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocation[]; trip: any }) => {
     const router = useRouter();
 
-    console.debug({
-        startDate: trip.startDate,
-        endDate: trip.endDate,
-        expiryDateOfBooking: trip.expiryDateOfBooking,
-    });
+    // console.debug({
+    //     startDate: trip.startDate,
+    //     endDate: trip.endDate,
+    //     expiryDateOfBooking: trip.expiryDateOfBooking,
+    // });
+
+    const types = {} as any;
+
+    if (router.query.type === '0000') {
+        types.dateType = 'FIXED';
+        types.accommodationType = 'FIXED';
+        types.transportationType = 'FIXED';
+        types.foodType = 'FIXED';
+    } else if (router.query.type === '1100') {
+        types.dateType = 'ON_DEMAND';
+        types.accommodationType = 'ON_DEMAND_ROOM_SEAT';
+        types.transportationType = 'FIXED';
+        types.foodType = 'FIXED';
+    }
 
     return (
-        <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
+        <WrapperComponent title={trip?.name} tripId={tripId} router={router}>
             <TabViewComponent
                 activeIndex={0}
                 router={router}
@@ -83,7 +97,14 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
                                 datum={{
                                     ...trip,
                                 }}
-                                fields={getTripFields(locations)}
+                                fields={getTripFields(
+                                    locations,
+                                    types.dateType,
+                                    types.accommodationType,
+                                    types.transportationType,
+                                    types.foodType,
+                                    router.query.type as string
+                                )}
                                 callback={data => {
                                     // console.debug({ data });
 

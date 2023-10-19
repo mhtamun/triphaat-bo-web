@@ -50,6 +50,11 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
         types.accommodationType = 'FIXED';
         types.transportationType = 'FIXED';
         types.foodType = 'FIXED';
+    } else if (router.query.type === '1100') {
+        types.dateType = 'ON_DEMAND';
+        types.accommodationType = 'ON_DEMAND_ROOM_SEAT';
+        types.transportationType = 'FIXED';
+        types.foodType = 'FIXED';
     }
 
     return (
@@ -62,7 +67,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                 onClick={e => {
                     e.preventDefault();
 
-                    router.push(`/v-p/trips/type/${router.query.type}/create`);
+                    router.push(`/v-p/trips/t/${router.query.type}/create`);
                 }}
             />
             {useMemo(
@@ -116,9 +121,10 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                             {
                                 color: 'info',
                                 icon: PrimeIcons.ARROW_RIGHT,
-                                text: 'Detail',
+                                text: '',
+                                tooltip: 'Enter trip management',
                                 callback: identifier => {
-                                    router.push(`/v-p/trips/${identifier}`);
+                                    router.push(`/v-p/trips/t/${router.query.type}/${identifier}`);
                                 },
                             },
                         ]}
