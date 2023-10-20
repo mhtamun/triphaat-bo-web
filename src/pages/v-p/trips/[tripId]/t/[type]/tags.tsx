@@ -45,7 +45,6 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={4}
                 router={router}
                 tripId={tripId}
                 content={useMemo(

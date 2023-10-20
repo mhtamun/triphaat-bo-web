@@ -46,7 +46,7 @@ const DataTable = ({
             columnHeads.push({
                 key: 'actions',
                 label: 'ACTIONS',
-                headerStyle: { minWidth: '10rem' },
+                headerStyle: { minWidth: 'auto' },
                 style: { width: 'auto' },
                 frozen: true,
                 body: undefined,

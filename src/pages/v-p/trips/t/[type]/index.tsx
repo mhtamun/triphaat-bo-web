@@ -87,8 +87,13 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                                 'vendorId',
                                 'locationId',
                                 'dateType',
+                                'dateTypeOther',
                                 'accommodationType',
+                                'accommodationTypeOther',
                                 'transportationType',
+                                'transportationTypeOther',
+                                'foodType',
+                                'foodTypeOther',
                                 'smallDescription',
                                 'bigDescription',
                                 'createdAt',
@@ -109,12 +114,15 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                             onDataModify: data =>
                                 _.map(data, datum => ({
                                     ...datum,
-                                    startDate: getFormattedDatetime(datum.startDate, DATE_FORMAT.DATE_REPORT),
-                                    endDate: getFormattedDatetime(datum.endDate, DATE_FORMAT.DATE_REPORT),
-                                    expiryDateOfBooking: getFormattedDatetime(
-                                        datum.expiryDateOfBooking,
-                                        DATE_FORMAT.DATE_REPORT
-                                    ),
+                                    startDate: !datum.startDate
+                                        ? null
+                                        : getFormattedDatetime(datum.startDate, DATE_FORMAT.DATE_REPORT),
+                                    endDate: !datum.endDate
+                                        ? null
+                                        : getFormattedDatetime(datum.endDate, DATE_FORMAT.DATE_REPORT),
+                                    expiryDateOfBooking: !datum.expiryDateOfBooking
+                                        ? null
+                                        : getFormattedDatetime(datum.expiryDateOfBooking, DATE_FORMAT.DATE_REPORT),
                                 })),
                         }}
                         customActions={[

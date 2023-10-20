@@ -31,6 +31,25 @@ const WrapperComponent = ({
                             },
                         },
                         {
+                            label: 'Service Date Setup',
+                            icon: 'pi pi-fw pi-calendar',
+                            command: (e: MenuItemCommandEvent) => {
+                                e.originalEvent.preventDefault();
+
+                                router.push('/v-p/trips/' + tripId + '/t/' + router.query.type + '/service-dates');
+                            },
+                        },
+
+                        {
+                            label: 'Room Seat Setup',
+                            icon: 'pi pi-fw pi-building',
+                            command: (e: MenuItemCommandEvent) => {
+                                e.originalEvent.preventDefault();
+
+                                router.push('/v-p/trips/' + tripId + '/t/' + router.query.type + '/room-seats');
+                            },
+                        },
+                        {
                             label: 'Booking',
                             icon: 'pi pi-fw pi-book',
                             items: [
@@ -40,7 +59,9 @@ const WrapperComponent = ({
                                     command: (e: MenuItemCommandEvent) => {
                                         e.originalEvent.preventDefault();
 
-                                        router.push('/v-p/trips/' + tripId + '/bookings/create');
+                                        router.push(
+                                            '/v-p/trips/' + tripId + '/t/' + router.query.type + '/bookings/create'
+                                        );
                                     },
                                 },
                                 {
@@ -49,7 +70,7 @@ const WrapperComponent = ({
                                     command: (e: MenuItemCommandEvent) => {
                                         e.originalEvent.preventDefault();
 
-                                        router.push('/v-p/trips/' + tripId + '/bookings');
+                                        router.push('/v-p/trips/' + tripId + '/t/' + router.query.type + '/bookings');
                                     },
                                 },
                             ],
@@ -92,7 +113,17 @@ const WrapperComponent = ({
                             label: 'Deactivate This Trip',
                             icon: 'pi pi-fw pi-ban',
                         },
-                    ]}
+                    ].filter(item => {
+                        if (router.query.type === '0000' && item.label === 'Service Date Setup') return false;
+
+                        if (router.query.type === '0000' && item.label === 'Room Seat Setup') return false;
+
+                        if (router.query.type === '1100' && item.label === 'Expenses') return false;
+
+                        if (router.query.type === '1100' && item.label === 'Copy This Trip') return false;
+
+                        return true;
+                    })}
                     className="mb-3"
                 />
             )}

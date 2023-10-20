@@ -11,7 +11,7 @@ import _ from 'lodash';
 import { getAuthorized } from '../../../../../../libs/auth';
 import GenericViewGenerator from '../../../../../../components/global/GenericViewGenerator';
 import { getTripForVendor } from '../../../../../../apis';
-import { getGeneralStatusOptions } from '../../../../../../utils';
+import { getGeneralStatusOptions, getVariantOptions } from '../../../../../../utils';
 import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 
@@ -43,7 +43,6 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={1}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
@@ -253,11 +252,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     show: () => false,
                                 },
                                 {
-                                    type: 'chips',
+                                    type: 'multi-select-sync',
                                     name: 'reasons',
-                                    placeholder: 'Enter reasons (press enter to start new line)!',
-                                    title: 'Reasons',
+                                    placeholder: 'Enter diversity reasons (press enter to start new line)!',
+                                    title: 'Reasons (Diversification)',
                                     initialValue: null,
+                                    options: getVariantOptions(),
+                                    isGroupOptions: true,
                                     validate: (values: any) => {
                                         if (
                                             _.size(values.accommodationType) === 0 &&

@@ -21,6 +21,10 @@ import FileUpload from './global/FileUpload';
 import GenericViewGenerator from './global/GenericViewGenerator';
 import GenericFormGenerator from './global/GenericFormGenerator';
 
+// Trips
+import WrapperComponent from './trips/WrapperComponent';
+import TabViewComponent from './trips/TabViewComponent';
+
 export {
     DataTable,
     Modal,
@@ -41,4 +45,7 @@ export {
     // Generators
     GenericViewGenerator,
     GenericFormGenerator,
+    // Trips
+    WrapperComponent,
+    TabViewComponent,
 };
