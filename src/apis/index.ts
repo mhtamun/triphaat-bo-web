@@ -144,6 +144,12 @@ export const addRoom = (
     authorization?: string
 ) => callPostApi('api/v1/rooms', payload, authorization, null, true);
 
+export const getRooms = (tripId: string, authorization?: string) =>
+    callGetApi(`api/v1/trips/${tripId}/rooms`, authorization, true);
+
+export const removeRoom = (id: string, authorization?: string) =>
+    callDeleteApi('api/v1/rooms/' + id, authorization, true);
+
 export const getProfile = (authorization: string) => callGetApi(apiBaseUrl + `/api/v1/user-profile`, authorization);
 
 // public APIs

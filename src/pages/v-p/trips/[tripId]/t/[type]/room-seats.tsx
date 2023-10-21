@@ -5,20 +5,29 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FormikValues } from 'formik';
 import { Fieldset } from 'primereact/fieldset';
+import { TreeTable } from 'primereact/treetable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 import _ from 'lodash';
 
 // application
 import { getAuthorized } from '../../../../../../libs/auth';
 import { WrapperComponent, GenericFormGenerator } from '../../../../../../components';
-import { getTripForVendor, addRoom } from '../../../../../../apis';
+import { getTripForVendor, addRoom, getRooms, removeRoom } from '../../../../../../apis';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Service Dates | Trip Management', async cookies => {
         const tripId = context.query.tripId as string;
 
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
+        const responseGetRooms = await getRooms(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 
-        if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
+        if (
+            !responseGetTrip ||
+            responseGetTrip.statusCode !== 200 ||
+            !responseGetRooms ||
+            responseGetRooms.statusCode !== 200
+        ) {
             return {
                 redirect: {
                     destination: '/500',
@@ -31,11 +40,47 @@ export const getServerSideProps: GetServerSideProps = async context =>
             isVendor: true,
             tripId,
             trip: responseGetTrip.data,
+            roomSeats: responseGetRooms.data,
         };
     });
 
-const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
+const Page = ({ tripId, trip, roomSeats }: { tripId: string; trip: any; roomSeats: any[] }) => {
     const router = useRouter();
+
+    const [rooms, setRooms] = useState<any[]>(roomSeats);
+    console.debug({ rooms });
+
+    const actionTemplate = (roomId: number) => {
+        return (
+            <div className="flex flex-wrap gap-2">
+                <Button
+                    type="button"
+                    icon="pi pi-trash"
+                    severity="danger"
+                    rounded
+                    onClick={() => {
+                        removeRoom(roomId.toString())
+                            .then(response => {
+                                // console.debug({ response });
+
+                                if (!response) throw new Error('API call not resolved!');
+
+                                if (response.statusCode !== 200) throw new Error(response.message);
+
+                                const tempRooms = [...rooms];
+                                const index = tempRooms.findIndex(room => room.id === roomId);
+                                tempRooms.splice(index, 1);
+
+                                setRooms(tempRooms);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    }}
+                ></Button>
+            </div>
+        );
+    };
 
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
@@ -102,7 +147,11 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                             title: 'Room Seats',
                             initialValue: null,
                             validate: (values: any) => {
-                                if (router.query.type === '1100' && !values.numberOfSeats) return 'Required!';
+                                if (
+                                    router.query.type === '1100' &&
+                                    (_.isUndefined(values.numberOfSeats) || _.isNull(values.numberOfSeats))
+                                )
+                                    return 'Required!';
 
                                 return null;
                             },
@@ -128,6 +177,9 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
 
                                 if (response.statusCode !== 200) throw new Error(response.message);
 
+                                const tempRooms = [...rooms, response.data];
+                                setRooms(tempRooms);
+
                                 if (resetForm) resetForm();
                             })
                             .catch(error => {
@@ -137,7 +189,33 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                     enableReinitialize={false}
                 />
             </Fieldset>
-            <Fieldset legend="Room seat distribution view" className="mt-3"></Fieldset>
+            <Fieldset legend="View room seats" className="mt-3">
+                <TreeTable
+                    value={[...rooms].map((room: any) => ({
+                        key: `${room.id}`,
+                        data: {
+                            identifier: room.identifier,
+                            description: room.description,
+                            type: 'Room',
+                            action: actionTemplate(room.id),
+                        },
+                        children: room.seats.map((seat: any) => ({
+                            key: `${room.id}-${seat.id}`,
+                            data: {
+                                identifier: seat.identifier,
+                                description: seat.description,
+                                type: 'Seat',
+                            },
+                        })),
+                    }))}
+                    tableStyle={{ minWidth: '50rem' }}
+                >
+                    <Column field="identifier" header="Name" expander sortable></Column>
+                    <Column field="description" header="Description"></Column>
+                    <Column field="type" header="Type"></Column>
+                    <Column field="action" header="Action" headerClassName="w-10rem" />
+                </TreeTable>
+            </Fieldset>
         </WrapperComponent>
     );
 };
