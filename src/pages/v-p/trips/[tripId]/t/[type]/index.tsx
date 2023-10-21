@@ -78,7 +78,7 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
         types.transportationType = 'FIXED';
         types.foodType = 'FIXED';
     } else if (router.query.type === '1100') {
-        types.dateType = 'ON_DEMAND';
+        types.dateType = 'ON_DEMAND_SINGLE';
         types.accommodationType = 'ON_DEMAND_ROOM_SEAT';
         types.transportationType = 'FIXED';
         types.foodType = 'FIXED';

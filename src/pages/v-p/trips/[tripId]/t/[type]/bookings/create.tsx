@@ -186,16 +186,19 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
 
     return !variants || _.size(variants) === 0 ? (
         <div className="card">
-            <h5>No Variants Found</h5>
+            {/* <h5>No Variants Found</h5> */}
+            <h4 style={{ color: 'red' }}>
+                You did not set <strong>price</strong> for this trip
+            </h4>
             <p>
-                Please add at least <strong>one</strong> trip variant
+                Please add at least <strong style={{ color: 'orangered' }}>one</strong> trip variant
             </p>
             <button
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    router.push(`/v-p/trips/${tripId}/variants`);
+                    router.push(`/v-p/trips/${tripId}/t/${router.query.type}/variants`);
                 }}
             >
-                Go
+                Add Variants
             </button>
         </div>
     ) : (

@@ -53,6 +53,11 @@ export const getBookingStatusOptions = () => [
 
 export const getVariantOptions = () => [
     {
+        label: 'Single Variant (No Reason)',
+        value: 'Single Variant (No Reason)',
+        items: [{ label: 'Not Applicable', value: 'n/a' }],
+    },
+    {
         label: 'Accommodation Type',
         value: 'Accommodation Type',
         items: [
