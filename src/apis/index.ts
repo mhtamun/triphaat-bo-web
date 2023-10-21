@@ -132,6 +132,18 @@ export const getServiceDates = (tripId: string, authorization?: string) =>
 export const deleteServiceDate = (id: string, authorization?: string) =>
     callDeleteApi('api/v1/service-dates/' + id, authorization, true);
 
+export const addRoom = (
+    payload: {
+        tripId: number;
+        identifier: string;
+        type: string;
+        description: string;
+        maxOccupancy: number;
+        numberOfSeats: number;
+    },
+    authorization?: string
+) => callPostApi('api/v1/rooms', payload, authorization, null, true);
+
 export const getProfile = (authorization: string) => callGetApi(apiBaseUrl + `/api/v1/user-profile`, authorization);
 
 // public APIs
