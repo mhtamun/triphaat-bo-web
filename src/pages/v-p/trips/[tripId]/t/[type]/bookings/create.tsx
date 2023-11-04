@@ -1,8 +1,9 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useCallback, useMemo, FormEvent } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { FormikValues } from 'formik';
 import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Messages } from 'primereact/messages';
@@ -10,6 +11,7 @@ import { Fieldset } from 'primereact/fieldset';
 import { InputText } from 'primereact/inputtext';
 import { DataView } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
+import { CalendarDateTemplateEvent } from 'primereact/calendar';
 import { useTimer } from 'react-timer-hook';
 import _ from 'lodash';
 
@@ -23,7 +25,6 @@ import {
     searchCustomersForVendor,
     lockBooking,
 } from '../../../../../../../apis';
-import { FormikValues } from 'formik';
 import { getSeverity } from '../../../../../../../utils';
 import WrapperComponent from '../../../../../../../components/trips/WrapperComponent';
 
@@ -244,7 +245,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                     ' - ' +
                                     _.join(variant.reasons, ', '),
                             })),
-                            onChange: (name: string, value: any, setFieldValue) => {
+                            onChange: (name: string, value: any, setFieldValue: any) => {
                                 console.debug({ name, value });
 
                                 const variant = _.find(variants, variant => variant.id === value);
@@ -289,7 +290,31 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                 return null;
                             },
                         },
-                    ]}
+                        {
+                            type: 'date',
+                            name: 'date',
+                            placeholder: 'Select trip date',
+                            title: 'Trip Date',
+                            initialValue: null,
+                            minDate: new Date(),
+                            disabledDates: [new Date(new Date().setDate(new Date().getDate() + 1))],
+                            disabledDatesTemplate: (date: CalendarDateTemplateEvent) => (
+                                <strong style={{ color: 'red' }}>{date.day}</strong>
+                            ),
+                            enabledDatesTemplate: (date: CalendarDateTemplateEvent) => (
+                                <strong style={{ color: 'green' }}>{date.day}</strong>
+                            ),
+                            validate: (values: any) => {
+                                if (!values.date) return 'Required';
+
+                                return null;
+                            },
+                        },
+                    ].filter(field => {
+                        if (router.query.type === '0000' && field.name === 'date') return false;
+
+                        return true;
+                    })}
                     submitButtonShow={!isBookingInitiated}
                     submitButtonText="Check if seat is available"
                     callback={(values: FormikValues) => {

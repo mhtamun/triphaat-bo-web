@@ -1,7 +1,7 @@
 import React from 'react';
-import { Calendar, CalendarChangeEvent } from 'primereact/calendar';
+import { Calendar, CalendarChangeEvent, CalendarDateTemplateEvent } from 'primereact/calendar';
 import moment from 'moment';
-import { DATE_FORMAT, convertDateToIsoString, convertIsoStringToDate } from '../../utils/date';
+import { DATE_FORMAT } from '../../utils/date';
 
 const InputDateField = (props: {
     type?: string;
@@ -16,6 +16,9 @@ const InputDateField = (props: {
     isMultiple?: boolean;
     minDate?: Date;
     maxDate?: Date;
+    disabledDates?: Date[];
+    disabledDatesTemplate?: (date: CalendarDateTemplateEvent) => React.ReactNode;
+    enabledDatesTemplate?: (date: CalendarDateTemplateEvent) => React.ReactNode;
     isDisabled?: boolean;
     errorMessage?: string;
 }) => {
@@ -32,6 +35,9 @@ const InputDateField = (props: {
         isMultiple,
         minDate,
         maxDate,
+        disabledDates,
+        disabledDatesTemplate,
+        enabledDatesTemplate,
         isDisabled = false,
         errorMessage = '',
     } = props;
@@ -46,8 +52,24 @@ const InputDateField = (props: {
             !element ? '' : moment(element, DATE_FORMAT.DATETIME_SERVER).toDate()
         );
     }
-
     // console.debug({ tempValue });
+
+    const dateTemplate = (date: CalendarDateTemplateEvent) => {
+        if (!disabledDates || !enabledDatesTemplate || !disabledDatesTemplate) return date.day;
+
+        if (
+            disabledDates.some(
+                disabledDate =>
+                    disabledDate.getDate() === date.day &&
+                    disabledDate.getMonth() === date.month &&
+                    disabledDate.getFullYear() === date.year
+            )
+        ) {
+            return disabledDatesTemplate(date);
+        }
+
+        return enabledDatesTemplate(date);
+    };
 
     return (
         <div className="field p-fluid">
@@ -96,8 +118,10 @@ const InputDateField = (props: {
                 readOnlyInput={isRange || isMultiple}
                 minDate={minDate}
                 maxDate={maxDate}
+                disabledDates={disabledDates}
                 showIcon
                 showButtonBar
+                dateTemplate={dateTemplate}
                 // touchUI
                 // inline={isMultiple}
                 // numberOfMonths={!isMultiple ? 1 : 2}

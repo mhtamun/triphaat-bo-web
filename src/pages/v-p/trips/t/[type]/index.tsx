@@ -14,7 +14,7 @@ import { getAuthorized } from '../../../../../libs/auth';
 import GenericViewGenerator from '../../../../../components/global/GenericViewGenerator';
 import { getLocations } from '../../../../../apis';
 import { DATE_FORMAT, getFormattedDatetime } from '../../../../../utils/date';
-import { generateQueryPath, getGeneralStatusOptions } from '../../../../../utils';
+import { generateQueryPath, getGeneralStatusOptions, getTripType } from '../../../../../utils';
 import { FilterComponent, PaginatorComponent } from '../../../../../components';
 import { ILocation } from './create';
 
@@ -43,19 +43,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
     const router = useRouter();
     // console.debug({ query: router.query });
 
-    const types = {} as any;
-
-    if (router.query.type === '0000') {
-        types.dateType = 'FIXED';
-        types.accommodationType = 'FIXED';
-        types.transportationType = 'FIXED';
-        types.foodType = 'FIXED';
-    } else if (router.query.type === '1100') {
-        types.dateType = 'ON_DEMAND_SINGLE';
-        types.accommodationType = 'ON_DEMAND_ROOM_SEAT';
-        types.transportationType = 'FIXED';
-        types.foodType = 'FIXED';
-    }
+    const types = getTripType(router);
 
     return (
         <Card title="Trips" subTitle="Manage trips here!">

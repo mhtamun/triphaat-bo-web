@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
+import { CalendarDateTemplateEvent } from 'primereact/calendar';
 import {
     InputTextField,
     InputDateField,
@@ -27,6 +28,9 @@ export interface IField {
     isGroupOptions?: boolean; // only for multi select dropdowns
     minDate?: Date; // only for date picker
     maxDate?: Date; // only for date picker
+    disabledDates?: Date[]; // only for date picker
+    disabledDatesTemplate?: (date: CalendarDateTemplateEvent) => React.ReactNode; // only for date picker
+    enabledDatesTemplate?: (date: CalendarDateTemplateEvent) => React.ReactNode; // only for date picker
     acceptType?: 'image/*' | 'video/*' | 'application/*' | '*/*'; // only for file select
     maxFileSize?: number; // only for file select
     isDisabled?: boolean;
@@ -229,6 +233,9 @@ export default function GenericFormGenerator({
                     setFieldError={formik.setFieldError}
                     minDate={field.minDate}
                     maxDate={field.maxDate}
+                    disabledDates={field.disabledDates}
+                    disabledDatesTemplate={field.disabledDatesTemplate}
+                    enabledDatesTemplate={field.enabledDatesTemplate}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />
@@ -251,6 +258,9 @@ export default function GenericFormGenerator({
                     isMultiple={true}
                     minDate={field.minDate}
                     maxDate={field.maxDate}
+                    disabledDates={field.disabledDates}
+                    disabledDatesTemplate={field.disabledDatesTemplate}
+                    enabledDatesTemplate={field.enabledDatesTemplate}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />
@@ -273,6 +283,9 @@ export default function GenericFormGenerator({
                     isMultiple={false}
                     minDate={field.minDate}
                     maxDate={field.maxDate}
+                    disabledDates={field.disabledDates}
+                    disabledDatesTemplate={field.disabledDatesTemplate}
+                    enabledDatesTemplate={field.enabledDatesTemplate}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />

@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FormikValues } from 'formik';
 import { Fieldset } from 'primereact/fieldset';
-import { Calendar, momentLocalizer, Event } from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import _ from 'lodash';
@@ -14,7 +14,6 @@ import _ from 'lodash';
 import { getAuthorized } from '../../../../../../libs/auth';
 import { WrapperComponent, GenericFormGenerator, ModalConfirmation } from '../../../../../../components';
 import { deleteServiceDate, getServiceDates, getTripForVendor, postServiceDates } from '../../../../../../apis';
-import { getGeneralStatusOptions } from '../../../../../../utils';
 
 const localizer = momentLocalizer(moment);
 

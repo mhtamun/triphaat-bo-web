@@ -15,6 +15,7 @@ import { callPutApi } from '../../../../../../libs/api';
 import { getTripFields } from '../../../t/[type]/create';
 import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
+import { getTripType } from '../../../../../../utils';
 
 export interface ILocation {
     id: number;
@@ -64,25 +65,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
 const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocation[]; trip: any }) => {
     const router = useRouter();
 
-    // console.debug({
-    //     startDate: trip.startDate,
-    //     endDate: trip.endDate,
-    //     expiryDateOfBooking: trip.expiryDateOfBooking,
-    // });
-
-    const types = {} as any;
-
-    if (router.query.type === '0000') {
-        types.dateType = 'FIXED';
-        types.accommodationType = 'FIXED';
-        types.transportationType = 'FIXED';
-        types.foodType = 'FIXED';
-    } else if (router.query.type === '1100') {
-        types.dateType = 'ON_DEMAND_SINGLE';
-        types.accommodationType = 'ON_DEMAND_ROOM_SEAT';
-        types.transportationType = 'FIXED';
-        types.foodType = 'FIXED';
-    }
+    const types = getTripType(router);
 
     return (
         <WrapperComponent title={trip?.name} tripId={tripId} router={router}>

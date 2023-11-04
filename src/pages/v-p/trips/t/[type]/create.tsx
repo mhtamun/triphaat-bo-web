@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { getAuthorized } from '../../../../../libs/auth';
 import GenericFormGenerator, { IField } from '../../../../../components/global/GenericFormGenerator';
 import { getLocations } from '../../../../../apis';
-import { getGeneralStatusOptions } from '../../../../../utils';
+import { getGeneralStatusOptions, getTripType } from '../../../../../utils';
 import { callPostApi } from '../../../../../libs/api';
 
 export interface ILocation {
@@ -325,19 +325,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
 const Page = ({ locations }: { locations: ILocation[] }) => {
     const router = useRouter();
 
-    const types = {} as any;
-
-    if (router.query.type === '0000') {
-        types.dateType = 'FIXED';
-        types.accommodationType = 'FIXED';
-        types.transportationType = 'FIXED';
-        types.foodType = 'FIXED';
-    } else if (router.query.type === '1100') {
-        types.dateType = 'ON_DEMAND_SINGLE';
-        types.accommodationType = 'ON_DEMAND_ROOM_SEAT';
-        types.transportationType = 'FIXED';
-        types.foodType = 'FIXED';
-    }
+    const types = getTripType(router);
 
     return (
         <>

@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { NextRouter } from 'next/router';
 
 export const getUserStatusOptions = () => [
     { value: 'ACTIVE', label: 'ACTIVE' },
@@ -357,4 +358,29 @@ export const generateQueryPath = (pathname: string, pathParams?: any | null, que
         },
         path
     );
+};
+
+export interface ITripType {
+    dateType: string;
+    accommodationType: string;
+    transportationType: string;
+    foodType: string;
+}
+
+export const getTripType = (router: NextRouter): ITripType => {
+    const types = {} as ITripType;
+
+    if (router.query.type === '0000') {
+        types.dateType = 'FIXED';
+        types.accommodationType = 'FIXED';
+        types.transportationType = 'FIXED';
+        types.foodType = 'FIXED';
+    } else if (router.query.type === '1100') {
+        types.dateType = 'ON_DEMAND_SINGLE';
+        types.accommodationType = 'ON_DEMAND_ROOM_SEAT';
+        types.transportationType = 'FIXED';
+        types.foodType = 'FIXED';
+    }
+
+    return types;
 };
