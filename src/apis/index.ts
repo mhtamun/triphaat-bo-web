@@ -1,4 +1,4 @@
-import { callPostApi, callGetApi, IData, callPutApi, callDeleteApi } from '../libs/api';
+import { callPostApi, callGetApi, callPutApi, callDeleteApi } from '../libs/api';
 import { apiBaseUrl } from '../config/env';
 
 // TRIPHAAT admin APIs
@@ -103,7 +103,7 @@ export const reserveBooking = (payload: { bookingId: number }) =>
 export const getTripBookingFacts = (tripId: string, authorization?: string) =>
     callGetApi(`/vendor/api/v1/trips/${tripId}/trip-booking-facts`, authorization);
 
-export const getVendorProfile = (authorization?: string) => callGetApi(`/api/v1/vendor-profile`, authorization);
+export const getVendorProfile = (authorization?: string) => callGetApi(`/vendor/api/v1/vendor-profile`, authorization);
 
 export const updateVendorProfile = (payload: any, authorization?: string) =>
     callPutApi(`/vendor/api/v1/vendor-profile`, payload, null, null, true);
