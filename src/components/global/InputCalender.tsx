@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, CalendarChangeEvent, CalendarDateTemplateEvent } from 'primereact/calendar';
+import { Calendar, CalendarChangeEvent, CalendarDateTemplateEvent, CalendarSelectEvent } from 'primereact/calendar';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../utils/date';
 
@@ -16,9 +16,9 @@ const InputDateField = (props: {
     isMultiple?: boolean;
     minDate?: Date;
     maxDate?: Date;
+    enabledDates?: Date[];
+    notEnabledDateSelectionErrorMessage?: string;
     disabledDates?: Date[];
-    disabledDatesTemplate?: (date: CalendarDateTemplateEvent) => React.ReactNode;
-    enabledDatesTemplate?: (date: CalendarDateTemplateEvent) => React.ReactNode;
     isDisabled?: boolean;
     errorMessage?: string;
 }) => {
@@ -35,9 +35,9 @@ const InputDateField = (props: {
         isMultiple,
         minDate,
         maxDate,
+        enabledDates,
+        notEnabledDateSelectionErrorMessage,
         disabledDates,
-        disabledDatesTemplate,
-        enabledDatesTemplate,
         isDisabled = false,
         errorMessage = '',
     } = props;
@@ -55,20 +55,50 @@ const InputDateField = (props: {
     // console.debug({ tempValue });
 
     const dateTemplate = (date: CalendarDateTemplateEvent) => {
-        if (!disabledDates || !enabledDatesTemplate || !disabledDatesTemplate) return date.day;
+        if (!enabledDates) return date.day;
 
         if (
-            disabledDates.some(
+            enabledDates.some(
                 disabledDate =>
                     disabledDate.getDate() === date.day &&
                     disabledDate.getMonth() === date.month &&
                     disabledDate.getFullYear() === date.year
             )
         ) {
-            return disabledDatesTemplate(date);
+            return (
+                <strong
+                    style={{
+                        color: 'white',
+                        backgroundColor: 'green',
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                    }}
+                >
+                    {date.day}
+                </strong>
+            );
         }
 
-        return enabledDatesTemplate(date);
+        return (
+            <strong
+                style={{
+                    color: 'white',
+                    backgroundColor: 'red',
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    cursor: 'not-allowed',
+                }}
+            >
+                {date.day}
+            </strong>
+        );
     };
 
     return (
@@ -80,18 +110,69 @@ const InputDateField = (props: {
                 placeholder={placeholder}
                 value={tempValue as any}
                 onChange={(e: CalendarChangeEvent) => {
-                    e.preventDefault();
-
                     // console.debug({ e });
 
-                    if (!isRange && !isMultiple) {
-                        // console.debug({ value: e.target.value as Date });
-                        const formattedDate: string = moment(e.target.value as Date).format(DATE_FORMAT.YEAR_MM_DD);
-                        // console.debug({ formattedDate });
+                    e.preventDefault();
 
-                        setFieldValue(e.target.name, new Date(formattedDate).toISOString());
+                    if (e.target.value === null) {
+                        setFieldValue(e.target.name, null);
+
+                        return;
+                    }
+
+                    if (!isRange && !isMultiple) {
+                        const value = e.target.value as Date;
+
+                        if (
+                            enabledDates &&
+                            value &&
+                            !enabledDates.some(
+                                enabledDate =>
+                                    enabledDate.getDate() === value.getDate() &&
+                                    enabledDate.getMonth() === value.getMonth() &&
+                                    enabledDate.getFullYear() === value.getFullYear()
+                            )
+                        ) {
+                            // setFieldValue(e.target.name, null);
+
+                            setFieldError(
+                                e.target.name,
+                                !notEnabledDateSelectionErrorMessage
+                                    ? 'This date is not available for selection or is not within the allowed dates.'
+                                    : notEnabledDateSelectionErrorMessage
+                            );
+
+                            return;
+                        }
+
+                        setFieldValue(
+                            e.target.name,
+                            new Date(moment(value).format(DATE_FORMAT.YEAR_MM_DD)).toISOString()
+                        );
                     } else {
                         const value: Date[] = e.target.value as Date[];
+
+                        if (
+                            enabledDates &&
+                            value &&
+                            !enabledDates.some(
+                                enabledDate =>
+                                    enabledDate.getDate() === value[0].getDate() &&
+                                    enabledDate.getMonth() === value[0].getMonth() &&
+                                    enabledDate.getFullYear() === value[0].getFullYear()
+                            )
+                        ) {
+                            // setFieldValue(e.target.name, null);
+
+                            setFieldError(
+                                e.target.name,
+                                !notEnabledDateSelectionErrorMessage
+                                    ? 'This date is not available for selection or is not within the allowed dates.'
+                                    : notEnabledDateSelectionErrorMessage
+                            );
+
+                            return;
+                        }
 
                         setFieldValue(
                             e.target.name,
@@ -118,13 +199,12 @@ const InputDateField = (props: {
                 readOnlyInput={isRange || isMultiple}
                 minDate={minDate}
                 maxDate={maxDate}
-                disabledDates={disabledDates}
+                disabledDates={!enabledDates ? disabledDates : undefined}
+                hideOnDateTimeSelect
                 showIcon
                 showButtonBar
                 dateTemplate={dateTemplate}
-                // touchUI
-                // inline={isMultiple}
-                // numberOfMonths={!isMultiple ? 1 : 2}
+                // formatDateTime={(date: Date) => date.toISOString()}
                 disabled={isDisabled}
                 className={!errorMessage ? '' : 'p-invalid'}
                 aria-describedby={`${name}-help`}

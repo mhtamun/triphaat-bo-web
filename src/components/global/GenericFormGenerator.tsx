@@ -28,9 +28,9 @@ export interface IField {
     isGroupOptions?: boolean; // only for multi select dropdowns
     minDate?: Date; // only for date picker
     maxDate?: Date; // only for date picker
+    enabledDates?: Date[]; // only for date picker
+    notEnabledDateSelectionErrorMessage?: string;
     disabledDates?: Date[]; // only for date picker
-    disabledDatesTemplate?: (date: CalendarDateTemplateEvent) => React.ReactNode; // only for date picker
-    enabledDatesTemplate?: (date: CalendarDateTemplateEvent) => React.ReactNode; // only for date picker
     acceptType?: 'image/*' | 'video/*' | 'application/*' | '*/*'; // only for file select
     maxFileSize?: number; // only for file select
     isDisabled?: boolean;
@@ -233,9 +233,9 @@ export default function GenericFormGenerator({
                     setFieldError={formik.setFieldError}
                     minDate={field.minDate}
                     maxDate={field.maxDate}
+                    enabledDates={field.enabledDates}
+                    notEnabledDateSelectionErrorMessage={field.notEnabledDateSelectionErrorMessage}
                     disabledDates={field.disabledDates}
-                    disabledDatesTemplate={field.disabledDatesTemplate}
-                    enabledDatesTemplate={field.enabledDatesTemplate}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />
@@ -258,9 +258,9 @@ export default function GenericFormGenerator({
                     isMultiple={true}
                     minDate={field.minDate}
                     maxDate={field.maxDate}
+                    enabledDates={field.enabledDates}
+                    notEnabledDateSelectionErrorMessage={field.notEnabledDateSelectionErrorMessage}
                     disabledDates={field.disabledDates}
-                    disabledDatesTemplate={field.disabledDatesTemplate}
-                    enabledDatesTemplate={field.enabledDatesTemplate}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />
@@ -283,9 +283,9 @@ export default function GenericFormGenerator({
                     isMultiple={false}
                     minDate={field.minDate}
                     maxDate={field.maxDate}
+                    enabledDates={field.enabledDates}
+                    notEnabledDateSelectionErrorMessage={field.notEnabledDateSelectionErrorMessage}
                     disabledDates={field.disabledDates}
-                    disabledDatesTemplate={field.disabledDatesTemplate}
-                    enabledDatesTemplate={field.enabledDatesTemplate}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />

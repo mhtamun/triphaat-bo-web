@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo, FormEvent } from 'react';
+import React, { useState, useRef, useCallback, useMemo, FormEvent, useEffect } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
@@ -11,7 +11,6 @@ import { Fieldset } from 'primereact/fieldset';
 import { InputText } from 'primereact/inputtext';
 import { DataView } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
-import { CalendarDateTemplateEvent } from 'primereact/calendar';
 import { useTimer } from 'react-timer-hook';
 import _ from 'lodash';
 
@@ -24,6 +23,8 @@ import {
     initBooking,
     searchCustomersForVendor,
     lockBooking,
+    getServiceDates,
+    getRooms,
 } from '../../../../../../../apis';
 import { getSeverity } from '../../../../../../../utils';
 import WrapperComponent from '../../../../../../../components/trips/WrapperComponent';
@@ -86,6 +87,9 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
 
     const router = useRouter();
 
+    const [serviceDates, setServiceDates] = useState<Date[] | null>(null);
+    const [rooms, setRooms] = useState<any[] | null>(null);
+    // console.debug({ rooms });
     const [isBookingInitiated, setBookingInitiated] = useState<boolean>(false);
     const [jobId, setJobId] = useState<number>(0);
     const [bookingId, setBookingId] = useState<number>(0);
@@ -130,7 +134,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                     // console.debug({ response });
 
                     if (response.statusCode === 200) {
-                        router.push('/v-p/trips/' + tripId + '/bookings');
+                        router.push('/v-p/trips/' + tripId + '/t/' + router.query.type + '/bookings');
                     }
                 })
                 .catch(error => {
@@ -184,6 +188,57 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
             </div>
         );
     };
+
+    useEffect(() => {
+        if (router.query.type === '1100') {
+            getServiceDates(tripId)
+                .then(response => {
+                    // console.debug({ response });
+
+                    if (!response) throw new Error('Something went wrong!');
+
+                    if (response.statusCode !== 200) throw new Error(response.message);
+
+                    setServiceDates(response.data.map((datum: any) => new Date(datum.date)));
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            getRooms(tripId)
+                .then(response => {
+                    // console.debug({ response });
+
+                    if (!response) throw new Error('Something went wrong!');
+
+                    if (response.statusCode !== 200) throw new Error(response.message);
+
+                    const tempRooms = [];
+
+                    for (const room of response.data) {
+                        const items = [];
+
+                        for (const seat of room.seats) {
+                            items.push({
+                                value: seat.id,
+                                label: `Seat: ${seat.identifier}`,
+                            });
+                        }
+
+                        tempRooms.push({
+                            value: room.id,
+                            label: `Room: ${room.identifier}`,
+                            items,
+                        });
+                    }
+
+                    setRooms(tempRooms);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }, [router.query.type]);
 
     return !variants || _.size(variants) === 0 ? (
         <div className="card">
@@ -246,7 +301,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                     _.join(variant.reasons, ', '),
                             })),
                             onChange: (name: string, value: any, setFieldValue: any) => {
-                                console.debug({ name, value });
+                                // console.debug({ name, value });
 
                                 const variant = _.find(variants, variant => variant.id === value);
 
@@ -297,21 +352,47 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                             title: 'Trip Date',
                             initialValue: null,
                             minDate: new Date(),
-                            disabledDates: [new Date(new Date().setDate(new Date().getDate() + 1))],
-                            disabledDatesTemplate: (date: CalendarDateTemplateEvent) => (
-                                <strong style={{ color: 'red' }}>{date.day}</strong>
-                            ),
-                            enabledDatesTemplate: (date: CalendarDateTemplateEvent) => (
-                                <strong style={{ color: 'green' }}>{date.day}</strong>
-                            ),
+                            enabledDates: serviceDates ?? [],
+                            notEnabledDateSelectionErrorMessage:
+                                'This date is not available for selection or is not within the service dates.',
                             validate: (values: any) => {
                                 if (!values.date) return 'Required';
+
+                                // const value = new Date(values.date);
+                                // console.debug({ value });
+
+                                // if (
+                                //     serviceDates &&
+                                //     !serviceDates.some(
+                                //         enabledDate =>
+                                //             enabledDate.getDate() === value.getDate() &&
+                                //             enabledDate.getMonth() === value.getMonth() &&
+                                //             enabledDate.getFullYear() === value.getFullYear()
+                                //     )
+                                // )
+                                //     return 'This date is not available for selection or is not within the service dates.';
+
+                                return null;
+                            },
+                            // col: 2,
+                        },
+                        {
+                            type: 'multi-select-sync',
+                            name: 'seats',
+                            placeholder: 'Select seats...',
+                            title: 'Trips Seats',
+                            initialValue: null,
+                            options: rooms ?? [],
+                            isGroupOptions: true,
+                            validate: (values: any) => {
+                                if (!values.seats) return 'Required';
 
                                 return null;
                             },
                         },
                     ].filter(field => {
                         if (router.query.type === '0000' && field.name === 'date') return false;
+                        if (router.query.type === '0000' && field.name === 'seats') return false;
 
                         return true;
                     })}
@@ -361,7 +442,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                 }
                             })
                             .catch(error => {
-                                // console.error(error);
+                                console.error(error);
 
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                 // @ts-ignore

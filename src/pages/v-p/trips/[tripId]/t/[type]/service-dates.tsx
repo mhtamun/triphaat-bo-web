@@ -101,7 +101,7 @@ const Page = ({ tripId, trip, serviceDates }: { tripId: string; trip: any; servi
                             .then(response => {
                                 // console.debug({ response });
 
-                                if (!response) throw new Error('API call not resolved!');
+                                if (!response) throw new Error('Something went wrong!');
 
                                 if (response.statusCode !== 200) throw new Error(response.message);
 
@@ -152,7 +152,7 @@ const Page = ({ tripId, trip, serviceDates }: { tripId: string; trip: any; servi
                             .then(response => {
                                 // console.debug({ response });
 
-                                if (!response) throw new Error('API call not resolved!');
+                                if (!response) throw new Error('Something went wrong!');
 
                                 if (response.statusCode !== 200) throw new Error(response.message);
 

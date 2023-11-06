@@ -89,7 +89,7 @@ const Page = ({ vendor, tripId, tripBookingPayment }: { vendor: IVendor; tripId:
                                                 response => {
                                                     console.debug({ response });
 
-                                                    if (!response) throw new Error('API call not resolved!');
+                                                    if (!response) throw new Error('Something went wrong!');
 
                                                     if (response.statusCode === 200) router.reload();
                                                 }
@@ -110,7 +110,7 @@ const Page = ({ vendor, tripId, tripBookingPayment }: { vendor: IVendor; tripId:
                                                 response => {
                                                     console.debug({ response });
 
-                                                    if (!response) throw new Error('API call not resolved!');
+                                                    if (!response) throw new Error('Something went wrong!');
 
                                                     if (response.statusCode === 200) router.reload();
                                                 }
@@ -141,7 +141,7 @@ const Page = ({ vendor, tripId, tripBookingPayment }: { vendor: IVendor; tripId:
                                                 .then(response => {
                                                     console.debug({ response });
 
-                                                    if (!response) throw new Error('API call not resolved!');
+                                                    if (!response) throw new Error('Something went wrong!');
 
                                                     if (response.statusCode === 200) {
                                                         return reserveBooking({ bookingId: response.data.bookingId });
@@ -152,7 +152,7 @@ const Page = ({ vendor, tripId, tripBookingPayment }: { vendor: IVendor; tripId:
                                                 .then(response => {
                                                     console.debug({ response });
 
-                                                    if (!response) throw new Error('Previous API call not resolved!');
+                                                    if (!response) throw new Error('Previous Something went wrong!');
 
                                                     if (response.statusCode === 200) router.reload();
                                                 })

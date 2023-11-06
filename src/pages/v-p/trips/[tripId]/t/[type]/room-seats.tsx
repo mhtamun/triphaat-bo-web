@@ -63,7 +63,7 @@ const Page = ({ tripId, trip, roomSeats }: { tripId: string; trip: any; roomSeat
                             .then(response => {
                                 // console.debug({ response });
 
-                                if (!response) throw new Error('API call not resolved!');
+                                if (!response) throw new Error('Something went wrong!');
 
                                 if (response.statusCode !== 200) throw new Error(response.message);
 
@@ -173,7 +173,7 @@ const Page = ({ tripId, trip, roomSeats }: { tripId: string; trip: any; roomSeat
                             .then(response => {
                                 // console.debug({ response });
 
-                                if (!response) throw new Error('API call not resolved!');
+                                if (!response) throw new Error('Something went wrong!');
 
                                 if (response.statusCode !== 200) throw new Error(response.message);
 
