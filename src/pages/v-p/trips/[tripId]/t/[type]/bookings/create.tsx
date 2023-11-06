@@ -87,7 +87,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
 
     const router = useRouter();
 
-    const [serviceDates, setServiceDates] = useState<Date[] | null>(null);
+    const [serviceDates, setServiceDates] = useState<any[] | null>(null);
     const [rooms, setRooms] = useState<any[] | null>(null);
     // console.debug({ rooms });
     const [isBookingInitiated, setBookingInitiated] = useState<boolean>(false);
@@ -199,7 +199,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
 
                     if (response.statusCode !== 200) throw new Error(response.message);
 
-                    setServiceDates(response.data.map((datum: any) => new Date(datum.date)));
+                    setServiceDates(response.data);
                 })
                 .catch(error => {
                     console.error(error);
@@ -213,32 +213,33 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
 
                     if (response.statusCode !== 200) throw new Error(response.message);
 
-                    const tempRooms = [];
-
-                    for (const room of response.data) {
-                        const items = [];
-
-                        for (const seat of room.seats) {
-                            items.push({
-                                value: seat.id,
-                                label: `Seat: ${seat.identifier}`,
-                            });
-                        }
-
-                        tempRooms.push({
-                            value: room.id,
-                            label: `Room: ${room.identifier}`,
-                            items,
-                        });
-                    }
-
-                    setRooms(tempRooms);
+                    setRooms(response.data);
                 })
                 .catch(error => {
                     console.error(error);
                 });
         }
     }, [router.query.type]);
+
+    const formattedRooms = [];
+
+    if (rooms && rooms.length > 0)
+        for (const room of rooms) {
+            const items = [];
+
+            for (const seat of room.seats) {
+                items.push({
+                    value: `${seat.id}-${room.id}`,
+                    label: `Seat: ${seat.identifier}`,
+                });
+            }
+
+            formattedRooms.push({
+                value: room.id,
+                label: `Room: ${room.identifier}`,
+                items,
+            });
+        }
 
     return !variants || _.size(variants) === 0 ? (
         <div className="card">
@@ -352,37 +353,23 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                             title: 'Trip Date',
                             initialValue: null,
                             minDate: new Date(),
-                            enabledDates: serviceDates ?? [],
+                            enabledDates: _.map(serviceDates, (serviceDate: any) => new Date(serviceDate.date)) ?? [],
                             notEnabledDateSelectionErrorMessage:
                                 'This date is not available for selection or is not within the service dates.',
                             validate: (values: any) => {
                                 if (!values.date) return 'Required';
 
-                                // const value = new Date(values.date);
-                                // console.debug({ value });
-
-                                // if (
-                                //     serviceDates &&
-                                //     !serviceDates.some(
-                                //         enabledDate =>
-                                //             enabledDate.getDate() === value.getDate() &&
-                                //             enabledDate.getMonth() === value.getMonth() &&
-                                //             enabledDate.getFullYear() === value.getFullYear()
-                                //     )
-                                // )
-                                //     return 'This date is not available for selection or is not within the service dates.';
-
                                 return null;
                             },
-                            // col: 2,
+                            col: 2,
                         },
                         {
                             type: 'multi-select-sync',
                             name: 'seats',
                             placeholder: 'Select seats...',
-                            title: 'Trips Seats',
+                            title: 'Trip Seats',
                             initialValue: null,
-                            options: rooms ?? [],
+                            options: formattedRooms ?? [],
                             isGroupOptions: true,
                             validate: (values: any) => {
                                 if (!values.seats) return 'Required';
@@ -401,11 +388,21 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                     callback={(values: FormikValues) => {
                         // console.debug({ values });
 
+                        const serviceDateId = _.find(serviceDates, serviceDate => serviceDate.date === values.date).id;
+                        // console.debug({ serviceDateId });
+                        const roomSeats = _.map(values.seats, (seat: string) => ({
+                            roomId: parseInt(_.split(seat, '-')[1]),
+                            seatId: parseInt(_.split(seat, '-')[0]),
+                        }));
+                        // console.debug({ roomSeats });
+
                         initBooking({
                             tripId: parseInt(tripId),
                             variantId: values.variantId,
                             pricePerPerson: parseFloat(values.pricePerPerson),
                             numberOfTravelers: parseInt(values.numberOfTravelers),
+                            serviceDateId,
+                            roomSeats,
                         })
                             .then(response => {
                                 // console.debug({ response });

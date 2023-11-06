@@ -54,6 +54,13 @@ export const initBooking = (payload: {
     variantId: number;
     pricePerPerson: number;
     numberOfTravelers: number;
+    serviceDateId?: number | null;
+    roomSeats?:
+        | {
+              roomId: number;
+              seatId: number;
+          }[]
+        | null;
 }) => callPostApi('/vendor/api/v1/init-trip-booking', payload, null, null, true);
 
 export const lockBooking = (payload: {
