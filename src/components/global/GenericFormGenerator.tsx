@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
+import { CalendarDateTemplateEvent } from 'primereact/calendar';
 import {
     InputTextField,
     InputDateField,
@@ -25,9 +26,11 @@ export interface IField {
         items?: { value: boolean | number | string; label: string }[];
     }[];
     isGroupOptions?: boolean; // only for multi select dropdowns
-    isRange?: boolean; // only for date picker
     minDate?: Date; // only for date picker
     maxDate?: Date; // only for date picker
+    enabledDates?: Date[]; // only for date picker
+    notEnabledDateSelectionErrorMessage?: string;
+    disabledDates?: Date[]; // only for date picker
     acceptType?: 'image/*' | 'video/*' | 'application/*' | '*/*'; // only for file select
     maxFileSize?: number; // only for file select
     isDisabled?: boolean;
@@ -149,10 +152,10 @@ export default function GenericFormGenerator({
 
         onReset: (values: FormikValues) => {
             // console.debug({ values });
-
-            if (submitButtonShow && callback) {
-                callback(null);
-            }
+            // if (submitButtonShow && callback) {
+            //     callback(null);
+            // }
+            // toto: Fix
         },
     });
 
@@ -228,9 +231,61 @@ export default function GenericFormGenerator({
                     setFieldValue={formik.setFieldValue}
                     setFieldTouched={formik.setFieldTouched}
                     setFieldError={formik.setFieldError}
-                    isRange={field.isRange}
                     minDate={field.minDate}
                     maxDate={field.maxDate}
+                    enabledDates={field.enabledDates}
+                    notEnabledDateSelectionErrorMessage={field.notEnabledDateSelectionErrorMessage}
+                    disabledDates={field.disabledDates}
+                    isDisabled={field.isDisabled}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'date-multiple')
+            return (
+                <InputDateField
+                    key={field.name}
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    value={formik.values[field.name] ?? ''}
+                    setFieldValue={formik.setFieldValue}
+                    setFieldTouched={formik.setFieldTouched}
+                    setFieldError={formik.setFieldError}
+                    isRange={false}
+                    isMultiple={true}
+                    minDate={field.minDate}
+                    maxDate={field.maxDate}
+                    enabledDates={field.enabledDates}
+                    notEnabledDateSelectionErrorMessage={field.notEnabledDateSelectionErrorMessage}
+                    disabledDates={field.disabledDates}
+                    isDisabled={field.isDisabled}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'date-range')
+            return (
+                <InputDateField
+                    key={field.name}
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    value={formik.values[field.name] ?? ''}
+                    setFieldValue={formik.setFieldValue}
+                    setFieldTouched={formik.setFieldTouched}
+                    setFieldError={formik.setFieldError}
+                    isRange={true}
+                    isMultiple={false}
+                    minDate={field.minDate}
+                    maxDate={field.maxDate}
+                    enabledDates={field.enabledDates}
+                    notEnabledDateSelectionErrorMessage={field.notEnabledDateSelectionErrorMessage}
+                    disabledDates={field.disabledDates}
                     isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />

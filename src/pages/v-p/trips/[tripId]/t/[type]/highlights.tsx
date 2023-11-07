@@ -8,15 +8,15 @@ import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../libs/auth';
-import GenericViewGenerator from '../../../../components/global/GenericViewGenerator';
-import { getTripForVendor } from '../../../../apis';
-import { getGeneralStatusOptions } from '../../../../utils';
-import TabViewComponent from '../../../../components/trips/TabViewComponent';
-import WrapperComponent from '../../../../components/trips/WrapperComponent';
+import { getAuthorized } from '../../../../../../libs/auth';
+import GenericViewGenerator from '../../../../../../components/global/GenericViewGenerator';
+import { getTripForVendor } from '../../../../../../apis';
+import { getGeneralStatusOptions } from '../../../../../../utils';
+import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
+import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'FAQs | Trip Management', async cookies => {
+    getAuthorized(context, 'Highlights | Trip Management', async cookies => {
         const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -45,17 +45,16 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={7}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
                     () => (
                         <GenericViewGenerator
-                            name={'FAQ'}
-                            title="Trip FAQs"
-                            subtitle="Manage trip faqs here!"
+                            name={'Highlight'}
+                            title="Trip Highlights"
+                            subtitle="Manage trip highlights here!"
                             viewAll={{
-                                uri: `/api/v1/trips/${tripId}/faqs`,
+                                uri: `/api/v1/trips/${tripId}/highlights`,
                                 ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                 scopedColumns: {
                                     status: (item: any) => (
@@ -75,13 +74,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     })),
                             }}
                             addNew={{
-                                uri: `/api/v1/faqs`,
-                                buttonText: 'Add FAQ',
+                                uri: `/api/v1/highlights`,
+                                buttonText: 'Add Highlight',
                             }}
-                            viewOne={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
-                            editExisting={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
+                            viewOne={{ uri: '/api/v1/highlights/{id}', identifier: '{id}' }}
+                            editExisting={{ uri: '/api/v1/highlights/{id}', identifier: '{id}' }}
                             removeOne={{
-                                uri: '/api/v1/faqs/{id}',
+                                uri: '/api/v1/highlights/{id}',
                                 identifier: '{id}',
                             }}
                             fields={[
@@ -99,24 +98,12 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 },
                                 {
                                     type: 'text',
-                                    name: 'question',
-                                    placeholder: 'Enter a question for this FAQ!',
-                                    title: 'Question',
+                                    name: 'note',
+                                    placeholder: 'Enter a highlight note for this trip!',
+                                    title: 'Note',
                                     initialValue: null,
                                     validate: (values: any) => {
-                                        if (!values.question) return 'Required!';
-
-                                        return null;
-                                    },
-                                },
-                                {
-                                    type: 'text',
-                                    name: 'answer',
-                                    placeholder: 'Enter a answer for this FAQ!',
-                                    title: 'Answer',
-                                    initialValue: null,
-                                    validate: (values: any) => {
-                                        if (!values.answer) return 'Required!';
+                                        if (!values.note) return 'Required!';
 
                                         return null;
                                     },

@@ -8,19 +8,17 @@ import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../libs/auth';
-import GenericViewGenerator from '../../../../components/global/GenericViewGenerator';
-import { getTripForVendor } from '../../../../apis';
-import { getGeneralStatusOptions } from '../../../../utils';
-import TabViewComponent from '../../../../components/trips/TabViewComponent';
-import WrapperComponent from '../../../../components/trips/WrapperComponent';
+import { getAuthorized } from '../../../../../../libs/auth';
+import GenericViewGenerator from '../../../../../../components/global/GenericViewGenerator';
+import { getTripForVendor } from '../../../../../../apis';
+import { getGeneralStatusOptions, getVariantOptions } from '../../../../../../utils';
+import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
+import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Variants | Trip Management', async cookies => {
-        const tripId = context.query.tripId;
+        const tripId = context.query.tripId as string;
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetTrip || responseGetTrip.statusCode !== 200) {
@@ -45,7 +43,6 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={1}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
@@ -87,7 +84,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 onDataModify: data =>
                                     _.map(data, datum => ({
                                         id: datum.id,
-                                        reasons: _.join(datum.otherReasons, ', '),
+                                        reasons: _.join(datum.reasons, ', '),
                                         costPrice: parseFloat(datum.costPricePerPerson),
                                         price: parseFloat(datum.pricePerPerson),
                                         offerPrice: parseFloat(datum.offerPricePerPerson),
@@ -255,11 +252,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     show: () => false,
                                 },
                                 {
-                                    type: 'chips',
-                                    name: 'otherReasons',
-                                    placeholder: 'Enter reasons (press enter to start new line)!',
-                                    title: 'Reasons',
+                                    type: 'multi-select-sync',
+                                    name: 'reasons',
+                                    placeholder: 'Enter diversity reasons (press enter to start new line)!',
+                                    title: 'Reasons (Diversification)',
                                     initialValue: null,
+                                    options: getVariantOptions(),
+                                    isGroupOptions: true,
                                     validate: (values: any) => {
                                         if (
                                             _.size(values.accommodationType) === 0 &&
@@ -270,7 +269,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             _.size(values.transportationSharing) === 0 &&
                                             _.size(values.foodType) === 0 &&
                                             _.size(values.foodClass) === 0 &&
-                                            !values.otherReasons
+                                            !values.reasons
                                         )
                                             return 'Please at least define what differs this variant from other variants!';
 

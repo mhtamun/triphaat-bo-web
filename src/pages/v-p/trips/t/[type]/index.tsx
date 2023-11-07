@@ -10,16 +10,16 @@ import { PrimeIcons } from 'primereact/api';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../libs/auth';
-import GenericViewGenerator from '../../../components/global/GenericViewGenerator';
-import { getLocations } from '../../../apis';
-import { DATE_FORMAT, getFormattedDatetime } from '../../../utils/date';
-import { generateQueryPath, getGeneralStatusOptions } from '../../../utils';
-import { FilterComponent, PaginatorComponent } from '../../../components/';
+import { getAuthorized } from '../../../../../libs/auth';
+import GenericViewGenerator from '../../../../../components/global/GenericViewGenerator';
+import { getLocations } from '../../../../../apis';
+import { DATE_FORMAT, getFormattedDatetime } from '../../../../../utils/date';
+import { generateQueryPath, getGeneralStatusOptions, getTripType } from '../../../../../utils';
+import { FilterComponent, PaginatorComponent } from '../../../../../components';
 import { ILocation } from './create';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Fix Package Trips | Trip Trip Management', async cookies => {
+    getAuthorized(context, 'Trips | Trip Management', async cookies => {
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetLocations || responseGetLocations.statusCode !== 200) {
@@ -41,6 +41,9 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
 const Page = ({ locations }: { locations: ILocation[] }) => {
     const router = useRouter();
+    // console.debug({ query: router.query });
+
+    const types = getTripType(router);
 
     return (
         <Card title="Trips" subTitle="Manage trips here!">
@@ -52,7 +55,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                 onClick={e => {
                     e.preventDefault();
 
-                    router.push(`/v-p/fixed-package-trips/create`);
+                    router.push(`/v-p/trips/t/${router.query.type}/create`);
                 }}
             />
             {useMemo(
@@ -60,18 +63,25 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                     <GenericViewGenerator
                         name={'Trip'}
                         viewAll={{
-                            uri: `/vendor/api/v1/date-types/FIXED/accommodation-types/FIXED/transportation-types/FIXED/trips${generateQueryPath(
+                            uri: `/vendor/api/v1/date-types/${types.dateType}/accommodation-types/${
+                                types.accommodationType
+                            }/transportation-types/${types.transportationType}/trips${generateQueryPath(
                                 '',
-                                null,
-                                router.query
+                                { type: router.query.type },
+                                { ..._.omit(router.query, ['type']) }
                             )}`,
                             ignoredColumns: [
                                 'id',
                                 'vendorId',
                                 'locationId',
                                 'dateType',
+                                'dateTypeOther',
                                 'accommodationType',
+                                'accommodationTypeOther',
                                 'transportationType',
+                                'transportationTypeOther',
+                                'foodType',
+                                'foodTypeOther',
                                 'smallDescription',
                                 'bigDescription',
                                 'createdAt',
@@ -92,21 +102,25 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                             onDataModify: data =>
                                 _.map(data, datum => ({
                                     ...datum,
-                                    startDate: getFormattedDatetime(datum.startDate, DATE_FORMAT.DATE_REPORT),
-                                    endDate: getFormattedDatetime(datum.endDate, DATE_FORMAT.DATE_REPORT),
-                                    expiryDateOfBooking: getFormattedDatetime(
-                                        datum.expiryDateOfBooking,
-                                        DATE_FORMAT.DATE_REPORT
-                                    ),
+                                    startDate: !datum.startDate
+                                        ? null
+                                        : getFormattedDatetime(datum.startDate, DATE_FORMAT.DATE_REPORT),
+                                    endDate: !datum.endDate
+                                        ? null
+                                        : getFormattedDatetime(datum.endDate, DATE_FORMAT.DATE_REPORT),
+                                    expiryDateOfBooking: !datum.expiryDateOfBooking
+                                        ? null
+                                        : getFormattedDatetime(datum.expiryDateOfBooking, DATE_FORMAT.DATE_REPORT),
                                 })),
                         }}
                         customActions={[
                             {
                                 color: 'info',
                                 icon: PrimeIcons.ARROW_RIGHT,
-                                text: 'Detail',
+                                text: '',
+                                tooltip: 'Enter trip management',
                                 callback: identifier => {
-                                    router.push(`/v-p/fixed-package-trips/${identifier}`);
+                                    router.push(`/v-p/trips/${identifier}/t/${router.query.type}`);
                                 },
                             },
                         ]}
@@ -169,9 +183,10 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                                     },
                                 ]}
                                 router={router}
+                                pathParams={{ type: router.query.type }}
                             />
                         }
-                        pagination={<PaginatorComponent router={router} />}
+                        pagination={<PaginatorComponent router={router} pathParams={{ type: router.query.type }} />}
                     />
                 ),
                 [router]

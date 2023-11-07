@@ -8,15 +8,15 @@ import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../libs/auth';
-import GenericViewGenerator from '../../../../components/global/GenericViewGenerator';
-import { getTripForVendor } from '../../../../apis';
-import { getGeneralStatusOptions } from '../../../../utils';
-import TabViewComponent from '../../../../components/trips/TabViewComponent';
-import WrapperComponent from '../../../../components/trips/WrapperComponent';
+import { getAuthorized } from '../../../../../../libs/auth';
+import GenericViewGenerator from '../../../../../../components/global/GenericViewGenerator';
+import { getTripForVendor } from '../../../../../../apis';
+import { getGeneralStatusOptions } from '../../../../../../utils';
+import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
+import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Includes/Excludes | Trip Management', async cookies => {
+    getAuthorized(context, 'FAQs | Trip Management', async cookies => {
         const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -45,17 +45,16 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={8}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
                     () => (
                         <GenericViewGenerator
-                            name={'Include/Exclude'}
-                            title="Trip Include/Exclude List"
-                            subtitle="Manage trip include/exclude here!"
+                            name={'FAQ'}
+                            title="Trip FAQs"
+                            subtitle="Manage trip faqs here!"
                             viewAll={{
-                                uri: `/api/v1/trips/${tripId}/includes`,
+                                uri: `/api/v1/trips/${tripId}/faqs`,
                                 ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                 scopedColumns: {
                                     status: (item: any) => (
@@ -71,20 +70,17 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 actionIdentifier: 'id',
                                 onDataModify: data =>
                                     _.map(data, datum => ({
-                                        id: datum.id,
-                                        note: datum.note,
-                                        type: !datum.not ? 'Include' : 'Exclude',
-                                        status: datum.status,
+                                        ...datum,
                                     })),
                             }}
                             addNew={{
-                                uri: `/api/v1/includes`,
-                                buttonText: 'Add Include/Exclude',
+                                uri: `/api/v1/faqs`,
+                                buttonText: 'Add FAQ',
                             }}
-                            viewOne={{ uri: '/api/v1/includes/{id}', identifier: '{id}' }}
-                            editExisting={{ uri: '/api/v1/includes/{id}', identifier: '{id}' }}
+                            viewOne={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
+                            editExisting={{ uri: '/api/v1/faqs/{id}', identifier: '{id}' }}
                             removeOne={{
-                                uri: '/api/v1/includes/{id}',
+                                uri: '/api/v1/faqs/{id}',
                                 identifier: '{id}',
                             }}
                             fields={[
@@ -102,31 +98,24 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 },
                                 {
                                     type: 'text',
-                                    name: 'note',
-                                    placeholder: 'Enter a include/exclude note for this trip!',
-                                    title: 'Note',
+                                    name: 'question',
+                                    placeholder: 'Enter a question for this FAQ!',
+                                    title: 'Question',
                                     initialValue: null,
                                     validate: (values: any) => {
-                                        if (!values.note) return 'Required!';
+                                        if (!values.question) return 'Required!';
 
                                         return null;
                                     },
                                 },
                                 {
-                                    type: 'select-sync',
-                                    name: 'not',
-                                    placeholder: 'Select include/exclude!',
-                                    title: 'Include/Exclude',
-                                    initialValue: false,
-                                    options: [
-                                        {
-                                            value: false,
-                                            label: 'Include',
-                                        },
-                                        { value: true, label: 'Exclude' },
-                                    ],
+                                    type: 'text',
+                                    name: 'answer',
+                                    placeholder: 'Enter a answer for this FAQ!',
+                                    title: 'Answer',
+                                    initialValue: null,
                                     validate: (values: any) => {
-                                        if (values.not === null || values.not === undefined) return 'Required!';
+                                        if (!values.answer) return 'Required!';
 
                                         return null;
                                     },

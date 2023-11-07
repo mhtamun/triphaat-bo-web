@@ -423,7 +423,7 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                         .then(response => {
                                             // console.debug({ response });
 
-                                            if (!response) throw new Error('API call not resolved!');
+                                            if (!response) throw new Error('Something went wrong!');
                                         })
                                         .catch(error => {
                                             console.error(error);

@@ -10,6 +10,7 @@ export interface IAction {
     text?: string;
     icon: string;
     color: 'success' | 'warning' | 'info' | 'danger' | 'secondary' | 'help';
+    tooltip?: string;
     callback: (identifier: string | number) => void;
 }
 
@@ -45,7 +46,7 @@ const DataTable = ({
             columnHeads.push({
                 key: 'actions',
                 label: 'ACTIONS',
-                headerStyle: { minWidth: '10rem' },
+                headerStyle: { minWidth: 'auto' },
                 style: { width: 'auto' },
                 frozen: true,
                 body: undefined,
@@ -75,6 +76,8 @@ const DataTable = ({
 
                                 action.callback(datum[actionIdentifier]);
                             }}
+                            tooltip={action.tooltip}
+                            tooltipOptions={{ position: 'bottom', mouseTrack: true, mouseTrackTop: 20 }}
                         />
                     ))}
                 </>

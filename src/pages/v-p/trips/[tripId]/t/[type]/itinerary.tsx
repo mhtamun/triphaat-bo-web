@@ -7,12 +7,12 @@ import { Card } from 'primereact/card';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../libs/auth';
-import GenericViewGenerator from '../../../../components/global/GenericViewGenerator';
-import { getTripForVendor } from '../../../../apis';
-import { getGeneralStatusOptions } from '../../../../utils';
-import TabViewComponent from '../../../../components/trips/TabViewComponent';
-import WrapperComponent from '../../../../components/trips/WrapperComponent';
+import { getAuthorized } from '../../../../../../libs/auth';
+import GenericViewGenerator from '../../../../../../components/global/GenericViewGenerator';
+import { getTripForVendor } from '../../../../../../apis';
+import { getGeneralStatusOptions } from '../../../../../../utils';
+import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
+import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Itinerary | Trip Management', async cookies => {
@@ -44,7 +44,6 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={7}
                 router={router}
                 tripId={tripId}
                 content={useMemo(

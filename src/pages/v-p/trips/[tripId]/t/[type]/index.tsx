@@ -8,13 +8,14 @@ import { Button } from 'primereact/button';
 import _ from 'lodash';
 
 // application libraries
-import { getAuthorized } from '../../../../libs/auth';
-import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
-import { getLocations, getTripForVendor } from '../../../../apis';
-import { callPutApi } from '../../../../libs/api';
-import { getTripFields } from '../create';
-import TabViewComponent from '../../../../components/trips/TabViewComponent';
-import WrapperComponent from '../../../../components/trips/WrapperComponent';
+import { getAuthorized } from '../../../../../../libs/auth';
+import GenericFormGenerator from '../../../../../../components/global/GenericFormGenerator';
+import { getLocations, getTripForVendor } from '../../../../../../apis';
+import { callPutApi } from '../../../../../../libs/api';
+import { getTripFields } from '../../../t/[type]/create';
+import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
+import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
+import { getTripType } from '../../../../../../utils';
 
 export interface ILocation {
     id: number;
@@ -64,16 +65,11 @@ export const getServerSideProps: GetServerSideProps = async context =>
 const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocation[]; trip: any }) => {
     const router = useRouter();
 
-    console.debug({
-        startDate: trip.startDate,
-        endDate: trip.endDate,
-        expiryDateOfBooking: trip.expiryDateOfBooking,
-    });
+    const types = getTripType(router);
 
     return (
-        <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
+        <WrapperComponent title={trip?.name} tripId={tripId} router={router}>
             <TabViewComponent
-                activeIndex={0}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
@@ -83,7 +79,14 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
                                 datum={{
                                     ...trip,
                                 }}
-                                fields={getTripFields(locations)}
+                                fields={getTripFields(
+                                    locations,
+                                    types.dateType,
+                                    types.accommodationType,
+                                    types.transportationType,
+                                    types.foodType,
+                                    router.query.type as string
+                                )}
                                 callback={data => {
                                     // console.debug({ data });
 

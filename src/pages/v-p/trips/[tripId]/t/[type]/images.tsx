@@ -3,20 +3,19 @@ import React, { useMemo } from 'react';
 // third-party
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { Card } from 'primereact/card';
 import { Badge } from 'primereact/badge';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../libs/auth';
-import GenericViewGenerator from '../../../../components/global/GenericViewGenerator';
-import { getTripForVendor } from '../../../../apis';
-import { getGeneralStatusOptions } from '../../../../utils';
-import TabViewComponent from '../../../../components/trips/TabViewComponent';
-import WrapperComponent from '../../../../components/trips/WrapperComponent';
+import { getAuthorized } from '../../../../../../libs/auth';
+import GenericViewGenerator from '../../../../../../components/global/GenericViewGenerator';
+import { getTripForVendor } from '../../../../../../apis';
+import { getGeneralStatusOptions } from '../../../../../../utils';
+import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
+import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Tags | Trip Management', async cookies => {
+    getAuthorized(context, 'Images | Fixed Package Trip Management', async cookies => {
         const tripId = context.query.tripId;
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -45,19 +44,24 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
-                activeIndex={4}
                 router={router}
                 tripId={tripId}
                 content={useMemo(
                     () => (
                         <GenericViewGenerator
-                            name={'Tag'}
-                            title="Trip Tags"
-                            subtitle="Manage trip tags here!"
+                            name={'Image'}
+                            title="Trip Images"
+                            subtitle="Manage trip images here!"
                             viewAll={{
-                                uri: `/api/v1/trips/${tripId}/tags`,
+                                uri: `/api/v1/trips/${tripId}/images`,
                                 ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                 scopedColumns: {
+                                    url: (item: any) => (
+                                        <>
+                                            <span className="p-column-title">{item.title}</span>
+                                            <img src={item.url} alt={item.title} className="shadow-2" width="100" />
+                                        </>
+                                    ),
                                     status: (item: any) => (
                                         <>
                                             <Badge
@@ -75,13 +79,13 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     })),
                             }}
                             addNew={{
-                                uri: `/api/v1/tags`,
-                                buttonText: 'Add Tag',
+                                uri: `/api/v1/images`,
+                                buttonText: 'Add Image',
                             }}
-                            viewOne={{ uri: '/api/v1/tags/{id}', identifier: '{id}' }}
-                            editExisting={{ uri: '/api/v1/tags/{id}', identifier: '{id}' }}
+                            viewOne={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+                            editExisting={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
                             removeOne={{
-                                uri: '/api/v1/tags/{id}',
+                                uri: '/api/v1/images/{id}',
                                 identifier: '{id}',
                             }}
                             fields={[
@@ -98,16 +102,74 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                 },
                                 {
-                                    type: 'text',
-                                    name: 'tag',
-                                    placeholder: 'Enter a TAG for this trip!',
-                                    title: 'TAG',
+                                    type: 'file-select',
+                                    name: 'url',
+                                    placeholder: 'Select image file!',
+                                    title: 'Image Upload',
                                     initialValue: null,
+                                    acceptType: 'image/*',
+                                    maxFileSize: 1048576,
                                     validate: (values: any) => {
-                                        if (!values.tag) return 'Required!';
+                                        if (!values.url) return 'Required!';
 
                                         return null;
                                     },
+                                },
+                                {
+                                    type: 'text',
+                                    name: 'title',
+                                    placeholder: 'Enter title for this image!',
+                                    title: 'Title',
+                                    initialValue: null,
+                                },
+                                {
+                                    type: 'text',
+                                    name: 'description',
+                                    placeholder: 'Enter description for this image!',
+                                    title: 'Description',
+                                    initialValue: null,
+                                },
+                                {
+                                    type: 'number',
+                                    name: 'serial',
+                                    placeholder: 'Enter serial number for sorting!',
+                                    title: 'Serial',
+                                    initialValue: 9999,
+                                    validate: (values: any) => {
+                                        if (!values.serial) return 'Required!';
+
+                                        return null;
+                                    },
+                                    col: 2,
+                                },
+                                {
+                                    type: 'select-sync',
+                                    name: 'status',
+                                    placeholder: 'Select status!',
+                                    title: 'Status',
+                                    initialValue: 'ACTIVE',
+                                    options: getGeneralStatusOptions(),
+                                    validate: (values: any) => {
+                                        if (!values.status) return 'Required!';
+
+                                        return null;
+                                    },
+                                },
+                            ]}
+                            editFields={[
+                                {
+                                    type: 'text',
+                                    name: 'title',
+                                    placeholder: 'Enter title for this image!',
+                                    title: 'Title',
+                                    initialValue: null,
+                                },
+                                {
+                                    type: 'text',
+                                    name: 'description',
+                                    placeholder: 'Enter description for this image!',
+                                    title: 'Description',
+                                    initialValue: null,
                                 },
                                 {
                                     type: 'number',

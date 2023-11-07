@@ -4,41 +4,44 @@ import { NextRouter } from 'next/router';
 
 // Component for fixed package
 const TabViewComponent = ({
-    activeIndex = 0,
     router,
     tripId,
     content,
 }: {
-    activeIndex: number;
     router: NextRouter;
     tripId: string;
     content: React.ReactNode;
 }) => {
+    const tabs = [
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}`, title: 'Details' },
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}/variants`, title: 'Variants' },
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}/images`, title: 'Images' },
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}/videos`, title: 'Videos' },
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}/tags`, title: 'Tags' },
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}/highlights`, title: 'Highlights' },
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}/activities`, title: 'Activities' },
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}/itinerary`, title: 'Itinerary' },
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}/includes`, title: 'Includes' },
+        { url: `/v-p/trips/${tripId}/t/${router.query.type}/faqs`, title: 'Faqs' },
+    ];
+
     const onTabChange = useCallback((e: TabViewTabChangeEvent, router: NextRouter, tripId: string) => {
-        if (e.index === 0) router.push(`/v-p/fixed-package-trips/${tripId}`);
-        if (e.index === 1) router.push(`/v-p/fixed-package-trips/${tripId}/variants`);
-        if (e.index === 2) router.push(`/v-p/fixed-package-trips/${tripId}/images`);
-        if (e.index === 3) router.push(`/v-p/fixed-package-trips/${tripId}/videos`);
-        if (e.index === 4) router.push(`/v-p/fixed-package-trips/${tripId}/tags`);
-        if (e.index === 5) router.push(`/v-p/fixed-package-trips/${tripId}/highlights`);
-        if (e.index === 6) router.push(`/v-p/fixed-package-trips/${tripId}/activities`);
-        if (e.index === 7) router.push(`/v-p/fixed-package-trips/${tripId}/itinerary`);
-        if (e.index === 8) router.push(`/v-p/fixed-package-trips/${tripId}/includes`);
-        if (e.index === 9) router.push(`/v-p/fixed-package-trips/${tripId}/faqs`);
+        router.push(tabs[e.index].url);
     }, []);
+
+    // console.debug({ router });
+
+    const activeIndex = tabs.findIndex(
+        tab => router.asPath === tab.url || router.asPath.includes(tab.title.toLowerCase())
+    );
 
     return (
         <TabView activeIndex={activeIndex} onTabChange={e => onTabChange(e, router, tripId)}>
-            <TabPanel header="Details">{activeIndex === 0 ? content : null}</TabPanel>
-            <TabPanel header="Variants">{activeIndex === 1 ? content : null}</TabPanel>
-            <TabPanel header="Images">{activeIndex === 2 ? content : null}</TabPanel>
-            <TabPanel header="Videos">{activeIndex === 3 ? content : null}</TabPanel>
-            <TabPanel header="Tags">{activeIndex === 4 ? content : null}</TabPanel>
-            <TabPanel header="Highlights">{activeIndex === 5 ? content : null}</TabPanel>
-            <TabPanel header="Activities">{activeIndex === 6 ? content : null}</TabPanel>
-            <TabPanel header="Itinerary">{activeIndex === 7 ? content : null}</TabPanel>
-            <TabPanel header="Includes">{activeIndex === 8 ? content : null}</TabPanel>
-            <TabPanel header="FAQs">{activeIndex === 9 ? content : null}</TabPanel>
+            {tabs.map((tab, index) => (
+                <TabPanel key={index} header={tab.title}>
+                    {router.asPath !== tab.url && !router.asPath.includes(tab.title.toLowerCase()) ? null : content}
+                </TabPanel>
+            ))}
         </TabView>
     );
 };

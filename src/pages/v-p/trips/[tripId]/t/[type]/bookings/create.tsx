@@ -1,8 +1,9 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useCallback, useMemo, FormEvent, useEffect } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { FormikValues } from 'formik';
 import { Button } from 'primereact/button';
 import { Avatar } from 'primereact/avatar';
 import { Messages } from 'primereact/messages';
@@ -14,18 +15,19 @@ import { useTimer } from 'react-timer-hook';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../../libs/auth';
-import GenericFormGenerator from '../../../../../components/global/GenericFormGenerator';
+import { getAuthorized } from '../../../../../../../libs/auth';
+import GenericFormGenerator from '../../../../../../../components/global/GenericFormGenerator';
 import {
     getTripForVendor,
     getTripVariants,
     initBooking,
     searchCustomersForVendor,
     lockBooking,
-} from '../../../../../apis';
-import { FormikValues } from 'formik';
-import { getSeverity } from '../../../../../utils';
-import WrapperComponent from '../../../../../components/trips/WrapperComponent';
+    getServiceDates,
+    getRooms,
+} from '../../../../../../../apis';
+import { getSeverity } from '../../../../../../../utils';
+import WrapperComponent from '../../../../../../../components/trips/WrapperComponent';
 
 interface ICustomer {
     id: number;
@@ -85,6 +87,9 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
 
     const router = useRouter();
 
+    const [serviceDates, setServiceDates] = useState<any[] | null>(null);
+    const [rooms, setRooms] = useState<any[] | null>(null);
+    // console.debug({ rooms });
     const [isBookingInitiated, setBookingInitiated] = useState<boolean>(false);
     const [jobId, setJobId] = useState<number>(0);
     const [bookingId, setBookingId] = useState<number>(0);
@@ -129,7 +134,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                     // console.debug({ response });
 
                     if (response.statusCode === 200) {
-                        router.push('/v-p/fixed-package-trips/' + tripId + '/bookings');
+                        router.push('/v-p/trips/' + tripId + '/t/' + router.query.type + '/bookings');
                     }
                 })
                 .catch(error => {
@@ -184,18 +189,73 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
         );
     };
 
+    useEffect(() => {
+        if (router.query.type === '1100') {
+            getServiceDates(tripId)
+                .then(response => {
+                    // console.debug({ response });
+
+                    if (!response) throw new Error('Something went wrong!');
+
+                    if (response.statusCode !== 200) throw new Error(response.message);
+
+                    setServiceDates(response.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            getRooms(tripId)
+                .then(response => {
+                    // console.debug({ response });
+
+                    if (!response) throw new Error('Something went wrong!');
+
+                    if (response.statusCode !== 200) throw new Error(response.message);
+
+                    setRooms(response.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }, [router.query.type]);
+
+    const formattedRooms = [];
+
+    if (rooms && rooms.length > 0)
+        for (const room of rooms) {
+            const items = [];
+
+            for (const seat of room.seats) {
+                items.push({
+                    value: `${seat.id}-${room.id}`,
+                    label: `Seat: ${seat.identifier}`,
+                });
+            }
+
+            formattedRooms.push({
+                value: room.id,
+                label: `Room: ${room.identifier}`,
+                items,
+            });
+        }
+
     return !variants || _.size(variants) === 0 ? (
         <div className="card">
-            <h5>No Variants Found</h5>
+            {/* <h5>No Variants Found</h5> */}
+            <h4 style={{ color: 'red' }}>
+                You did not set <strong>price</strong> for this trip
+            </h4>
             <p>
-                Please add at least <strong>one</strong> trip variant
+                Please add at least <strong style={{ color: 'orangered' }}>one</strong> trip variant
             </p>
             <button
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    router.push(`/v-p/fixed-package-trips/${tripId}/variants`);
+                    router.push(`/v-p/trips/${tripId}/t/${router.query.type}/variants`);
                 }}
             >
-                Go
+                Add Variants
             </button>
         </div>
     ) : (
@@ -239,10 +299,10 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                         ? variant.pricePerPerson
                                         : variant.offerPricePerPerson) +
                                     ' - ' +
-                                    _.join(variant.otherReasons, ', '),
+                                    _.join(variant.reasons, ', '),
                             })),
-                            onChange: (name: string, value: any, setFieldValue) => {
-                                console.debug({ name, value });
+                            onChange: (name: string, value: any, setFieldValue: any) => {
+                                // console.debug({ name, value });
 
                                 const variant = _.find(variants, variant => variant.id === value);
 
@@ -286,17 +346,63 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                 return null;
                             },
                         },
-                    ]}
+                        {
+                            type: 'date',
+                            name: 'date',
+                            placeholder: 'Select trip date',
+                            title: 'Trip Date',
+                            initialValue: null,
+                            minDate: new Date(),
+                            enabledDates: _.map(serviceDates, (serviceDate: any) => new Date(serviceDate.date)) ?? [],
+                            notEnabledDateSelectionErrorMessage:
+                                'This date is not available for selection or is not within the service dates.',
+                            validate: (values: any) => {
+                                if (!values.date) return 'Required';
+
+                                return null;
+                            },
+                            col: 2,
+                        },
+                        {
+                            type: 'multi-select-sync',
+                            name: 'seats',
+                            placeholder: 'Select seats...',
+                            title: 'Trip Seats',
+                            initialValue: null,
+                            options: formattedRooms ?? [],
+                            isGroupOptions: true,
+                            validate: (values: any) => {
+                                if (!values.seats) return 'Required';
+
+                                return null;
+                            },
+                        },
+                    ].filter(field => {
+                        if (router.query.type === '0000' && field.name === 'date') return false;
+                        if (router.query.type === '0000' && field.name === 'seats') return false;
+
+                        return true;
+                    })}
                     submitButtonShow={!isBookingInitiated}
                     submitButtonText="Check if seat is available"
                     callback={(values: FormikValues) => {
                         // console.debug({ values });
+
+                        const serviceDateId = _.find(serviceDates, serviceDate => serviceDate.date === values.date).id;
+                        // console.debug({ serviceDateId });
+                        const roomSeats = _.map(values.seats, (seat: string) => ({
+                            roomId: parseInt(_.split(seat, '-')[1]),
+                            seatId: parseInt(_.split(seat, '-')[0]),
+                        }));
+                        // console.debug({ roomSeats });
 
                         initBooking({
                             tripId: parseInt(tripId),
                             variantId: values.variantId,
                             pricePerPerson: parseFloat(values.pricePerPerson),
                             numberOfTravelers: parseInt(values.numberOfTravelers),
+                            serviceDateId,
+                            roomSeats,
                         })
                             .then(response => {
                                 // console.debug({ response });
@@ -333,7 +439,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                 }
                             })
                             .catch(error => {
-                                // console.error(error);
+                                console.error(error);
 
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                 // @ts-ignore

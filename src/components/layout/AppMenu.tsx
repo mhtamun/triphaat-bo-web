@@ -84,8 +84,8 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
         {
             label: 'Trips',
             items: [
-                { icon: 'pi pi-bars', label: 'Fixed Package Trips', to: '/v-p/fixed-package-trips' },
-                { icon: 'pi pi-bars', label: 'Full-Board Package Trips', to: '' },
+                { icon: 'pi pi-bars', label: 'Fixed Package Trips', to: '/v-p/trips/t/0000' },
+                { icon: 'pi pi-bars', label: 'Houseboat Trips', to: '/v-p/trips/t/1100' },
             ],
         },
     ];

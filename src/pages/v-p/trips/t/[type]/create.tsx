@@ -7,11 +7,11 @@ import { Card } from 'primereact/card';
 import _ from 'lodash';
 
 // application
-import { getAuthorized } from '../../../../libs/auth';
-import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
-import { getLocations } from '../../../../apis';
-import { getGeneralStatusOptions } from '../../../../utils';
-import { callPostApi } from '../../../../libs/api';
+import { getAuthorized } from '../../../../../libs/auth';
+import GenericFormGenerator, { IField } from '../../../../../components/global/GenericFormGenerator';
+import { getLocations } from '../../../../../apis';
+import { getGeneralStatusOptions, getTripType } from '../../../../../utils';
+import { callPostApi } from '../../../../../libs/api';
 
 export interface ILocation {
     id: number;
@@ -27,7 +27,14 @@ export interface ILocation {
     };
 }
 
-export const getTripFields = (locations: ILocation[]) => [
+export const getTripFields = (
+    locations: ILocation[],
+    dateType: string,
+    accommodationType: string,
+    transportationType: string,
+    foodType: string,
+    type: string
+): IField[] => [
     {
         type: 'select-sync',
         name: 'locationId',
@@ -49,7 +56,7 @@ export const getTripFields = (locations: ILocation[]) => [
         name: 'dateType',
         placeholder: '',
         title: '',
-        initialValue: 'FIXED',
+        initialValue: dateType,
         validate: (values: any) => {
             if (!values.dateType) return 'Required!';
 
@@ -61,7 +68,7 @@ export const getTripFields = (locations: ILocation[]) => [
         name: 'accommodationType',
         placeholder: '',
         title: '',
-        initialValue: 'FIXED',
+        initialValue: accommodationType,
         validate: (values: any) => {
             if (!values.accommodationType) return 'Required!';
 
@@ -73,7 +80,7 @@ export const getTripFields = (locations: ILocation[]) => [
         name: 'transportationType',
         placeholder: '',
         title: '',
-        initialValue: 'FIXED',
+        initialValue: transportationType,
         validate: (values: any) => {
             if (!values.transportationType) return 'Required!';
 
@@ -92,7 +99,6 @@ export const getTripFields = (locations: ILocation[]) => [
             return null;
         },
     },
-
     {
         type: 'textarea',
         name: 'smallDescription',
@@ -123,6 +129,11 @@ export const getTripFields = (locations: ILocation[]) => [
         placeholder: 'Enter duration in days this trip!',
         title: 'Duration In Days',
         initialValue: null,
+        show: () => {
+            if (type === '1100') return false;
+
+            return true;
+        },
         validate: (values: any) => {
             if (!values.durationInDays) return 'Required!';
 
@@ -136,6 +147,11 @@ export const getTripFields = (locations: ILocation[]) => [
         placeholder: 'Enter duration in nights for this trip!',
         title: 'Duration In Nights',
         initialValue: null,
+        show: () => {
+            if (type === '1100') return false;
+
+            return true;
+        },
         validate: (values: any) => {
             if (!values.durationInNights) return 'Required!';
 
@@ -156,6 +172,11 @@ export const getTripFields = (locations: ILocation[]) => [
         title: 'Start Date',
         initialValue: null,
         minDate: new Date(),
+        show: () => {
+            if (type === '1100') return false;
+
+            return true;
+        },
         validate: (values: any) => {
             if (!values.startDate) return 'Required!';
 
@@ -170,6 +191,11 @@ export const getTripFields = (locations: ILocation[]) => [
         title: 'End Date',
         initialValue: null,
         minDate: new Date(),
+        show: () => {
+            if (type === '1100') return false;
+
+            return true;
+        },
         validate: (values: any) => {
             if (!values.endDate) return 'Required!';
 
@@ -182,7 +208,11 @@ export const getTripFields = (locations: ILocation[]) => [
         placeholder: 'Enter date of expiration for this trip!',
         title: 'Expiration Date Of Booking',
         initialValue: null,
-        // minDate: new Date(),
+        show: () => {
+            if (type === '1100') return false;
+
+            return true;
+        },
         validate: (values: any) => {
             if (!values.expiryDateOfBooking) return 'Required!';
 
@@ -233,6 +263,11 @@ export const getTripFields = (locations: ILocation[]) => [
                 label: 'Visa Not Required',
             },
         ],
+        show: () => {
+            if (type === '1100') return false;
+
+            return true;
+        },
         validate: (values: any) => {
             if (!values.status) return 'Required!';
 
@@ -267,7 +302,7 @@ export const getTripFields = (locations: ILocation[]) => [
 ];
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Create A Trip | Fixed Package Trip Management', async cookies => {
+    getAuthorized(context, 'Create A Trip | Trip Management', async cookies => {
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
         if (!responseGetLocations || responseGetLocations.statusCode !== 200) {
@@ -290,6 +325,8 @@ export const getServerSideProps: GetServerSideProps = async context =>
 const Page = ({ locations }: { locations: ILocation[] }) => {
     const router = useRouter();
 
+    const types = getTripType(router);
+
     return (
         <>
             <Card title="Create A Trip">
@@ -297,7 +334,14 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                     () =>
                         !locations || _.size(locations) === 0 ? null : (
                             <GenericFormGenerator
-                                fields={getTripFields(locations)}
+                                fields={getTripFields(
+                                    locations,
+                                    types.dateType,
+                                    types.accommodationType,
+                                    types.transportationType,
+                                    types.foodType,
+                                    router.query.type as string
+                                )}
                                 callback={(data, resetForm) => {
                                     // console.debug({ data });
 
@@ -312,7 +356,9 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
 
                                                 // showToast('success', 'Success!', response.message);
 
-                                                router.push(`/v-p/fixed-package-trips/${response.data.id}`);
+                                                router.push(
+                                                    `/v-p/trips/${response.data.id}/t/${router.query.type as string}`
+                                                );
                                             }
                                         })
                                         .catch(error => {

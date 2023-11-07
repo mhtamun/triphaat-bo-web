@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { NextRouter } from 'next/router';
 
 export const getUserStatusOptions = () => [
     { value: 'ACTIVE', label: 'ACTIVE' },
@@ -49,6 +50,120 @@ export const getBookingStatusOptions = () => [
     { value: 'CONFIRMED', label: 'CONFIRMED' },
     { value: 'CANCELED', label: 'CANCELED' },
     { value: 'EXPIRED', label: 'EXPIRED' },
+];
+
+export const getVariantOptions = () => [
+    {
+        label: 'Single Variant (No Reason)',
+        value: 'Single Variant (No Reason)',
+        items: [{ label: 'Not Applicable', value: 'n/a' }],
+    },
+    {
+        label: 'Accommodation Type',
+        value: 'Accommodation Type',
+        items: [
+            { label: 'Hotel', value: 'Hotel' },
+            { label: 'Motel', value: 'Motel' },
+            { label: 'Resort', value: 'Resort' },
+            { label: 'Cottage', value: 'Cottage' },
+            { label: 'Apartment', value: 'Apartment' },
+            { label: 'Houseboat', value: 'Houseboat' },
+        ],
+    },
+    {
+        label: 'Accommodation Class',
+        value: 'Accommodation Class',
+        items: [
+            { label: 'AC Accommodation', value: 'AC Accommodation' },
+            { label: 'Non-AC Accommodation', value: 'Non-AC Accommodation' },
+            { label: '2 Star', value: '2 Star' },
+            { label: '3 Star', value: '3 Star' },
+            { label: '4 Star', value: '4 Star' },
+            { label: '5 Star', value: '5 Star' },
+            { label: '7 Star', value: '7 Star' },
+        ],
+    },
+    {
+        label: 'Accommodation Sharing',
+        value: 'Accommodation Sharing',
+        items: [
+            { label: 'Couple (2 person sharing)', value: 'Couple (2 person sharing)' },
+            { label: '3 person sharing', value: '3 person sharing' },
+            { label: '4 person sharing', value: '4 person sharing' },
+            { label: '5 person sharing', value: '5 person sharing' },
+            { label: '6 person sharing', value: '6 person sharing' },
+            {
+                label: 'No sharing (1 Person sharing)',
+                value: 'No sharing (1 Person sharing)',
+            },
+        ],
+    },
+    {
+        label: 'Transportation Type',
+        value: 'Transportation Type',
+        items: [
+            { label: '2 Seater Vehicle', value: '2 Seater Vehicle' },
+            { label: '4 Seater Sedan', value: '4 Seater Sedan' },
+            { label: '4 Seater SUV (Jeep)', value: '4 Seater SUV (Jeep)' },
+            { label: '4 Seater Premium Car', value: '4 Seater Premium Car' },
+            { label: '7 Seater Car', value: '7 Seater Car' },
+            { label: '10 Seater Microbus', value: '10 Seater Microbus' },
+            { label: '30 Seater Minibus', value: '30 Seater Minibus' },
+            { label: '27 Seater (Luxury) Bus', value: '27 Seater (Luxury) Bus' },
+            { label: '36 Seater Bus', value: '36 Seater Bus' },
+            { label: 'Airplane', value: 'Airplane' },
+            { label: 'Speed Boat', value: 'Speed Boat' },
+            { label: 'Ship', value: 'Ship' },
+            { label: 'Cruise Ship', value: 'Cruise Ship' },
+        ],
+    },
+    {
+        label: 'Transportation Class',
+        value: 'Transportation Class',
+        items: [
+            { label: 'AC Transportation', value: 'AC Transportation' },
+            { label: 'Non-AC Transportation', value: 'Non-AC Transportation' },
+            { label: 'First Class', value: 'First Class' },
+            { label: 'Business Class', value: 'Business Class' },
+            { label: 'Economy Class', value: 'Economy Class' },
+        ],
+    },
+    {
+        label: 'Transportation Sharing',
+        value: 'Transportation Sharing',
+        items: [
+            { label: 'Couple (2 person sharing)', value: 'Couple (2 person sharing)' },
+            { label: '3 person sharing', value: '3 person sharing' },
+            { label: '4 person sharing', value: '4 person sharing' },
+            { label: '5 person sharing', value: '5 person sharing' },
+            { label: '6 person sharing', value: '6 person sharing' },
+            {
+                label: 'No sharing (1 Person sharing)',
+                value: 'No sharing (1 Person sharing)',
+            },
+        ],
+    },
+    {
+        label: 'Food Type',
+        value: 'Food Type',
+        items: [
+            { label: 'Vegetarian and Vegan', value: 'Vegetarian and Vegan' },
+            { label: 'Gluten-Free', value: 'Gluten-Free' },
+            { label: 'Kosher', value: 'Kosher' },
+            { label: 'Halal', value: 'Halal' },
+            { label: 'Low-Calorie or Healthy Choices', value: 'Low-Calorie or Healthy Choices' },
+            { label: 'International Cuisine', value: 'International Cuisine' },
+            { label: "Kids' Meals", value: "Kids' Meals" },
+            { label: 'Gourmet or Fine Dining', value: 'Gourmet or Fine Dining' },
+            { label: 'Fast Food and Snacks', value: 'Fast Food and Snacks' },
+            { label: 'Local and Regional Specialties', value: 'Local and Regional Specialties' },
+        ],
+    },
+    {
+        label: 'Food Class',
+        value: 'Food Class',
+        items: [],
+    },
 ];
 
 export const getExpenseCategoryOptions = () => [
@@ -243,4 +358,29 @@ export const generateQueryPath = (pathname: string, pathParams?: any | null, que
         },
         path
     );
+};
+
+export interface ITripType {
+    dateType: string;
+    accommodationType: string;
+    transportationType: string;
+    foodType: string;
+}
+
+export const getTripType = (router: NextRouter): ITripType => {
+    const types = {} as ITripType;
+
+    if (router.query.type === '0000') {
+        types.dateType = 'FIXED';
+        types.accommodationType = 'FIXED';
+        types.transportationType = 'FIXED';
+        types.foodType = 'FIXED';
+    } else if (router.query.type === '1100') {
+        types.dateType = 'ON_DEMAND_SINGLE';
+        types.accommodationType = 'ON_DEMAND_ROOM_SEAT';
+        types.transportationType = 'FIXED';
+        types.foodType = 'FIXED';
+    }
+
+    return types;
 };

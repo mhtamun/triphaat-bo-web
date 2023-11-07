@@ -1,4 +1,4 @@
-import { callPostApi, callGetApi, IData, callPutApi } from '../libs/api';
+import { callPostApi, callGetApi, callPutApi, callDeleteApi } from '../libs/api';
 import { apiBaseUrl } from '../config/env';
 
 // TRIPHAAT admin APIs
@@ -54,6 +54,13 @@ export const initBooking = (payload: {
     variantId: number;
     pricePerPerson: number;
     numberOfTravelers: number;
+    serviceDateId?: number | null;
+    roomSeats?:
+        | {
+              roomId: number;
+              seatId: number;
+          }[]
+        | null;
 }) => callPostApi('/vendor/api/v1/init-trip-booking', payload, null, null, true);
 
 export const lockBooking = (payload: {
@@ -103,18 +110,18 @@ export const reserveBooking = (payload: { bookingId: number }) =>
 export const getTripBookingFacts = (tripId: string, authorization?: string) =>
     callGetApi(`/vendor/api/v1/trips/${tripId}/trip-booking-facts`, authorization);
 
-export const getVendorProfile = (authorization?: string) => callGetApi(`/api/v1/vendor-profile`, authorization);
+export const getVendorProfile = (authorization?: string) => callGetApi(`/vendor/api/v1/vendor-profile`, authorization);
 
 export const updateVendorProfile = (payload: any, authorization?: string) =>
-    callPutApi(`/api/v1/vendor-profile`, payload, null, null, true);
+    callPutApi(`/vendor/api/v1/vendor-profile`, payload, null, null, true);
 export const updateVendorProfileLogo = (payload: any, authorization?: string) =>
-    callPutApi(`/api/v1/vendor-profile-logo`, payload, null, 'multipart/form-data', true);
+    callPutApi(`/vendor/api/v1/vendor-profile-logo`, payload, null, 'multipart/form-data', true);
 export const updateVendorProfileLicense = (payload: any, authorization?: string) =>
-    callPutApi(`/api/v1/vendor-profile-license`, payload, null, 'multipart/form-data', true);
+    callPutApi(`/vendor/api/v1/vendor-profile-license`, payload, null, 'multipart/form-data', true);
 export const updateVendorProfileRp = (payload: any, authorization?: string) =>
-    callPutApi(`/api/v1/vendor-profile-rp`, payload, null, 'multipart/form-data', true);
+    callPutApi(`/vendor/api/v1/vendor-profile-rp`, payload, null, 'multipart/form-data', true);
 export const updateVendorProfileRpNid = (payload: any, authorization?: string) =>
-    callPutApi(`/api/v1/vendor-profile-rp-nid`, payload, null, 'multipart/form-data', true);
+    callPutApi(`/vendor/api/v1/vendor-profile-rp-nid`, payload, null, 'multipart/form-data', true);
 
 // general APIs
 
@@ -122,6 +129,33 @@ export const getLocations = (authorization: string) => callGetApi(apiBaseUrl + '
 
 export const getTripVariants = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/api/v1/trips/' + id + '/variants', authorization);
+
+export const postServiceDates = (payload: { tripId: number; dates: string[] }, authorization?: string) =>
+    callPostApi('api/v1/service-dates', payload, authorization, null, true);
+
+export const getServiceDates = (tripId: string, authorization?: string) =>
+    callGetApi(`api/v1/trips/${tripId}/service-dates`, authorization);
+
+export const deleteServiceDate = (id: string, authorization?: string) =>
+    callDeleteApi('api/v1/service-dates/' + id, authorization, true);
+
+export const addRoom = (
+    payload: {
+        tripId: number;
+        identifier: string;
+        type: string;
+        description: string;
+        maxOccupancy: number;
+        numberOfSeats: number;
+    },
+    authorization?: string
+) => callPostApi('api/v1/rooms', payload, authorization, null, true);
+
+export const getRooms = (tripId: string, authorization?: string) =>
+    callGetApi(`api/v1/trips/${tripId}/rooms`, authorization, true);
+
+export const removeRoom = (id: string, authorization?: string) =>
+    callDeleteApi('api/v1/rooms/' + id, authorization, true);
 
 export const getProfile = (authorization: string) => callGetApi(apiBaseUrl + `/api/v1/user-profile`, authorization);
 
