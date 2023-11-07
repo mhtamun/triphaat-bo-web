@@ -22,6 +22,7 @@ import {
 } from '../../../../../../../utils';
 import FilterComponent from '../../../../../../../components/global/Filter';
 import PaginatorComponent from '../../../../../../../components/global/Paginator';
+import { getFormattedDatetime } from '../../../../../../../utils/date';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Bookings | Trip Management', async cookies => {
@@ -71,7 +72,7 @@ const Page = ({
     };
 }) => {
     const router = useRouter();
-    console.debug({ router });
+    // console.debug({ router });
 
     return (
         <WrapperComponent tripId={tripId} title={`Trip: ${trip?.name}, Bookings`} router={router}>
@@ -152,7 +153,7 @@ const Page = ({
                 viewAll={{
                     uri: `/vendor/api/v1/trips/${tripId}/trip-booking-payments${generateQueryPath(
                         '',
-                        { tripId: router.query.tripId },
+                        { tripId: router.query.tripId, type: router.query.type },
                         router.query
                     )}`,
                     ignoredColumns: ['id', 'createdAt', 'updatedAt'],
@@ -185,8 +186,9 @@ const Page = ({
                             pricePerPerson: datum.tripBooking?.pricePerPerson,
                             numberOfTravelers: datum.tripBooking?.numberOfTravelers,
                             totalAmount: datum.amount,
-                            paymentStatus: datum.status,
+                            date: getFormattedDatetime(datum.tripBooking?.serviceDate?.date),
                             bookingStatus: datum.tripBooking?.booking?.status,
+                            paymentStatus: datum.status,
                         })),
                 }}
                 customActions={[
@@ -202,40 +204,40 @@ const Page = ({
                 filtration={
                     <FilterComponent
                         fields={[
-                            {
-                                type: 'text',
-                                name: 'search',
-                                placeholder: 'Search by name...',
-                                title: 'Search',
-                                initialValue: null,
-                            },
-                            {
-                                type: 'date',
-                                name: 'startDate',
-                                placeholder: 'Enter start date for date range filter...',
-                                title: 'Date Range (Start Date)',
-                                initialValue: null,
-                                validate: (values: any) => {
-                                    if (!values.startDate && values.endDate)
-                                        return 'Please select both date for range!';
+                            // {
+                            //     type: 'text',
+                            //     name: 'search',
+                            //     placeholder: 'Search by name...',
+                            //     title: 'Search',
+                            //     initialValue: null,
+                            // },
+                            // {
+                            //     type: 'date',
+                            //     name: 'startDate',
+                            //     placeholder: 'Enter start date for date range filter...',
+                            //     title: 'Date Range (Start Date)',
+                            //     initialValue: null,
+                            //     validate: (values: any) => {
+                            //         if (!values.startDate && values.endDate)
+                            //             return 'Please select both date for range!';
 
-                                    return null;
-                                },
-                                col: 2,
-                            },
-                            {
-                                type: 'date',
-                                name: 'endDate',
-                                placeholder: 'Enter start date for date range filter...',
-                                title: 'Date Range (End Date)',
-                                initialValue: null,
-                                validate: (values: any) => {
-                                    if (values.startDate && !values.endDate)
-                                        return 'Please select both date for range!';
+                            //         return null;
+                            //     },
+                            //     col: 2,
+                            // },
+                            // {
+                            //     type: 'date',
+                            //     name: 'endDate',
+                            //     placeholder: 'Enter start date for date range filter...',
+                            //     title: 'Date Range (End Date)',
+                            //     initialValue: null,
+                            //     validate: (values: any) => {
+                            //         if (values.startDate && !values.endDate)
+                            //             return 'Please select both date for range!';
 
-                                    return null;
-                                },
-                            },
+                            //         return null;
+                            //     },
+                            // },
                             {
                                 type: 'select-sync',
                                 name: 'paymentStatus',
@@ -254,10 +256,15 @@ const Page = ({
                             },
                         ]}
                         router={router}
-                        pathParams={{ tripId: router.query.tripId }}
+                        pathParams={{ tripId: router.query.tripId, type: router.query.type }}
                     />
                 }
-                pagination={<PaginatorComponent router={router} pathParams={{ tripId: router.query.tripId }} />}
+                pagination={
+                    <PaginatorComponent
+                        router={router}
+                        pathParams={{ tripId: router.query.tripId, type: router.query.type }}
+                    />
+                }
             />
         </WrapperComponent>
     );
