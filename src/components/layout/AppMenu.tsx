@@ -90,9 +90,6 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
         },
     ];
 
-    // const userType = JSON.parse(getCookie('user')).type;
-    // console.debug({ userType });
-
     if (!isVendor) {
         model = triphaatAdminMenuModel;
     } else {

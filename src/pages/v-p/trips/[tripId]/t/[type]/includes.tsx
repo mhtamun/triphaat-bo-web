@@ -73,6 +73,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                         id: datum.id,
                                         note: datum.note,
                                         type: !datum.not ? 'Include' : 'Exclude',
+                                        serial: datum.serial,
                                         status: datum.status,
                                     })),
                             }}

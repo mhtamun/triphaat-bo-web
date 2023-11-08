@@ -110,7 +110,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                 },
                                 {
-                                    type: 'text',
+                                    type: 'textarea',
                                     name: 'body',
                                     placeholder: 'Enter body for itinerary',
                                     title: 'Body (Description)',
