@@ -4,8 +4,8 @@ import { GetServerSidePropsContext } from 'next';
 // application
 import { getCookie, setCookie, removeCookie, parseCookie, ICookie } from './cookie';
 
-export const getCustomer = () => JSON.parse(getCookie('customer'));
-export const setCustomer = (value: string) => setCookie('customer', JSON.stringify(value));
+export const getUser = () => JSON.parse(getCookie('user'));
+export const setUser = (value: string) => setCookie('user', JSON.stringify(value));
 export const getVendor = () => JSON.parse(getCookie('vendor'));
 export const setVendor = (value: string) => setCookie('vendor', JSON.stringify(value));
 export const getAccessType = () => getCookie('accessType');
@@ -15,7 +15,7 @@ export const setAccessToken = (value: string) => setCookie('accessToken', value)
 
 export const createLogin = (user: any, accessType: string, accessToken: string, vendor?: any): boolean => {
     try {
-        setCustomer(user);
+        setUser(user);
         setAccessType(accessType);
         setAccessToken(accessToken);
 
@@ -32,7 +32,7 @@ export const createLogin = (user: any, accessType: string, accessToken: string, 
 };
 
 export const isLoggedIn = () => {
-    if (!getCustomer || !getAccessType || !getAccessToken) return false;
+    if (!getUser || !getAccessType || !getAccessToken) return false;
 
     return true;
 };
