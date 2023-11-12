@@ -115,11 +115,6 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     placeholder: 'Enter body for itinerary',
                                     title: 'Body (Description)',
                                     initialValue: null,
-                                    validate: (values: any) => {
-                                        if (!values.body) return 'Required!';
-
-                                        return null;
-                                    },
                                 },
                                 {
                                     type: 'chips',
