@@ -17,21 +17,14 @@ import { DATE_FORMAT, getFormattedDatetime } from '../../../../../utils/date';
 import { generateQueryPath, getGeneralStatusOptions, getTripType } from '../../../../../utils';
 import { FilterComponent, PaginatorComponent } from '../../../../../components';
 import { ILocation } from './create';
+import handleResponseIfError from '../../../../../utils/responseHandler';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Trips | Trip Management', async cookies => {
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
-        if (!responseGetLocations || responseGetLocations.statusCode !== 200) {
-            return {
-                redirect: {
-                    destination: '/500',
-                    permanent: false,
-                },
-            };
-        }
-
-        // console.debug(responseGetLocations.data);
+        const responseError = handleResponseIfError(context, responseGetLocations);
+        if (responseError !== null) return responseError;
 
         return {
             isVendor: true,

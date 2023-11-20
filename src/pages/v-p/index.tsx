@@ -10,6 +10,7 @@ import {
     getCurrentMonthBalancePaymentOfTripsForVendor,
     getTotalCountNumberOfTripsForVendor,
 } from '../../apis';
+import handleResponseIfError from '../../utils/responseHandler';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Dashboard', async cookies => {
@@ -34,14 +35,8 @@ export const getServerSideProps: GetServerSideProps = async context =>
         //     !responseCurrentMonthBalancePaymentOfTrips ||
         //     responseCurrentMonthBalancePaymentOfTrips.statusCode !== 200
 
-        if (!responseCountNumberOfTrips || responseCountNumberOfTrips.statusCode !== 200) {
-            return {
-                redirect: {
-                    destination: '/500',
-                    permanent: false,
-                },
-            };
-        }
+        const responseError = handleResponseIfError(context, responseCountNumberOfTrips);
+        if (responseError !== null) return responseError;
 
         return {
             isVendor: true,

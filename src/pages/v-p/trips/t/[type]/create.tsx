@@ -12,6 +12,7 @@ import GenericFormGenerator, { IField } from '../../../../../components/global/G
 import { getLocations } from '../../../../../apis';
 import { getGeneralStatusOptions, getTripType } from '../../../../../utils';
 import { callPostApi } from '../../../../../libs/api';
+import handleResponseIfError from '../../../../../utils/responseHandler';
 
 export interface ILocation {
     id: number;
@@ -305,16 +306,8 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Create A Trip | Trip Management', async cookies => {
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
-        if (!responseGetLocations || responseGetLocations.statusCode !== 200) {
-            return {
-                redirect: {
-                    destination: '/500',
-                    permanent: false,
-                },
-            };
-        }
-
-        // console.debug(responseGetLocations.data);
+        const responseError = handleResponseIfError(context, responseGetLocations);
+        if (responseError !== null) return responseError;
 
         return {
             isVendor: true,
