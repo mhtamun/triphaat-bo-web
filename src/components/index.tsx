@@ -11,6 +11,7 @@ import PaginatorComponent from './global/Paginator';
 import InputText from './global/InputText';
 import InputCalender from './global/InputCalender';
 import Dropdown from './global/Dropdown';
+import ImageDropdown from './global/ImageDropdown';
 import InputTextarea from './global/InputTextarea';
 import Editor from './global/Editor';
 import MultiSelect from './global/MultiSelect';
@@ -37,6 +38,7 @@ export {
     InputText as InputTextField,
     InputCalender as InputDateField,
     Dropdown as SelectSyncField,
+    ImageDropdown as ImageSelectSyncField,
     InputTextarea as TextareaField,
     Editor as EditorField,
     MultiSelect as MultiSelectSyncField,

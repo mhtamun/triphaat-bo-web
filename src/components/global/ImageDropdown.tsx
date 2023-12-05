@@ -1,27 +1,22 @@
 import React from 'react';
-import { Dropdown } from 'primereact/dropdown';
-import { faDotCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as _ from 'lodash';
+import { Dropdown, DropdownProps } from 'primereact/dropdown';
+import _ from 'lodash';
 
-export interface ISelectOption {
-    parentValue?: number | string;
-    value?: boolean | number | string;
-    label: string;
+export interface IImageSelectOption {
+    value: string;
+    imageUrl: string;
 }
 
-const SelectSyncField = (props: {
+const ImageSelectSyncField = (props: {
     name: string;
     title: string;
     placeholder?: string;
     value?: string;
-    options: ISelectOption[];
-    isGroupOptions?: boolean;
+    options: IImageSelectOption[];
+    setFieldValue: (name: string, value: any) => void;
     isSearchable?: boolean;
     isClearable?: boolean;
     isDisabled?: boolean;
-    parentValue?: string;
-    setFieldValue: (name: string, value: any) => void;
     errorMessage?: string;
 }) => {
     const {
@@ -30,27 +25,22 @@ const SelectSyncField = (props: {
         placeholder,
         value,
         options,
-        isGroupOptions,
+        setFieldValue,
         isSearchable = false,
         isClearable = false,
         isDisabled = false,
-        parentValue,
-        setFieldValue,
         errorMessage = '',
     } = props;
+    // console.debug({ name, title, placeholder, value, options });
 
-    // console.debug({ name, title, placeholder, value, options, parentValue });
+    const template = (option: IImageSelectOption, props?: DropdownProps) => {
+        if (!option && props) {
+            return <span>{props.placeholder}</span>;
+        }
 
-    let tempOptions = [...options];
-    if (parentValue != undefined && parentValue != null) {
-        tempOptions = _.filter(options, (option: ISelectOption) => option.parentValue === parentValue);
-    }
-
-    const groupedItemTemplate = (option: ISelectOption) => {
         return (
             <div className="flex align-items-center">
-                <FontAwesomeIcon icon={faDotCircle} className="mr-2" />
-                <div>{option.label}</div>
+                <img src={option.imageUrl} alt={''} className="mr-2" style={{ maxWidth: !props ? '200px' : '25px' }} />
             </div>
         );
     };
@@ -63,12 +53,11 @@ const SelectSyncField = (props: {
                 name={name}
                 placeholder={placeholder}
                 value={value}
-                options={tempOptions}
-                optionLabel="label"
+                options={options}
+                optionLabel="imageUrl"
                 optionValue="value"
-                optionGroupLabel={!isGroupOptions ? undefined : 'label'}
-                optionGroupChildren={!isGroupOptions ? undefined : 'items'}
-                optionGroupTemplate={groupedItemTemplate}
+                valueTemplate={template}
+                itemTemplate={template}
                 filter={isSearchable}
                 showClear={isClearable}
                 disabled={isDisabled}
@@ -89,4 +78,4 @@ const SelectSyncField = (props: {
     );
 };
 
-export default SelectSyncField;
+export default ImageSelectSyncField;

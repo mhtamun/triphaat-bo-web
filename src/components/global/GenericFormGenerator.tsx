@@ -13,6 +13,8 @@ import {
     ChipsField,
     FileSelectField,
 } from '../index';
+import { ISelectOption } from './Dropdown';
+import { IMultiSelectOption } from './MultiSelect';
 
 export interface IField {
     type: string;
@@ -20,12 +22,11 @@ export interface IField {
     title: string;
     placeholder: string;
     initialValue: string | number | boolean | null;
-    options?: {
-        value?: boolean | number | string;
-        label: string;
-        items?: { value: boolean | number | string; label: string }[];
-    }[];
+    options?: ISelectOption[] | IMultiSelectOption[];
     isGroupOptions?: boolean; // only for multi select dropdowns
+    isSearchable?: boolean;
+    isClearable?: boolean;
+    parentFieldName?: string;
     minDate?: Date; // only for date picker
     maxDate?: Date; // only for date picker
     enabledDates?: Date[]; // only for date picker
@@ -319,12 +320,17 @@ export default function GenericFormGenerator({
                     value={formik.values[field.name] ?? ''}
                     options={field.options ?? []}
                     isGroupOptions={field.isGroupOptions}
+                    isSearchable={field.isSearchable}
+                    isClearable={field.isClearable}
+                    isDisabled={field.isDisabled}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    parentValue={formik.values[field.parentFieldName]}
                     setFieldValue={(name: string, value: any) => {
                         formik.setFieldValue(name, value, true);
 
                         if (field.onChange) field.onChange(name, value, formik.setFieldValue);
                     }}
-                    isDisabled={field.isDisabled}
                     errorMessage={errorMessage}
                 />
             );
@@ -341,8 +347,8 @@ export default function GenericFormGenerator({
                     value={formik.values[field.name] ?? ''}
                     options={field.options ?? []}
                     isGroupOptions={field.isGroupOptions}
-                    setFieldValue={formik.setFieldValue}
                     isDisabled={field.isDisabled}
+                    setFieldValue={formik.setFieldValue}
                     errorMessage={errorMessage}
                 />
             );

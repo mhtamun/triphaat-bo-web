@@ -3,7 +3,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import _ from 'lodash';
 import { ISelectOption } from './Dropdown';
 
-interface IMultiSelectOption extends ISelectOption {
+export interface IMultiSelectOption extends ISelectOption {
     items?: { value: boolean | number | string; label: string }[];
 }
 
