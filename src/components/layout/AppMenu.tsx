@@ -45,6 +45,11 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     label: 'Location Management',
                     to: '/locations/countries',
                 },
+                {
+                    icon: 'pi pi-fw pi-map',
+                    label: 'Slider Management',
+                    to: '/sliders',
+                },
             ],
         },
     ];

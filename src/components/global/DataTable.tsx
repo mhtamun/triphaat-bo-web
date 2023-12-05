@@ -74,6 +74,7 @@ const DataTable = ({
                             onClick={e => {
                                 e.preventDefault();
 
+                                // console.debug({ datumIdentifier: datum[actionIdentifier] });
                                 action.callback(datum[actionIdentifier]);
                             }}
                             tooltip={action.tooltip}

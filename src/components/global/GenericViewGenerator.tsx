@@ -23,6 +23,8 @@ const DeleteItemComponent = ({
     datumId: string;
     onSuccess: () => void;
 }) => {
+    // console.debug({ datumId });
+
     return (
         <ModalConfirmation
             isOpen={isConfirmationModalOpen}
@@ -242,7 +244,7 @@ function GenericViewGenerator({
         uri: getAllApiUri,
         ignoredColumns,
         scopedColumns,
-        actionIdentifier,
+        actionIdentifier = 'id',
         actionDatum = null,
         onDataModify: getAllDataModificationCallback,
         onSuccess: getAllSuccessCallback = null,
@@ -323,6 +325,7 @@ function GenericViewGenerator({
                 callback: id => {
                     // console.debug({ id });
 
+                    setDatumId(id);
                     getDatum(getOneApiUri, getOneIdentifier, id.toString(), getOneDataModificationCallback);
                 },
             });
@@ -448,7 +451,7 @@ function GenericViewGenerator({
             )}
             {useMemo(
                 () =>
-                    (!fields && !editFields) || !putApiUri || !putIdentifier || !datum ? null : (
+                    (!fields && !editFields) || !putApiUri || !putIdentifier || !datum || !datumId ? null : (
                         <EditItemComponent
                             isFormModalOpen={isEditFormModalOpen}
                             setFormModalOpen={value => {
@@ -456,7 +459,7 @@ function GenericViewGenerator({
                             }}
                             putApiUri={putApiUri}
                             putIdentifier={putIdentifier}
-                            datumId={datum.id}
+                            datumId={datumId}
                             datum={datum}
                             fields={!editFields ? fields : editFields}
                             nonEdibleFields={nonEdibleFields}
