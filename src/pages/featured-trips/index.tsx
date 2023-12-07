@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
@@ -9,10 +9,9 @@ import * as _ from 'lodash';
 // application
 import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
-import { getGeneralStatusOptions } from '../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Featured Trip Management', cookies => {
+    getAuthorized(context, 'Featured Trip Management', () => {
         return null;
     });
 
@@ -48,51 +47,21 @@ const Page = () => {
                         customActions={[]}
                         fields={[
                             {
-                                type: 'select-sync',
+                                type: 'select-async',
                                 name: 'testParent',
-                                placeholder: '',
+                                placeholder: 'Search',
                                 title: '',
                                 initialValue: null,
-                                options: [
-                                    {
-                                        value: 1,
-                                        label: 'One',
-                                    },
-                                    {
-                                        value: 2,
-                                        label: 'Two',
-                                    },
-                                ],
-                            },
-                            {
-                                type: 'select-sync',
-                                name: 'testChild',
-                                placeholder: '',
-                                title: '',
-                                initialValue: null,
-                                options: [
-                                    {
-                                        parentValue: 1,
-                                        value: 1,
-                                        label: 'One One',
-                                    },
-                                    {
-                                        parentValue: 1,
-                                        value: 2,
-                                        label: 'One Two',
-                                    },
-                                    {
-                                        parentValue: 2,
-                                        value: 1,
-                                        label: 'Two One',
-                                    },
-                                    {
-                                        parentValue: 2,
-                                        value: 2,
-                                        label: 'Two Two',
-                                    },
-                                ],
-                                parentFieldName: 'testParent',
+                                options: [],
+                                loadOptions: searchKey => {
+                                    console.debug({ searchKey });
+                                },
+                                isSearchable: true,
+                                validate(values) {
+                                    if (!values.testParent) return 'Required';
+
+                                    return null;
+                                },
                             },
                         ]}
                     />

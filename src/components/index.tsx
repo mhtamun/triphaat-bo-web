@@ -11,6 +11,7 @@ import PaginatorComponent from './global/Paginator';
 import InputText from './global/InputText';
 import InputCalender from './global/InputCalender';
 import Dropdown from './global/Dropdown';
+import DropdownAsync from './global/DropdownAsync';
 import ImageDropdown from './global/ImageDropdown';
 import InputTextarea from './global/InputTextarea';
 import Editor from './global/Editor';
@@ -38,6 +39,7 @@ export {
     InputText as InputTextField,
     InputCalender as InputDateField,
     Dropdown as SelectSyncField,
+    DropdownAsync as SelectAsyncField,
     ImageDropdown as ImageSelectSyncField,
     InputTextarea as TextareaField,
     Editor as EditorField,

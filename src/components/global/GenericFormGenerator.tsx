@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { FormikValues, useFormik } from 'formik';
 import _ from 'lodash';
 import { Button } from 'primereact/button';
-import { CalendarDateTemplateEvent } from 'primereact/calendar';
 import {
     InputTextField,
     InputDateField,
+    SelectAsyncField,
     SelectSyncField,
     MultiSelectSyncField,
     TextareaField,
@@ -23,6 +23,7 @@ export interface IField {
     placeholder: string;
     initialValue: string | number | boolean | null;
     options?: ISelectOption[] | IMultiSelectOption[];
+    loadOptions?: (searchKey: string) => void; // only for async select
     isGroupOptions?: boolean; // only for multi select dropdowns
     isSearchable?: boolean;
     isClearable?: boolean;
@@ -304,6 +305,30 @@ export default function GenericFormGenerator({
                     value={formik.values[field.name]}
                     setFieldValue={formik.setFieldValue}
                     setFieldTouched={formik.setFieldTouched}
+                    errorMessage={errorMessage}
+                />
+            );
+
+        if (field.type === 'select-async' && field.loadOptions)
+            return (
+                <SelectAsyncField
+                    key={field.name}
+                    name={field.name}
+                    title={field.title}
+                    placeholder={field.placeholder}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    value={formik.values[field.name] ?? ''}
+                    options={field.options ?? []}
+                    loadOptions={field.loadOptions}
+                    isSearchable={field.isSearchable}
+                    isClearable={field.isClearable}
+                    isDisabled={field.isDisabled}
+                    setFieldValue={(name: string, value: any) => {
+                        formik.setFieldValue(name, value, true);
+
+                        if (field.onChange) field.onChange(name, value, formik.setFieldValue);
+                    }}
                     errorMessage={errorMessage}
                 />
             );
