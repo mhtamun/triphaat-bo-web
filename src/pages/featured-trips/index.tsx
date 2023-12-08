@@ -13,6 +13,7 @@ import { searchTripsForSelectByLocationId, getLocations } from '../../apis';
 import { ILocation } from '../../types';
 import { ISelectOption } from '../../components/global/Dropdown';
 import { getGeneralStatusOptions } from '../../utils';
+import { getFormattedDatetime, DATE_FORMAT } from '../../utils/date';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Featured Trip Management', () => {
@@ -85,6 +86,12 @@ const Page = () => {
                             onDataModify: data =>
                                 _.map(data, datum => ({
                                     ...datum,
+                                    startDate: !datum.startDate
+                                        ? null
+                                        : getFormattedDatetime(datum.startDate, DATE_FORMAT.DATE_REPORT),
+                                    endDate: !datum.endDate
+                                        ? null
+                                        : getFormattedDatetime(datum.endDate, DATE_FORMAT.DATE_REPORT),
                                 })),
                         }}
                         addNew={{
