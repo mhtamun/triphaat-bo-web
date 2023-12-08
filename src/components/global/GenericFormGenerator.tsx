@@ -38,7 +38,7 @@ export interface IField {
     isDisabled?: boolean;
     show?: (values: FormikValues) => boolean;
     validate?: (values: FormikValues) => string | null;
-    onChange?: (name: string, value: any, callback: (name: string, value: any) => void) => void;
+    onChange?: (name: string, value: any, setFormikFieldValue: (name: string, value: any) => void) => void;
     col?: number;
 }
 

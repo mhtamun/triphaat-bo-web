@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
@@ -9,6 +9,10 @@ import * as _ from 'lodash';
 // application
 import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
+import { searchTripsForSelectByLocationId, getLocations } from '../../apis';
+import { ILocation } from '../../types';
+import { ISelectOption } from '../../components/global/Dropdown';
+import { getGeneralStatusOptions } from '../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Featured Trip Management', () => {
@@ -17,6 +21,54 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
 const Page = () => {
     const router = useRouter();
+
+    const [locations, setLocations] = useState<ISelectOption[]>([]);
+    // console.debug({ locations });
+    const [locationId, setLocationId] = useState<number | null>(null);
+    const [trips, setTrips] = useState<ISelectOption[]>([]);
+    // console.debug({ trips });
+
+    const getTrips = useCallback((locationId: number) => {
+        searchTripsForSelectByLocationId(locationId, null)
+            .then(response => {
+                if (!response) throw { message: 'Server not working!' };
+
+                if (response.statusCode !== 200) throw { message: response.message };
+
+                setTrips(
+                    _.map(response.data, (trip: any) => ({
+                        value: trip.id,
+                        label: trip.vendor.businessName + ' - ' + trip.name,
+                    }))
+                );
+            })
+            .catch(error => {
+                console.error('error', error);
+            });
+    }, []);
+
+    useEffect(() => {
+        getLocations()
+            .then(response => {
+                if (!response) throw { message: 'Server not working!' };
+
+                if (response.statusCode !== 200) throw { message: response.message };
+
+                setLocations(
+                    _.map(response.data, (location: ILocation) => ({
+                        value: location.id,
+                        label: location.name + ', ' + location.city.name,
+                    }))
+                );
+            })
+            .catch(error => {
+                console.error('error', error);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (!_.isNull(locationId)) getTrips(locationId);
+    }, [locationId]);
 
     return (
         <Card title="" subTitle="">
@@ -27,7 +79,7 @@ const Page = () => {
                         title={'Featured Trips'}
                         subtitle={'Manage featured-trips here!'}
                         viewAll={{
-                            uri: `/api/v1/sliders`,
+                            uri: `/api/v1/featured-trips`,
                             ignoredColumns: ['_id', '__v', 'createdAt', 'updatedAt'],
                             actionIdentifier: '_id',
                             onDataModify: data =>
@@ -38,8 +90,8 @@ const Page = () => {
                         addNew={{
                             uri: `/api/v1/featured-trips`,
                         }}
-                        viewOne={{ uri: '/api/v1/featured-trips/{id}', identifier: '{id}' }}
-                        editExisting={{ uri: '/api/v1/featured-trips/{id}', identifier: '{id}' }}
+                        // viewOne={{ uri: '/api/v1/featured-trips/{id}', identifier: '{id}' }}
+                        // editExisting={{ uri: '/api/v1/featured-trips/{id}', identifier: '{id}' }}
                         removeOne={{
                             uri: '/api/v1/featured-trips/{id}',
                             identifier: '{id}',
@@ -47,18 +99,57 @@ const Page = () => {
                         customActions={[]}
                         fields={[
                             {
-                                type: 'select-async',
-                                name: 'testParent',
-                                placeholder: 'Search',
-                                title: '',
+                                type: 'select-sync',
+                                name: 'locationId',
+                                placeholder: 'Select location',
+                                title: 'Location',
                                 initialValue: null,
-                                options: [],
-                                loadOptions: searchKey => {
-                                    console.debug({ searchKey });
-                                },
+                                options: locations,
                                 isSearchable: true,
                                 validate(values) {
-                                    if (!values.testParent) return 'Required';
+                                    if (!values.locationId) return 'Required!';
+
+                                    return null;
+                                },
+                                onChange(name, value, callback) {
+                                    setLocationId(value);
+                                },
+                            },
+                            {
+                                type: 'select-sync',
+                                name: 'tripId',
+                                placeholder: 'Select trip',
+                                title: 'Trip',
+                                initialValue: null,
+                                options: [...trips],
+                                isSearchable: true,
+                                validate(values) {
+                                    if (!values.tripId) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'number',
+                                name: 'serial',
+                                placeholder: 'Enter a serial!',
+                                title: 'Serial',
+                                initialValue: 9999,
+                                validate: (values: any) => {
+                                    if (!values.serial) return 'Serial required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'select-sync',
+                                name: 'status',
+                                placeholder: 'Select a status!',
+                                title: 'Status',
+                                initialValue: 'ACTIVE',
+                                options: getGeneralStatusOptions(),
+                                validate: (values: any) => {
+                                    if (!values.status) return 'Status required!';
 
                                     return null;
                                 },
@@ -66,7 +157,7 @@ const Page = () => {
                         ]}
                     />
                 ),
-                []
+                [locations, trips]
             )}
         </Card>
     );

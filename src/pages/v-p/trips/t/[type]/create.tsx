@@ -13,20 +13,7 @@ import { getLocations } from '../../../../../apis';
 import { getGeneralStatusOptions, getTripType } from '../../../../../utils';
 import { callPostApi } from '../../../../../libs/api';
 import handleResponseIfError from '../../../../../utils/responseHandler';
-
-export interface ILocation {
-    id: number;
-    name: string;
-    city: {
-        name: string;
-        state: {
-            name: string;
-            country: {
-                name: string;
-            };
-        };
-    };
-}
+import { ILocation } from '../../../../../types';
 
 export const getTripFields = (
     locations: ILocation[],
@@ -106,11 +93,11 @@ export const getTripFields = (
         placeholder: 'Enter small description for this trip!',
         title: 'Small Description',
         initialValue: null,
-        validate: (values: any) => {
-            if (!values.smallDescription) return 'Required!';
+        // validate: (values: any) => {
+        //     if (!values.smallDescription) return 'Required!';
 
-            return null;
-        },
+        //     return null;
+        // },
     },
     {
         type: 'richtext',
@@ -118,11 +105,11 @@ export const getTripFields = (
         placeholder: 'Enter big description for this trip!',
         title: 'Big Description',
         initialValue: null,
-        validate: (values: any) => {
-            if (!values.bigDescription) return 'Required!';
+        // validate: (values: any) => {
+        //     if (!values.bigDescription) return 'Required!';
 
-            return null;
-        },
+        //     return null;
+        // },
     },
     {
         type: 'number',
@@ -321,53 +308,51 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
     const types = getTripType(router);
 
     return (
-        <>
-            <Card title="Create A Trip">
-                {useMemo(
-                    () =>
-                        !locations || _.size(locations) === 0 ? null : (
-                            <GenericFormGenerator
-                                fields={getTripFields(
-                                    locations,
-                                    types.dateType,
-                                    types.accommodationType,
-                                    types.transportationType,
-                                    types.foodType,
-                                    router.query.type as string
-                                )}
-                                callback={(data, resetForm) => {
-                                    // console.debug({ data });
+        <Card title="Create A Trip">
+            {useMemo(
+                () =>
+                    !locations || _.size(locations) === 0 ? null : (
+                        <GenericFormGenerator
+                            fields={getTripFields(
+                                locations,
+                                types.dateType,
+                                types.accommodationType,
+                                types.transportationType,
+                                types.foodType,
+                                router.query.type as string
+                            )}
+                            callback={(data, resetForm) => {
+                                // console.debug({ data });
 
-                                    callPostApi('/vendor/api/v1/trips', data, null, null, true)
-                                        .then(response => {
-                                            if (!response) {
-                                                // showToast('error', 'Unsuccessful!', 'Server not working!');
-                                            } else if (response.statusCode !== 200) {
-                                                // showToast('error', 'Unsuccessful!', response.message);
-                                            } else {
-                                                if (resetForm) resetForm();
+                                callPostApi('/vendor/api/v1/trips', data, null, null, true)
+                                    .then(response => {
+                                        if (!response) {
+                                            // showToast('error', 'Unsuccessful!', 'Server not working!');
+                                        } else if (response.statusCode !== 200) {
+                                            // showToast('error', 'Unsuccessful!', response.message);
+                                        } else {
+                                            if (resetForm) resetForm();
 
-                                                // showToast('success', 'Success!', response.message);
+                                            // showToast('success', 'Success!', response.message);
 
-                                                router.push(
-                                                    `/v-p/trips/${response.data.id}/t/${router.query.type as string}`
-                                                );
-                                            }
-                                        })
-                                        .catch(error => {
-                                            console.error('error', error);
+                                            router.push(
+                                                `/v-p/trips/${response.data.id}/t/${router.query.type as string}`
+                                            );
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('error', error);
 
-                                            // showToast('error', 'Unsuccessful!', 'Something went wrong!');
-                                        })
-                                        .finally(() => {});
-                                }}
-                                submitButtonText="Save"
-                            />
-                        ),
-                    [locations]
-                )}
-            </Card>
-        </>
+                                        // showToast('error', 'Unsuccessful!', 'Something went wrong!');
+                                    })
+                                    .finally(() => {});
+                            }}
+                            submitButtonText="Save"
+                        />
+                    ),
+                [locations]
+            )}
+        </Card>
     );
 };
 

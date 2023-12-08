@@ -46,9 +46,14 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     to: '/locations/countries',
                 },
                 {
-                    icon: 'pi pi-fw pi-map',
+                    icon: 'pi pi-fw pi-list',
                     label: 'Slider Management',
                     to: '/sliders',
+                },
+                {
+                    icon: 'pi pi-fw pi-list',
+                    label: 'Featured Trip Management',
+                    to: '/featured-trips',
                 },
             ],
         },

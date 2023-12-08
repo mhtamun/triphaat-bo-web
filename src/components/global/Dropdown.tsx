@@ -39,7 +39,9 @@ const SelectSyncField = (props: {
         errorMessage = '',
     } = props;
 
-    // console.debug({ name, title, placeholder, value, options, parentValue });
+    // console.debug({title, placeholder, value, parentValue });
+
+    // console.debug({ name, options });
 
     let tempOptions = [...options];
     if (parentValue != undefined && parentValue != null) {

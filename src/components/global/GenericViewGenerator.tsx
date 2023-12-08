@@ -447,7 +447,7 @@ function GenericViewGenerator({
                             name={name}
                         />
                     ),
-                [isAddFormModalOpen]
+                [isAddFormModalOpen, fields]
             )}
             {useMemo(
                 () =>
@@ -472,7 +472,7 @@ function GenericViewGenerator({
                             name={name}
                         />
                     ),
-                [isEditFormModalOpen, datum]
+                [isEditFormModalOpen, datum, fields, editFields]
             )}
             {useMemo(
                 () =>

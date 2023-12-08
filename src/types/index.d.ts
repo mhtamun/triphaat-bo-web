@@ -36,3 +36,17 @@ export interface IVendor {
     status: 'PERMITTED';
     bannedReason: string;
 }
+
+export interface ILocation {
+    id: number;
+    name: string;
+    city: {
+        name: string;
+        state: {
+            name: string;
+            country: {
+                name: string;
+            };
+        };
+    };
+}
