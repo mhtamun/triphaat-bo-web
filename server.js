@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const next = require('next');
 
-const port = parseInt(process.env.PORT) || 5679;
+const port = parseInt(process.env.PORT) || 8081;
 const dev = process.env.NODE_ENV === 'development';
 const app = next({ dev });
 const handle = app.getRequestHandler();
