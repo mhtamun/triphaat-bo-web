@@ -16,8 +16,8 @@ import { getLocations } from '../../../../../apis';
 import { DATE_FORMAT, getFormattedDatetime } from '../../../../../utils/date';
 import { generateQueryPath, getGeneralStatusOptions, getTripType } from '../../../../../utils';
 import { FilterComponent, PaginatorComponent } from '../../../../../components';
-import { ILocation } from './create';
 import handleResponseIfError from '../../../../../utils/responseHandler';
+import { ILocation } from '../../[tripId]/t/[type]';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Trips | Trip Management', async cookies => {
