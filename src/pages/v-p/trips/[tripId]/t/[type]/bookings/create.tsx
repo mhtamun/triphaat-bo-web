@@ -503,24 +503,12 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                 fields={[
                                     {
                                         type: 'text',
-                                        name: 'firstName',
-                                        placeholder: 'Enter first name!',
-                                        title: 'First Name',
+                                        name: 'name',
+                                        placeholder: 'Enter name!',
+                                        title: 'Name',
                                         initialValue: null,
                                         validate: (values: any) => {
-                                            if (!values.firstName) return 'Required!';
-
-                                            return null;
-                                        },
-                                    },
-                                    {
-                                        type: 'text',
-                                        name: 'lastName',
-                                        placeholder: 'Enter last name!',
-                                        title: 'Last Name',
-                                        initialValue: null,
-                                        validate: (values: any) => {
-                                            if (!values.lastName) return 'Required!';
+                                            if (!values.name) return 'Required!';
 
                                             return null;
                                         },
