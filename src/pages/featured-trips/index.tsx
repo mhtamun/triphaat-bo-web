@@ -16,7 +16,7 @@ import { getGeneralStatusOptions } from '../../utils';
 import { getFormattedDatetime, DATE_FORMAT } from '../../utils/date';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Featured Trip Management', () => {
+    getAuthorized(context, 'Featured Trip Management | Admin Panel | TripHaat', () => {
         return null;
     });
 

@@ -11,7 +11,8 @@ import GenericViewGenerator from '../../components/global/GenericViewGenerator';
 import { getRoles } from '../../apis';
 import { IField } from '../../components/global/GenericFormGenerator';
 
-export const getServerSideProps: GetServerSideProps = async context => getAuthorized(context, 'User Management');
+export const getServerSideProps: GetServerSideProps = async context =>
+    getAuthorized(context, 'User Management | Admin Panel | TripHaat');
 
 export const getUserManagementFields = (roles: { id: number; name: string }[]): IField[] => [
     {

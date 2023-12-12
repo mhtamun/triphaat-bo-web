@@ -13,7 +13,7 @@ import GenericViewGenerator from '../../components/global/GenericViewGenerator';
 import { getGeneralStatusOptions } from '../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Slider Management', cookies => {
+    getAuthorized(context, 'Slider Management | Admin Panel | TripHaat', cookies => {
         return null;
     });
 

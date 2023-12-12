@@ -7,7 +7,7 @@ import { GetServerSideProps } from 'next';
 import { getAuthorized } from '../../libs/auth';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Location Management', () => {
+    getAuthorized(context, 'Location Management | Admin Panel | TripHaat', () => {
         return {
             redirect: {
                 destination: '/',

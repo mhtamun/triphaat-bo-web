@@ -14,7 +14,7 @@ import { getCityById } from '../../../../../../../apis';
 import GenericViewGenerator from '../../../../../../../components/global/GenericViewGenerator';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Location Management', async cookies => {
+    getAuthorized(context, 'Location Management | Admin Panel | TripHaat', async cookies => {
         const id: string = context.query.id as string;
 
         const response = await getCityById(id, `${cookies.accessType} ${cookies.accessToken}`);

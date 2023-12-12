@@ -30,7 +30,6 @@ export const getServerSideProps: GetServerSideProps = async context =>
         }
 
         return {
-            isVendor: true,
             vendor: responseGetVendor.data,
         };
     });
