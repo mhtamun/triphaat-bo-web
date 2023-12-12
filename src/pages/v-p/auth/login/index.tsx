@@ -30,8 +30,8 @@ const LoginPage: Page = () => {
         enableReinitialize: false,
 
         initialValues: {
-            email: 'vendor@triphaat.com',
-            password: 'soLTVf9390l5JLgh',
+            email: '',
+            password: '',
             checked: false,
         },
 

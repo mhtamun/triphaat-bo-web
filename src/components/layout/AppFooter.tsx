@@ -5,11 +5,10 @@ import React from 'react';
 const AppFooter = () => {
     return (
         <div className="layout-footer">
-            <span className="font-medium">All</span>
-            <span className="font-medium ml-2">rights</span>
-            <span className="font-medium ml-2">reseved</span>
-            <span className="font-medium ml-2">by</span>
-            <span className="font-medium ml-2">triphaat.com</span>
+            <span className="font-medium">All rights reserved by</span>
+            <span className="font-medium ml-1">
+                <strong>triphaat.com</strong>
+            </span>
         </div>
     );
 };

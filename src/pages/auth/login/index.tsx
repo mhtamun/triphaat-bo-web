@@ -30,8 +30,8 @@ const LoginPage: Page = () => {
         enableReinitialize: false,
 
         initialValues: {
-            email: 'maruf@tripociate.com',
-            password: 'soLTVf9390l5JLgh',
+            email: '',
+            password: '',
             checked: false,
         },
 
