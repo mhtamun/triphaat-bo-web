@@ -30,13 +30,14 @@ export const showApiCallLoaderToast = (
         setTimeout(() => {
             promise
                 .then(response => {
-                    toast(response.message, {
-                        ...toastOptions,
-                        ...options,
-                        autoClose: response.statusCode !== 200 ? false : 1000,
-                        isLoading: false,
-                        type: response.statusCode !== 200 ? toast.TYPE.ERROR : toast.TYPE.SUCCESS,
-                    });
+                    if (response.statusCode !== 200)
+                        toast(response.message, {
+                            ...toastOptions,
+                            ...options,
+                            autoClose: 5000,
+                            isLoading: false,
+                            type: toast.TYPE.ERROR,
+                        });
 
                     resolve(response);
                 })

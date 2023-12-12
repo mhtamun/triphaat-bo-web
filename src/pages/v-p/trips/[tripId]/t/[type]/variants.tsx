@@ -253,7 +253,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 },
                                 {
                                     type: 'multi-select-sync',
-                                    name: 'reasons',
+                                    name: 'reasons', 
                                     placeholder: 'Enter diversity reasons (press enter to start new line)!',
                                     title: 'Reasons (Diversification)',
                                     initialValue: null,

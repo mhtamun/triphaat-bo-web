@@ -388,8 +388,12 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                     callback={(values: FormikValues) => {
                         // console.debug({ values });
 
-                        const serviceDateId = _.find(serviceDates, serviceDate => serviceDate.date === values.date).id;
+                        const serviceDateId =
+                            !serviceDates || serviceDates.length === 0
+                                ? null
+                                : _.find(serviceDates, serviceDate => serviceDate.date === values.date).id;
                         // console.debug({ serviceDateId });
+
                         const roomSeats = _.map(values.seats, (seat: string) => ({
                             roomId: parseInt(_.split(seat, '-')[1]),
                             seatId: parseInt(_.split(seat, '-')[0]),

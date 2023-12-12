@@ -148,7 +148,7 @@ export const getTripFields = (
                 values.durationInDays &&
                 values.durationInNights + 1 !== values.durationInDays
             )
-                return 'Nights can not be more then days!';
+                return 'Nights can not be more than days!';
 
             return null;
         },

@@ -181,8 +181,7 @@ const Page = ({
                     onDataModify: data =>
                         _.map(data, datum => ({
                             id: datum.id,
-                            customerName:
-                                datum.tripBooking?.customer?.firstName + ' ' + datum.tripBooking?.customer?.lastName,
+                            customerName: datum.tripBooking?.customer?.name,
                             pricePerPerson: datum.tripBooking?.pricePerPerson,
                             numberOfTravelers: datum.tripBooking?.numberOfTravelers,
                             totalAmount: datum.amount,
@@ -197,7 +196,8 @@ const Page = ({
                         icon: PrimeIcons.ARROW_RIGHT,
                         text: 'Invoice',
                         callback: identifier => {
-                            router.push(`/v-p/trips/${tripId}/bookings/${identifier}/invoice`);
+                            // + '/t/' + router.query.type
+                            router.push(`/v-p/trips/${tripId}/t/${router.query.type}/bookings/${identifier}/invoice`);
                         },
                     },
                 ]}

@@ -217,10 +217,7 @@ const Page = ({ vendor, tripId, tripBookingPayment }: { vendor: IVendor; tripId:
                                         email: tripBookingPayment?.tripBooking?.vendor?.email,
                                     },
                                     to: {
-                                        name:
-                                            tripBookingPayment?.tripBooking?.customer?.firstName +
-                                            ' ' +
-                                            tripBookingPayment?.tripBooking?.customer?.lastName,
+                                        name: tripBookingPayment?.tripBooking?.customer?.name,
                                         address: tripBookingPayment?.tripBooking?.customer?.address,
                                         phone: tripBookingPayment?.tripBooking?.customer?.phone,
                                         email: tripBookingPayment?.tripBooking?.customer?.email,
