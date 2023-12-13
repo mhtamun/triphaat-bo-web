@@ -4,7 +4,7 @@ import { Tag } from 'primereact/tag';
 import copy from 'copy-to-clipboard';
 import _ from 'lodash';
 
-const UrlBasedColumnItem = ({ url }: { url: string }) => {
+const UrlBasedColumnItem = ({ url, type = 'other' }: { url: string; type?: 'image' | 'video' | 'other' }) => {
     const _url_split = _.split(url, '.');
     const extension = _url_split[_.size(_url_split) - 1];
     // console.debug({ extension });
@@ -20,7 +20,13 @@ const UrlBasedColumnItem = ({ url }: { url: string }) => {
 
     return (
         <div className="flex-auto">
-            <View />
+            {!type ? (
+                <View />
+            ) : type === 'image' ? (
+                <img src={url} width={100}></img>
+            ) : type === 'video' ? (
+                <video src={url} width={100}></video>
+            ) : null}
             <br />
             <Button
                 className="p-button-outlined mt-3"

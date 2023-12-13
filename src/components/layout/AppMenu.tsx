@@ -55,6 +55,11 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     label: 'Featured Trip Management',
                     to: '/featured-trips',
                 },
+                {
+                    icon: 'pi pi-fw pi-list',
+                    label: 'Featured Location Management',
+                    to: '/featured-locations',
+                },
             ],
         },
     ];
