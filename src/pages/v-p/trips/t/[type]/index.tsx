@@ -67,6 +67,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                                 'id',
                                 'vendorId',
                                 'locationId',
+                                'slug',
                                 'dateType',
                                 'dateTypeOther',
                                 'accommodationType',
