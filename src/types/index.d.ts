@@ -37,6 +37,16 @@ export interface IVendor {
     bannedReason: string;
 }
 
+export interface ICustomer {
+    id: number;
+    name: string;
+    countryCode: string;
+    phone: string;
+    email: string;
+    profileImageUrl: string;
+    status: string;
+}
+
 export interface ILocation {
     id: number;
     name: string;

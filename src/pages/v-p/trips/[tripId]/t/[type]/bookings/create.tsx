@@ -28,16 +28,7 @@ import {
 } from '../../../../../../../apis';
 import { getSeverity } from '../../../../../../../utils';
 import WrapperComponent from '../../../../../../../components/trips/WrapperComponent';
-
-interface ICustomer {
-    id: number;
-    firstName: string;
-    lastName: string;
-    phone: string;
-    email: string;
-    profileImageUrl: string;
-    status: string;
-}
+import { ICustomer } from '../../../../../../../types';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Create | Booking | Fixed Package Trip', async cookies => {
@@ -155,12 +146,12 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                         <img
                             className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
                             src={customer.profileImageUrl}
-                            alt={customer.firstName}
+                            alt={customer.name}
                         />
                     )}
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
                         <div className="flex flex-column align-items-center sm:align-items-start gap-3">
-                            <div className="text-2xl font-bold text-900">{`${customer.firstName} ${customer.lastName}`}</div>
+                            <div className="text-2xl font-bold text-900">{customer.name}</div>
                             <div className="flex align-items-center gap-3">
                                 <span className="flex align-items-center gap-2">
                                     <span className="font-semibold">{customer.email}</span>
@@ -169,7 +160,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                             </div>
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                            <span className="text-2xl font-semibold">{customer.phone}</span>
+                            <span className="text-2xl font-semibold">{`${customer.countryCode}${customer.phone}`}</span>
                             <Button
                                 disabled={customer.status !== 'ACTIVE'}
                                 onClick={(e: React.MouseEvent) => {
