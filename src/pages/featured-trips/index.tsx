@@ -14,6 +14,7 @@ import { ILocation } from '../../types';
 import { ISelectOption } from '../../components/global/Dropdown';
 import { getGeneralStatusOptions } from '../../utils';
 import { getFormattedDatetime, DATE_FORMAT } from '../../utils/date';
+import { UrlBasedColumnItem } from '../../components';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Featured Trip Management | Admin Panel | TripHaat', () => {
@@ -82,6 +83,9 @@ const Page = () => {
                         viewAll={{
                             uri: `/api/v1/featured-trips`,
                             ignoredColumns: ['_id', '__v', 'createdAt', 'updatedAt'],
+                            scopedColumns: {
+                                imageUrl: (item: any) => <UrlBasedColumnItem url={item.imageUrl} type="image" />,
+                            },
                             actionIdentifier: '_id',
                             onDataModify: data =>
                                 _.map(data, datum => ({
