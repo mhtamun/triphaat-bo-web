@@ -85,6 +85,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     _.map(data, datum => ({
                                         id: datum.id,
                                         reasons: _.join(datum.reasons, ', '),
+                                        otherReasons: datum.otherReasons,
                                         costPrice: parseFloat(datum.costPricePerPerson),
                                         price: parseFloat(datum.pricePerPerson),
                                         offerPrice: parseFloat(datum.offerPricePerPerson),
@@ -253,25 +254,28 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 },
                                 {
                                     type: 'multi-select-sync',
-                                    name: 'reasons', 
+                                    name: 'reasons',
                                     placeholder: 'Enter diversity reasons (press enter to start new line)!',
                                     title: 'Reasons (Diversification)',
                                     initialValue: null,
                                     options: getVariantOptions(),
                                     isGroupOptions: true,
                                     validate: (values: any) => {
-                                        if (
-                                            _.size(values.accommodationType) === 0 &&
-                                            _.size(values.accommodationClass) === 0 &&
-                                            _.size(values.accommodationSharing) === 0 &&
-                                            _.size(values.transportationType) === 0 &&
-                                            _.size(values.transportationClass) === 0 &&
-                                            _.size(values.transportationSharing) === 0 &&
-                                            _.size(values.foodType) === 0 &&
-                                            _.size(values.foodClass) === 0 &&
-                                            !values.reasons
-                                        )
-                                            return 'Please at least define what differs this variant from other variants!';
+                                        if (!values.otherReasons && !values.reasons)
+                                            return 'Please at least select what differs this variant from other variants!';
+
+                                        return null;
+                                    },
+                                },
+                                {
+                                    type: 'text',
+                                    name: 'otherReasons',
+                                    placeholder: 'Write reasons for this variant',
+                                    title: 'Reasons (Diversification)',
+                                    initialValue: null,
+                                    validate: (values: any) => {
+                                        if (!values.reasons && !values.otherReasons)
+                                            return 'Please at least write what differs this variant from other variants!';
 
                                         return null;
                                     },
