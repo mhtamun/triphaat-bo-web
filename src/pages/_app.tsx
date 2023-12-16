@@ -20,10 +20,10 @@ import '../styles/layout/layout.scss';
 
 PrimeReact.zIndex = {
     modal: 999999,
-    overlay: 1000,
+    overlay: 9999999,
     menu: 99999,
-    tooltip: 1100,
-    toast: 1200,
+    tooltip: 99999999,
+    toast: 9999999,
 };
 
 type Props = AppProps & {
