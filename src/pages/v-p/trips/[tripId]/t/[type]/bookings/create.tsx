@@ -331,7 +331,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                             type: 'number',
                             name: 'numberOfTravelers',
                             placeholder: 'Enter number of traveler',
-                            title: 'Number Of Traveler',
+                            title: 'Number Of Traveler (Pax count)',
                             initialValue: null,
                             validate: (values: any) => {
                                 if (!values.numberOfTravelers) return 'Required!';

@@ -143,13 +143,6 @@ export const getTripFields = (
         validate: (values: any) => {
             if (!values.durationInNights) return 'Required!';
 
-            if (
-                values.durationInNights &&
-                values.durationInDays &&
-                values.durationInNights + 1 !== values.durationInDays
-            )
-                return 'Nights can not be more than days!';
-
             return null;
         },
     },
@@ -211,20 +204,20 @@ export const getTripFields = (
         type: 'number',
         name: 'numberOfSeats',
         placeholder: 'Enter number of seats for this trip!',
-        title: 'Number of Seats (Maximum)',
+        title: 'Number of Seats (Maximum pax possible)',
         initialValue: null,
         validate: (values: any) => {
             if (!values.numberOfSeats) return 'Required!';
 
             return null;
         },
-        col: 2,
+        col: 3,
     },
     {
         type: 'number',
         name: 'minRequiredSeatsToRun',
         placeholder: 'Enter number of seats required for this trip to run!',
-        title: 'Number of Seats (Minimum)',
+        title: 'Number of Seats (Minimum pax required)',
         initialValue: null,
         validate: (values: any) => {
             if (!values.minRequiredSeatsToRun) return 'Required!';
@@ -273,6 +266,7 @@ export const getTripFields = (
 
             return null;
         },
+        col: 2,
     },
     {
         type: 'select-sync',
