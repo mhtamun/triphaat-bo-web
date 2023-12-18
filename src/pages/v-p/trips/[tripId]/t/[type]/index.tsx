@@ -16,6 +16,7 @@ import { getTripFields } from '../../../t/[type]/create';
 import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 import { getTripType } from '../../../../../../utils';
+import { showToast } from '../../../../../../utils/toast';
 
 export interface ILocation {
     id: number;
@@ -90,20 +91,16 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
                                 callback={data => {
                                     // console.debug({ data });
 
-                                    callPutApi('/vendor/api/v1/trips/' + tripId, data)
+                                    callPutApi('/vendor/api/v1/trips/' + tripId, data, null, null, true)
                                         .then(response => {
-                                            if (!response) {
-                                                // showToast('error', 'Unsuccessful!', 'Server not working!');
-                                            } else if (response.statusCode !== 200) {
-                                                // showToast('error', 'Unsuccessful!', response.message);
-                                            } else {
-                                                // showToast('success', 'Success!', response.message);
-                                            }
+                                            if (!response) throw { message: 'Server not working!' };
+
+                                            if (response.statusCode !== 200) throw { message: response.message };
+
+                                            showToast(response.message, 'success', { autoClose: 500 });
                                         })
                                         .catch(error => {
                                             console.error('error', error);
-
-                                            // showToast('error', 'Unsuccessful!', 'Something went wrong!');
                                         })
                                         .finally(() => {});
                                 }}
