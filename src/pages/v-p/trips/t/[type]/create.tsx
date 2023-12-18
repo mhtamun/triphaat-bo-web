@@ -33,6 +33,8 @@ export const getTripFields = (
             value: location.id,
             label: `${location.name}, ${location.city.name}, ${location.city.state.name}, ${location.city.state.country.name}`,
         })),
+        isSearchable: true,
+        isClearable: false,
         validate: (values: any) => {
             if (!values.locationId) return 'Required!';
 
