@@ -126,6 +126,12 @@ export const updateVendorProfileRp = (payload: any, authorization?: string) =>
 export const updateVendorProfileRpNid = (payload: any, authorization?: string) =>
     callPutApi(`/vendor/api/v1/vendor-profile-rp-nid`, payload, null, 'multipart/form-data', true);
 
+export const copyTrip = (tripId: string, authorization?: string) =>
+    callGetApi(`vendor/api/v1/trips/${tripId}/copy`, authorization, true);
+
+export const deactivateTrip = (tripId: string, authorization?: string) =>
+    callGetApi(`vendor/api/v1/trips/${tripId}/deactivate`, authorization, true);
+
 // general APIs
 
 export const getLocations = (authorization?: string | null) =>

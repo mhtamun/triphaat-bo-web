@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 // third-party libraries
 import { GetServerSideProps } from 'next';
@@ -10,13 +10,14 @@ import _ from 'lodash';
 // application libraries
 import { getAuthorized } from '../../../../../../libs/auth';
 import GenericFormGenerator from '../../../../../../components/global/GenericFormGenerator';
-import { getLocations, getTripForVendor } from '../../../../../../apis';
+import { copyTrip, deactivateTrip, getLocations, getTripForVendor } from '../../../../../../apis';
 import { callPutApi } from '../../../../../../libs/api';
 import { getTripFields } from '../../../t/[type]/create';
 import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 import { getTripType } from '../../../../../../utils';
 import { showToast } from '../../../../../../utils/toast';
+import { ModalConfirmation } from '../../../../../../components';
 
 export interface ILocation {
     id: number;
@@ -68,8 +69,21 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
 
     const types = getTripType(router);
 
+    const [isCopyConfirmationModalOpen, setCopyConfirmationModalOpen] = useState<boolean>(false);
+    const [isDeactivateConfirmationModalOpen, setDeactivateConfirmationModalOpen] = useState<boolean>(false);
+
     return (
-        <WrapperComponent title={trip?.name} tripId={tripId} router={router}>
+        <WrapperComponent
+            title={trip?.name}
+            tripId={tripId}
+            router={router}
+            copyTripCallBack={() => {
+                setCopyConfirmationModalOpen(true);
+            }}
+            deactivateTripCallBack={() => {
+                setDeactivateConfirmationModalOpen(true);
+            }}
+        >
             <TabViewComponent
                 router={router}
                 tripId={tripId}
@@ -109,6 +123,67 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
                         ),
                     [trip]
                 )}
+            />
+            <ModalConfirmation
+                isOpen={isCopyConfirmationModalOpen}
+                onCancel={() => {
+                    setCopyConfirmationModalOpen(!isCopyConfirmationModalOpen);
+                }}
+                title="Are you sure you want to copy this trip?"
+                subtitle="You have to set the dates of the trip after copy"
+                cancelCallback={() => {
+                    setCopyConfirmationModalOpen(!isCopyConfirmationModalOpen);
+                }}
+                cancelColor="danger"
+                confirmCallback={() => {
+                    setCopyConfirmationModalOpen(!isCopyConfirmationModalOpen);
+
+                    copyTrip(tripId)
+                        .then(response => {
+                            if (!response) throw { message: 'Server not working!' };
+
+                            if (response.statusCode !== 200) throw { message: response.message };
+
+                            showToast(response.message, 'success', { autoClose: 500 });
+
+                            router.push(`/v-p/trips/t/${router.query.type}`);
+                        })
+                        .catch(error => {
+                            console.error('error', error);
+                        })
+                        .finally(() => {});
+                }}
+                confirmColor="success"
+            />
+            <ModalConfirmation
+                isOpen={isDeactivateConfirmationModalOpen}
+                onCancel={() => {
+                    setDeactivateConfirmationModalOpen(!isDeactivateConfirmationModalOpen);
+                }}
+                title="Are you sure you want to deactivate this trip?"
+                subtitle="You can reactivate by changing teh status of this trip"
+                cancelCallback={() => {
+                    setDeactivateConfirmationModalOpen(!isDeactivateConfirmationModalOpen);
+                }}
+                cancelColor="success"
+                confirmCallback={() => {
+                    setDeactivateConfirmationModalOpen(!isDeactivateConfirmationModalOpen);
+
+                    deactivateTrip(tripId)
+                        .then(response => {
+                            if (!response) throw { message: 'Server not working!' };
+
+                            if (response.statusCode !== 200) throw { message: response.message };
+
+                            showToast(response.message, 'success', { autoClose: 500 });
+
+                            router.reload();
+                        })
+                        .catch(error => {
+                            console.error('error', error);
+                        })
+                        .finally(() => {});
+                }}
             />
         </WrapperComponent>
     );

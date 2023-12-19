@@ -10,11 +10,15 @@ const WrapperComponent = ({
     tripId,
     router,
     children,
+    copyTripCallBack,
+    deactivateTripCallBack,
 }: {
     title: string;
     tripId?: string | null;
     router?: NextRouter | null;
     children: React.ReactNode;
+    copyTripCallBack?: () => void;
+    deactivateTripCallBack?: () => void;
 }) => {
     return (
         <Panel header={title}>
@@ -75,43 +79,53 @@ const WrapperComponent = ({
                                 },
                             ],
                         },
-                        {
-                            label: 'Expenses',
-                            icon: 'pi pi-fw pi-money-bill',
-                            items: [
-                                {
-                                    label: 'Create New',
-                                    icon: 'pi pi-fw pi-plus',
-                                    command: (e: MenuItemCommandEvent) => {
-                                        e.originalEvent.preventDefault();
-                                    },
-                                },
-                                {
-                                    label: 'Expense List',
-                                    icon: 'pi pi-fw pi-align-justify',
-                                    command: (e: MenuItemCommandEvent) => {
-                                        e.originalEvent.preventDefault();
-                                    },
-                                },
-                                {
-                                    separator: true,
-                                },
-                                {
-                                    label: 'Balance',
-                                    icon: 'pi pi-fw pi-calculator',
-                                    command: (e: MenuItemCommandEvent) => {
-                                        e.originalEvent.preventDefault();
-                                    },
-                                },
-                            ],
-                        },
+                        // {
+                        //     label: 'Expenses',
+                        //     icon: 'pi pi-fw pi-money-bill',
+                        //     items: [
+                        //         {
+                        //             label: 'Create New',
+                        //             icon: 'pi pi-fw pi-plus',
+                        //             command: (e: MenuItemCommandEvent) => {
+                        //                 e.originalEvent.preventDefault();
+                        //             },
+                        //         },
+                        //         {
+                        //             label: 'Expense List',
+                        //             icon: 'pi pi-fw pi-align-justify',
+                        //             command: (e: MenuItemCommandEvent) => {
+                        //                 e.originalEvent.preventDefault();
+                        //             },
+                        //         },
+                        //         {
+                        //             separator: true,
+                        //         },
+                        //         {
+                        //             label: 'Balance',
+                        //             icon: 'pi pi-fw pi-calculator',
+                        //             command: (e: MenuItemCommandEvent) => {
+                        //                 e.originalEvent.preventDefault();
+                        //             },
+                        //         },
+                        //     ],
+                        // },
                         {
                             label: 'Copy This Trip',
                             icon: 'pi pi-fw pi-copy',
+                            command: (e: MenuItemCommandEvent) => {
+                                e.originalEvent.preventDefault();
+
+                                if (tripId && copyTripCallBack) copyTripCallBack();
+                            },
                         },
                         {
                             label: 'Deactivate This Trip',
                             icon: 'pi pi-fw pi-ban',
+                            command: (e: MenuItemCommandEvent) => {
+                                e.originalEvent.preventDefault();
+
+                                if (tripId && deactivateTripCallBack) deactivateTripCallBack();
+                            },
                         },
                     ].filter(item => {
                         if (router.query.type === '0000' && item.label === 'Service Date Setup') return false;

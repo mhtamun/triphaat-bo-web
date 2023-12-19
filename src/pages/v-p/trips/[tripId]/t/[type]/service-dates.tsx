@@ -133,7 +133,6 @@ const Page = ({ tripId, trip, serviceDates }: { tripId: string; trip: any; servi
                     onSelectEvent={handleSelectEvent}
                 />
             </Fieldset>
-
             <ModalConfirmation
                 isOpen={isDeleteConfirmationModalOpen}
                 onCancel={() => {
