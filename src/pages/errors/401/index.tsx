@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'primereact/button';
-import AppConfig from '../../../components/layout/AppConfig';
+// import AppConfig from '../../../components/layout/AppConfig';
 import type { Page } from '../../../types/types';
 
 const AccessDeniedPage: Page = () => {
@@ -43,7 +43,7 @@ AccessDeniedPage.getLayout = function getLayout(page) {
     return (
         <React.Fragment>
             {page}
-            <AppConfig />
+            {/* <AppConfig simple /> */}
         </React.Fragment>
     );
 };

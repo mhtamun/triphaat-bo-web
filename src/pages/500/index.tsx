@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import AppConfig from '../../components/layout/AppConfig';
+// import AppConfig from '../../components/layout/AppConfig';
 import { Button } from 'primereact/button';
 import type { Page } from '../../types/types';
 
@@ -43,7 +43,7 @@ ErrorPage.getLayout = function getLayout(page) {
     return (
         <React.Fragment>
             {page}
-            <AppConfig />
+            {/* <AppConfig simple /> */}
         </React.Fragment>
     );
 };
