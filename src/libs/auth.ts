@@ -2,7 +2,14 @@
 import { GetServerSidePropsContext } from 'next';
 
 // application
-import { getCookie, setCookie, removeCookie, parseCookie, ICookie } from './cookie';
+import { getCookie, getServerSideCookie, setCookie, removeCookie, hasCookie } from './cookie';
+
+export interface ICookie {
+    user: any;
+    vendor?: any;
+    accessType: string;
+    accessToken: string;
+}
 
 export const getUser = () => JSON.parse(getCookie('user'));
 export const setUser = (value: string) => setCookie('user', JSON.stringify(value));
@@ -31,11 +38,7 @@ export const createLogin = (user: any, accessType: string, accessToken: string, 
     }
 };
 
-export const isLoggedIn = () => {
-    if (!getUser || !getAccessType || !getAccessToken) return false;
-
-    return true;
-};
+export const isLoggedIn = () => hasCookie('user') && hasCookie('accessType') && hasCookie('accessToken');
 
 export const destroyLogin = (): boolean => {
     try {
@@ -52,14 +55,26 @@ export const destroyLogin = (): boolean => {
     }
 };
 
-export const getServerSideCookie = (req: any): ICookie | null => {
-    if (!req) return null;
+export const getServerSideCookies = (context: GetServerSidePropsContext): ICookie | null => {
+    if (!context) return null;
 
-    if (!req.headers) return null;
+    if (!context.req) return null;
 
-    if (!req.headers.cookie) return null;
+    if (!context.req.headers) return null;
 
-    return parseCookie(req.headers.cookie);
+    if (!context.req.headers.cookie) return null;
+
+    const user = getServerSideCookie('user', context.req.headers.cookie);
+    const vendor = getServerSideCookie('vendor', context.req.headers.cookie);
+    const accessType = getServerSideCookie('accessType', context.req.headers.cookie);
+    const accessToken = getServerSideCookie('accessToken', context.req.headers.cookie);
+
+    return {
+        user,
+        vendor,
+        accessType,
+        accessToken,
+    };
 };
 
 export const getAuthorized = async (
@@ -67,21 +82,24 @@ export const getAuthorized = async (
     title: string,
     callback?: (cookies: any) => any
 ) => {
-    const { req } = context;
-    const cookies = getServerSideCookie(req);
+    // console.debug({ context });
 
-    if (!cookies?.user || !cookies?.accessType || !cookies?.accessToken) {
+    if (!context) return null;
+
+    const cookies = getServerSideCookies(context);
+
+    // console.debug({ cookies });
+
+    if (!cookies || !cookies.user || !cookies.accessType || !cookies.accessToken) {
         return {
             redirect: {
-                destination: !req.url?.includes('/v-p') ? '/auth/login' : '/v-p/auth/login',
+                destination: !context.req.url?.includes('/v-p') ? '/auth/login' : '/v-p/auth/login',
                 permanent: false,
             },
         };
     }
 
-    const user = JSON.parse(cookies?.user);
-
-    if (user.type === 'TRIPHAAT_ADMIN' && req.url?.includes('/v-p')) {
+    if (cookies.user.type === 'TRIPHAAT_ADMIN' && context.req.url?.includes('/v-p')) {
         return {
             redirect: {
                 destination: '/',
@@ -90,7 +108,7 @@ export const getAuthorized = async (
         };
     }
 
-    if (user.type === 'VENDOR_ADMIN' && !req.url?.includes('/v-p')) {
+    if (cookies.user.type === 'VENDOR_ADMIN' && !context.req.url?.includes('/v-p')) {
         return {
             redirect: {
                 destination: '/v-p/',
@@ -103,7 +121,7 @@ export const getAuthorized = async (
 
     if (callback) data = await callback(cookies);
 
-    if (data?.redirect) return { redirect: data.redirect };
+    if (data && data.redirect) return { redirect: data.redirect };
 
     return {
         props: { title, ...data } ?? { title },

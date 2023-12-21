@@ -1,17 +1,40 @@
-import jsCookie from 'js-cookie';
-import cookie from 'cookie';
+import Cookies, { CookieGetOptions, CookieSetOptions } from 'universal-cookie';
 
-export interface ICookie {
-    user: any;
-    vendor?: any;
-    accessType: string;
-    accessToken: string;
+// Function to get a cookie by name
+export function getCookie(name: string, options?: CookieGetOptions) {
+    const cookies = new Cookies();
+
+    return cookies.get(name, { ...options });
 }
 
-export const getCookie = (tag: string) => jsCookie.get(tag) ?? '';
+export function getServerSideCookie(name: string, serverCookie: any, options?: CookieSetOptions) {
+    const cookies = new Cookies(serverCookie, { path: '/', ...options });
 
-export const setCookie = (tag: string, data: any) => jsCookie.set(tag, data);
+    return cookies.get(name);
+}
 
-export const removeCookie = (tag: string) => jsCookie.remove(tag);
+// Function to set a cookie
+export function setCookie(name: string, value: string, options?: CookieSetOptions) {
+    const cookies = new Cookies();
 
-export const parseCookie = (reqCookie: any): any => cookie.parse(reqCookie);
+    cookies.set(name, value, { path: '/', ...options });
+}
+
+// Function to remove a cookie by name
+export function removeCookie(name: string, options?: CookieSetOptions) {
+    const cookies = new Cookies();
+
+    cookies.remove(name, { path: '/', ...options });
+}
+
+// Function to check if a cookie with a given name exists
+export function hasCookie(name: string, options?: CookieGetOptions) {
+    return getCookie(name, { ...options }) !== undefined;
+}
+
+// Function to get all cookies
+export function getAllCookies() {
+    const cookies = new Cookies();
+
+    return cookies.getAll();
+}
