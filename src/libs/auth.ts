@@ -82,9 +82,13 @@ export const getAuthorized = async (
     title: string,
     callback?: (cookies: any) => any
 ) => {
-    // console.debug({ context });
-
-    if (!context) return null;
+    if (!context)
+        return {
+            redirect: {
+                destination: '/500',
+                permanent: false,
+            },
+        };
 
     const cookies = getServerSideCookies(context);
 

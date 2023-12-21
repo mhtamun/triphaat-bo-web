@@ -106,7 +106,7 @@ const LoginPage: Page = () => {
                                 style={{ padding: '1rem' }}
                             />
                             <p id={`email-help`} className="p-error mt-1 mb-3">
-                                {formik.errors.email}
+                                {`${formik.errors.email}`}
                             </p>
                             <label htmlFor="password" className="block text-900 font-medium text-xl mb-2">
                                 Password
@@ -125,7 +125,7 @@ const LoginPage: Page = () => {
                                 inputClassName="w-full p-3 md:w-30rem"
                             ></Password>
                             <p id={`password-help`} className="p-error mt-1 mb-3">
-                                {formik.errors.password}
+                                {`${formik.errors.password}`}
                             </p>
                             <div className="flex align-items-center justify-content-between mb-5 gap-5">
                                 <div className="flex align-items-center">
