@@ -17,17 +17,13 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Checkbox } from 'primereact/checkbox';
 import { Button } from 'primereact/button';
-import { useFormik } from 'formik';
+import { FormikValues, useFormik } from 'formik';
 import * as Yup from 'yup';
 
 const LoginPage: Page = () => {
     const { layoutConfig } = useContext(LayoutContext);
 
     const router = useRouter();
-    const containerClassName = classNames(
-        'surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden',
-        { 'p-input-filled': layoutConfig.inputStyle === 'filled' }
-    );
 
     const formik = useFormik({
         enableReinitialize: false,
@@ -43,7 +39,7 @@ const LoginPage: Page = () => {
             password: Yup.string().required('Please enter a valid password!'),
         }),
 
-        onSubmit: (values, { setSubmitting }) => {
+        onSubmit: (values: FormikValues, { setSubmitting }) => {
             setSubmitting(true);
 
             vendorLogin({ email: values.email, password: values.password, type: 'VENDOR_ADMIN' })
@@ -69,6 +65,11 @@ const LoginPage: Page = () => {
                 });
         },
     });
+
+    const containerClassName = classNames(
+        'surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden',
+        { 'p-input-filled': layoutConfig.inputStyle === 'filled' }
+    );
 
     return (
         <div className={containerClassName}>
@@ -106,10 +107,12 @@ const LoginPage: Page = () => {
                                 className={`w-full md:w-30rem ${!formik.errors.email ? ' ' : 'p-invalid'}`}
                                 style={{ padding: '1rem' }}
                             />
-                            <p id={`email-help`} className="p-error mt-1 mb-3">
-                                {formik.errors.email}
-                            </p>
-                            <label htmlFor="password" className="block text-900 font-medium text-xl mb-2">
+                            {!formik.errors.email ? null : (
+                                <p id={`email-help`} className="p-error mt-1 mb-3">
+                                    {formik.errors.email.toString()}
+                                </p>
+                            )}
+                            <label htmlFor="password" className="block text-900 font-medium text-xl mb-2 mt-3">
                                 Password
                             </label>
                             <Password
@@ -125,10 +128,12 @@ const LoginPage: Page = () => {
                                 className={`w-full ${!formik.errors.password ? ' ' : 'p-invalid'}`}
                                 inputClassName="w-full p-3 md:w-30rem"
                             ></Password>
-                            <p id={`password-help`} className="p-error mt-1 mb-3">
-                                {formik.errors.password}
-                            </p>
-                            <div className="flex align-items-center justify-content-between mb-5 gap-5">
+                            {!formik.errors.password ? null : (
+                                <p id={`password-help`} className="p-error mt-1 mb-3">
+                                    {formik.errors.password.toString()}
+                                </p>
+                            )}
+                            <div className="flex align-items-center justify-content-between mb-3 mt-3 gap-5">
                                 <div className="flex align-items-center">
                                     <Checkbox
                                         id="remember-me"
@@ -148,9 +153,13 @@ const LoginPage: Page = () => {
                                     Forgot password?
                                 </a>
                             </div>
-                            <Button type="submit" className="w-full p-3 text-xl center">
-                                Sign In
-                            </Button>
+                            <Button
+                                type="submit"
+                                label={'Sign In'}
+                                raised
+                                size="small"
+                                className="w-full p-3 text-xl center"
+                            />
                         </div>
                     </form>
                 </div>
