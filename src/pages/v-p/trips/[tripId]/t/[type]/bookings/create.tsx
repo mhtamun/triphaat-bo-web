@@ -513,11 +513,14 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                                     {
                                         type: 'text',
                                         name: 'phone',
-                                        placeholder: 'Enter phone number!',
-                                        title: 'Phone Number',
+                                        placeholder: 'Enter a phone number!',
+                                        title: 'Phone',
                                         initialValue: null,
                                         validate: (values: any) => {
                                             if (!values.phone) return 'Required!';
+
+                                            if (values.phone && !values.phone.matches(/^01\d{9}$/))
+                                                return 'Please enter a valid bangladeshi phone number!';
 
                                             return null;
                                         },

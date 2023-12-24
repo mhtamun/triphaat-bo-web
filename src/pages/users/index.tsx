@@ -73,25 +73,20 @@ export const getUserManagementFields = (roles: { id: number; name: string }[]): 
         placeholder: 'Enter a phone number!',
         title: 'Phone Number',
         initialValue: null,
-        validate: (values: any) => {
-            if (!values.phone) return 'Required!';
-
-            if (values.phone && !values.phone.startsWith('+880')) return 'Please enter code +88 before number!';
-
-            return null;
-        },
     },
     {
         type: 'text',
         name: 'nid',
-        placeholder: 'Enter NID!',
+        placeholder: 'Enter a national identification number!',
         title: 'NID',
         initialValue: null,
-        validate: (values: any) => {
-            if (!values.nid) return 'Required!';
-
-            return null;
-        },
+    },
+    {
+        type: 'text',
+        name: 'address',
+        placeholder: 'Enter an address!',
+        title: 'NID',
+        initialValue: null,
     },
 ];
 
