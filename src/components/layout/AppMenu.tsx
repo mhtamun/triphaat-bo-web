@@ -60,6 +60,11 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     label: 'Featured Location Management',
                     to: '/featured-locations',
                 },
+                {
+                    icon: 'pi pi-fw pi-list',
+                    label: 'Featured City Management',
+                    to: '/featured-cities',
+                },
             ],
         },
     ];

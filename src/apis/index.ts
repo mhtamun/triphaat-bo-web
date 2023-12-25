@@ -137,6 +137,8 @@ export const deactivateTrip = (tripId: string, authorization?: string) =>
 export const getLocations = (authorization?: string | null) =>
     callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
 
+export const getCities = (authorization?: string | null) => callGetApi(apiBaseUrl + '/api/v1/cities', authorization);
+
 export const getTripVariants = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/api/v1/trips/' + id + '/variants', authorization);
 

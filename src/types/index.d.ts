@@ -50,13 +50,24 @@ export interface ICustomer {
 export interface ILocation {
     id: number;
     name: string;
-    city: {
+    city?: {
         name: string;
-        state: {
+        state?: {
             name: string;
-            country: {
+            country?: {
                 name: string;
             };
+        };
+    };
+}
+
+export interface ICity {
+    id: number;
+    name: string;
+    state?: {
+        name: string;
+        country?: {
+            name: string;
         };
     };
 }
