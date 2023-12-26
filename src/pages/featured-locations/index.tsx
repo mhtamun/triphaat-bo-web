@@ -35,7 +35,7 @@ const Page = () => {
                 setLocations(
                     _.map(response.data, (location: ILocation) => ({
                         value: location.id,
-                        label: location.name + ', ' + location.city.name,
+                        label: `${location.name}, ${location?.city?.name}`,
                     }))
                 );
             })
