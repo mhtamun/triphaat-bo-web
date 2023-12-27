@@ -142,9 +142,6 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                         validate: (values: any) => {
                                             if (!values.responsiblePersonPhone) return 'Required!';
 
-                                            if (values.phone && !values.responsiblePersonPhone.startsWith('+880'))
-                                                return 'Please enter code +88 before number!';
-
                                             return null;
                                         },
                                     },

@@ -157,9 +157,6 @@ const Page = () => {
                                 validate: (values: any) => {
                                     if (!values.phone) return 'Required!';
 
-                                    if (values.phone && !values.phone.startsWith('+880'))
-                                        return 'Please enter code +880 before number!';
-
                                     return null;
                                 },
                             },
@@ -168,9 +165,13 @@ const Page = () => {
                                 name: 'manualBookingCommission',
                                 placeholder: '',
                                 title: 'Manual Booking Commission',
-                                initialValue: null,
+                                initialValue: 0,
                                 validate: (values: any) => {
-                                    if (values.manualBookingCommission === '') return 'Required!';
+                                    if (
+                                        _.isUndefined(values.manualBookingCommission) ||
+                                        _.isNull(values.manualBookingCommission)
+                                    )
+                                        return 'Required!';
 
                                     return null;
                                 },
@@ -180,9 +181,13 @@ const Page = () => {
                                 name: 'onlyPgwUseCommission',
                                 placeholder: '',
                                 title: 'Only Pgw Use Commission',
-                                initialValue: null,
+                                initialValue: 0,
                                 validate: (values: any) => {
-                                    if (values.onlyPgwUseCommission === '') return 'Required!';
+                                    if (
+                                        _.isUndefined(values.onlyPgwUseCommission) ||
+                                        _.isNull(values.onlyPgwUseCommission)
+                                    )
+                                        return 'Required!';
 
                                     return null;
                                 },
@@ -192,9 +197,13 @@ const Page = () => {
                                 name: 'websiteBookingOnCommission',
                                 placeholder: '',
                                 title: 'Website Booking On Season Commission',
-                                initialValue: null,
+                                initialValue: 0,
                                 validate: (values: any) => {
-                                    if (values.websiteBookingOnCommission === '') return 'Required!';
+                                    if (
+                                        _.isUndefined(values.websiteBookingOnCommission) ||
+                                        _.isNull(values.websiteBookingOnCommission)
+                                    )
+                                        return 'Required!';
 
                                     return null;
                                 },
@@ -204,9 +213,13 @@ const Page = () => {
                                 name: 'websiteBookingOffCommission',
                                 placeholder: '',
                                 title: 'Website Booking Off Season Commission',
-                                initialValue: null,
+                                initialValue: 0,
                                 validate: (values: any) => {
-                                    if (values.websiteBookingOffCommission === '') return 'Required!';
+                                    if (
+                                        _.isUndefined(values.websiteBookingOffCommission) ||
+                                        _.isNull(values.websiteBookingOffCommission)
+                                    )
+                                        return 'Required!';
 
                                     return null;
                                 },
