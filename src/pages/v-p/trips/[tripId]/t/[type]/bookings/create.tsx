@@ -160,7 +160,11 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                             </div>
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                            <span className="text-2xl font-semibold">{`${customer.countryCode}${customer.phone}`}</span>
+                            {!customer.countryCode || !customer.phoneNumber ? null : (
+                                <span className="text-2xl font-semibold">
+                                    {`${customer.countryCode}${customer.phoneNumber}`}
+                                </span>
+                            )}
                             <Button
                                 disabled={customer.status !== 'ACTIVE'}
                                 onClick={(e: React.MouseEvent) => {

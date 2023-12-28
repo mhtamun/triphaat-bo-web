@@ -41,7 +41,7 @@ export interface ICustomer {
     id: number;
     name: string;
     countryCode: string;
-    phone: string;
+    phoneNumber: string;
     email: string;
     profileImageUrl: string;
     status: string;
