@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import { NextRouter } from 'next/router';
 
 export const getUserStatusOptions = () => [
+    { value: 'PENDING', label: 'PENDING' },
     { value: 'ACTIVE', label: 'ACTIVE' },
     { value: 'BLOCKED', label: 'BLOCKED' },
 ];

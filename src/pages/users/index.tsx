@@ -3,6 +3,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 // third-party
 import { GetServerSideProps } from 'next';
 import { Card } from 'primereact/card';
+import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
 // application
@@ -10,6 +11,7 @@ import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
 import { getRoles } from '../../apis';
 import { IField } from '../../components/global/GenericFormGenerator';
+import { getSeverity, getUserStatusOptions } from '../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'User Management | Admin Panel | TripHaat');
@@ -70,23 +72,36 @@ export const getUserManagementFields = (roles: { id: number; name: string }[]): 
     {
         type: 'text',
         name: 'phone',
-        placeholder: 'Enter a phone number!',
+        placeholder: 'Enter a phone number',
         title: 'Phone Number',
         initialValue: null,
     },
     {
         type: 'text',
         name: 'nid',
-        placeholder: 'Enter a national identification number!',
+        placeholder: 'Enter national identification number',
         title: 'NID',
         initialValue: null,
     },
     {
         type: 'text',
         name: 'address',
-        placeholder: 'Enter an address!',
-        title: 'NID',
+        placeholder: 'Enter an address',
+        title: 'Address',
         initialValue: null,
+    },
+    {
+        type: 'select-sync',
+        name: 'status',
+        placeholder: 'Select a status!',
+        title: 'Status',
+        initialValue: 'ACTIVE',
+        options: getUserStatusOptions(),
+        validate: (values: any) => {
+            if (!values.status) return 'Status required!';
+
+            return null;
+        },
     },
 ];
 
@@ -128,13 +143,21 @@ const Page = () => {
                                 ignoredColumns: [
                                     'id',
                                     'password',
-                                    'type',
                                     'otp',
                                     'otpAttempt',
                                     'roleId',
                                     'createdAt',
                                     'updatedAt',
                                 ],
+                                scopedColumns: {
+                                    status: (item: any) => (
+                                        <Badge
+                                            value={item.status}
+                                            size="normal"
+                                            severity={getSeverity(item.status)}
+                                        ></Badge>
+                                    ),
+                                },
                                 actionIdentifier: 'id',
                                 onDataModify: data =>
                                     _.map(data, datum => ({
@@ -152,6 +175,9 @@ const Page = () => {
                                 identifier: '{id}',
                             }}
                             fields={getUserManagementFields(roles)}
+                            editFields={getUserManagementFields(roles)
+                                .filter(field => field.name !== 'password')
+                                .map(field => (field.name !== 'email' ? { ...field } : { ...field, isDisabled: true }))}
                         />
                     ),
                 [roles]

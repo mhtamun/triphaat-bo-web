@@ -3,12 +3,14 @@ import React, { useMemo, useState, useEffect } from 'react';
 // third-party
 import { GetServerSideProps } from 'next';
 import { Card } from 'primereact/card';
+import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
 // application
 import { getAuthorized } from '../../../libs/auth';
 import GenericViewGenerator from '../../../components/global/GenericViewGenerator';
 import { getUserManagementFields } from '../../users';
+import { getSeverity } from '../../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'User Management | Administration | Vendor Panel | TripHaat', () => {
@@ -44,6 +46,15 @@ const Page = () => {
                                 'createdAt',
                                 'updatedAt',
                             ],
+                            scopedColumns: {
+                                status: (item: any) => (
+                                    <Badge
+                                        value={item.status}
+                                        size="normal"
+                                        severity={getSeverity(item.status)}
+                                    ></Badge>
+                                ),
+                            },
                             actionIdentifier: 'id',
                             onDataModify: data =>
                                 _.map(data, datum => ({
@@ -61,6 +72,9 @@ const Page = () => {
                             identifier: '{id}',
                         }}
                         fields={getUserManagementFields(roles)}
+                        editFields={getUserManagementFields(roles)
+                            .filter(field => field.name !== 'password')
+                            .map(field => (field.name !== 'email' ? { ...field } : { ...field, isDisabled: true }))}
                     />
                 ),
                 [roles]

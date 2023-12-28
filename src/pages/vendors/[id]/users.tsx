@@ -4,6 +4,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Card } from 'primereact/card';
+import { Badge } from 'primereact/badge';
 import _ from 'lodash';
 
 // application
@@ -13,6 +14,7 @@ import { getVendorById } from '../../../apis';
 import { IVendor } from '../../../types';
 import { getUserManagementFields } from '../../users';
 import { BreadCrumb } from '../../../components';
+import { getSeverity } from '../../../utils';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'User Management | Vendor | Admin Panel | TripHaat', async cookies => {
@@ -59,13 +61,21 @@ const Page = ({ vendor }: { vendor: IVendor }) => {
                                     ignoredColumns: [
                                         'id',
                                         'password',
-                                        'type',
                                         'otp',
                                         'otpAttempt',
                                         'roleId',
                                         'createdAt',
                                         'updatedAt',
                                     ],
+                                    scopedColumns: {
+                                        status: (item: any) => (
+                                            <Badge
+                                                value={item.status}
+                                                size="normal"
+                                                severity={getSeverity(item.status)}
+                                            ></Badge>
+                                        ),
+                                    },
                                     actionIdentifier: 'id',
                                     onDataModify: data =>
                                         _.map(data, datum => ({
@@ -77,12 +87,17 @@ const Page = ({ vendor }: { vendor: IVendor }) => {
                                     uri: `api/v1/vendors/${vendor.id}/users`,
                                 }}
                                 viewOne={{ uri: 'api/v1/users/{id}', identifier: '{id}' }}
-                                editExisting={{ uri: 'api/v1/users/{id}', identifier: '{id}' }}
+                                editExisting={{ uri: `api/v1/vendors/${vendor.id}/users/{id}`, identifier: '{id}' }}
                                 removeOne={{
                                     uri: `api/v1/vendors/${vendor.id}/users/{id}`,
                                     identifier: '{id}',
                                 }}
                                 fields={getUserManagementFields(roles)}
+                                editFields={getUserManagementFields(roles)
+                                    .filter(field => field.name !== 'password')
+                                    .map(field =>
+                                        field.name !== 'email' ? { ...field } : { ...field, isDisabled: true }
+                                    )}
                             />
                         ),
                     [roles]
