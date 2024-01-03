@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
         return {
             isVendor: true,
-            vendor: JSON.parse(cookies.vendor),
+            vendor: cookies.vendor,
             tripId,
             tripBookingPayment: responseGetTripBookingPayment.data,
         };
@@ -213,13 +213,17 @@ const Page = ({ vendor, tripId, tripBookingPayment }: { vendor: IVendor; tripId:
                                     from: {
                                         name: tripBookingPayment?.tripBooking?.vendor?.businessName,
                                         address: tripBookingPayment?.tripBooking?.vendor?.businessAddress,
-                                        phone: tripBookingPayment?.tripBooking?.vendor?.phone,
+                                        phone:
+                                            tripBookingPayment?.tripBooking?.vendor?.countryCode +
+                                            tripBookingPayment?.tripBooking?.vendor?.phoneNumber,
                                         email: tripBookingPayment?.tripBooking?.vendor?.email,
                                     },
                                     to: {
                                         name: tripBookingPayment?.tripBooking?.customer?.name,
                                         address: tripBookingPayment?.tripBooking?.customer?.address,
-                                        phone: tripBookingPayment?.tripBooking?.customer?.phone,
+                                        phone:
+                                            tripBookingPayment?.tripBooking?.customer?.countryCode +
+                                            tripBookingPayment?.tripBooking?.customer?.phoneNumber,
                                         email: tripBookingPayment?.tripBooking?.customer?.email,
                                     },
                                     items: [

@@ -255,7 +255,7 @@ const Page = () => {
                                 name: 'status',
                                 placeholder: 'Select status!',
                                 title: 'Status',
-                                initialValue: 'ACTIVE',
+                                initialValue: 'PERMITTED',
                                 options: getVendorStatusOptions(),
                                 validate: (values: any) => {
                                     if (!values.status) return 'Required!';
