@@ -54,6 +54,12 @@ const Page = () => {
                                 placeholder: 'Enter header!',
                                 title: 'Header',
                                 initialValue: null,
+                            },{
+                                type: 'text',
+                                name: 'subheader',
+                                placeholder: 'Enter subheader!',
+                                title: 'Subheader',
+                                initialValue: null,
                             },
                             {
                                 type: 'text',
