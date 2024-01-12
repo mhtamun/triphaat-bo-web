@@ -13,6 +13,7 @@ import { getTripForVendor } from '../../../../../../apis';
 import { getGeneralStatusOptions } from '../../../../../../utils';
 import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
+import { IField } from '../../../../../../components/global/GenericFormGenerator';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Images | Fixed Package Trip Management', async cookies => {
@@ -40,6 +41,75 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
 const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
     const router = useRouter();
+
+    const fields: IField[] = [
+        {
+            type: 'hidden',
+            name: 'tripId',
+            placeholder: '',
+            title: '',
+            initialValue: parseInt(tripId),
+            validate: (values: any) => {
+                if (!values.tripId) return 'Required!';
+
+                return null;
+            },
+        },
+        {
+            type: 'file-select',
+            name: 'url',
+            placeholder: 'Select image file!',
+            title: 'Image Upload',
+            initialValue: null,
+            acceptType: 'image/*',
+            maxFileSize: 1048576,
+            validate: (values: any) => {
+                if (!values.url) return 'Required!';
+
+                return null;
+            },
+        },
+        {
+            type: 'text',
+            name: 'title',
+            placeholder: 'Enter title for this image!',
+            title: 'Title',
+            initialValue: null,
+        },
+        {
+            type: 'text',
+            name: 'description',
+            placeholder: 'Enter description for this image!',
+            title: 'Description',
+            initialValue: null,
+        },
+        {
+            type: 'number',
+            name: 'serial',
+            placeholder: 'Enter serial number for sorting!',
+            title: 'Serial',
+            initialValue: 9999,
+            validate: (values: any) => {
+                if (!values.serial) return 'Required!';
+
+                return null;
+            },
+            col: 2,
+        },
+        {
+            type: 'select-sync',
+            name: 'status',
+            placeholder: 'Select status!',
+            title: 'Status',
+            initialValue: 'ACTIVE',
+            options: getGeneralStatusOptions(),
+            validate: (values: any) => {
+                if (!values.status) return 'Required!';
+
+                return null;
+            },
+        },
+    ];
 
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
@@ -88,115 +158,21 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 uri: '/api/v1/images/{id}',
                                 identifier: '{id}',
                             }}
-                            fields={[
+                            fields={fields}
+                            editFields={[
                                 {
-                                    type: 'hidden',
-                                    name: 'tripId',
-                                    placeholder: '',
-                                    title: '',
-                                    initialValue: parseInt(tripId),
-                                    validate: (values: any) => {
-                                        if (!values.tripId) return 'Required!';
-
-                                        return null;
-                                    },
-                                },
-                                {
-                                    type: 'file-select',
+                                    type: 'textarea',
                                     name: 'url',
-                                    placeholder: 'Select image file!',
+                                    placeholder: 'Insert an image URL',
                                     title: 'Image Upload',
                                     initialValue: null,
-                                    acceptType: 'image/*',
-                                    maxFileSize: 1048576,
                                     validate: (values: any) => {
                                         if (!values.url) return 'Required!';
 
                                         return null;
                                     },
                                 },
-                                {
-                                    type: 'text',
-                                    name: 'title',
-                                    placeholder: 'Enter title for this image!',
-                                    title: 'Title',
-                                    initialValue: null,
-                                },
-                                {
-                                    type: 'text',
-                                    name: 'description',
-                                    placeholder: 'Enter description for this image!',
-                                    title: 'Description',
-                                    initialValue: null,
-                                },
-                                {
-                                    type: 'number',
-                                    name: 'serial',
-                                    placeholder: 'Enter serial number for sorting!',
-                                    title: 'Serial',
-                                    initialValue: 9999,
-                                    validate: (values: any) => {
-                                        if (!values.serial) return 'Required!';
-
-                                        return null;
-                                    },
-                                    col: 2,
-                                },
-                                {
-                                    type: 'select-sync',
-                                    name: 'status',
-                                    placeholder: 'Select status!',
-                                    title: 'Status',
-                                    initialValue: 'ACTIVE',
-                                    options: getGeneralStatusOptions(),
-                                    validate: (values: any) => {
-                                        if (!values.status) return 'Required!';
-
-                                        return null;
-                                    },
-                                },
-                            ]}
-                            editFields={[
-                                {
-                                    type: 'text',
-                                    name: 'title',
-                                    placeholder: 'Enter title for this image!',
-                                    title: 'Title',
-                                    initialValue: null,
-                                },
-                                {
-                                    type: 'text',
-                                    name: 'description',
-                                    placeholder: 'Enter description for this image!',
-                                    title: 'Description',
-                                    initialValue: null,
-                                },
-                                {
-                                    type: 'number',
-                                    name: 'serial',
-                                    placeholder: 'Enter serial number for sorting!',
-                                    title: 'Serial',
-                                    initialValue: 9999,
-                                    validate: (values: any) => {
-                                        if (!values.serial) return 'Required!';
-
-                                        return null;
-                                    },
-                                    col: 2,
-                                },
-                                {
-                                    type: 'select-sync',
-                                    name: 'status',
-                                    placeholder: 'Select status!',
-                                    title: 'Status',
-                                    initialValue: 'ACTIVE',
-                                    options: getGeneralStatusOptions(),
-                                    validate: (values: any) => {
-                                        if (!values.status) return 'Required!';
-
-                                        return null;
-                                    },
-                                },
+                                ..._.filter(fields, (field: IField) => field.name !== 'url'),
                             ]}
                         />
                     ),
