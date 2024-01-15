@@ -231,11 +231,6 @@ const Page = () => {
                                 title: 'On Season Months',
                                 initialValue: null,
                                 options: getMonths(),
-                                validate: (values: any) => {
-                                    if (_.size(values.onSeasonMonths) === 0) return 'Required!';
-
-                                    return null;
-                                },
                             },
                             {
                                 type: 'multi-select-sync',
@@ -244,11 +239,6 @@ const Page = () => {
                                 title: 'Off Season Months',
                                 initialValue: null,
                                 options: getMonths(),
-                                validate: (values: any) => {
-                                    if (_.size(values.offSeasonMonths) === 0) return 'Required!';
-
-                                    return null;
-                                },
                             },
                             {
                                 type: 'select-sync',
