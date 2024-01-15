@@ -21,6 +21,7 @@ import {
 } from '../../../apis';
 import { IVendor } from '../../../types';
 import { getFormData } from '../../../utils';
+import { showToast } from '../../../utils/toast';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Profile | Administration | Vendor Panel | TripHaat', async cookies => {
@@ -97,6 +98,41 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                             <GenericFormGenerator
                                 datum={vendor}
                                 fields={[
+                                    {
+                                        type: 'textarea',
+                                        name: 'about',
+                                        placeholder: 'Enter few details',
+                                        title: 'About',
+                                        initialValue: null,
+                                    },
+                                    {
+                                        type: 'text',
+                                        name: 'facebookLink',
+                                        placeholder: 'Enter facebook page URL',
+                                        title: 'Facebook Page Link',
+                                        initialValue: null,
+                                    },
+                                    {
+                                        type: 'text',
+                                        name: 'instagramLink',
+                                        placeholder: 'Enter instagram page URL',
+                                        title: 'Instagram Page Link',
+                                        initialValue: null,
+                                    },
+                                    {
+                                        type: 'text',
+                                        name: 'twitterLink',
+                                        placeholder: 'Enter twitter page URL',
+                                        title: 'Twitter Page Link',
+                                        initialValue: null,
+                                    },
+                                    {
+                                        type: 'text',
+                                        name: 'youtubeLink',
+                                        placeholder: 'Enter youtube page URL',
+                                        title: 'YouTube Page Link',
+                                        initialValue: null,
+                                    },
                                     {
                                         type: 'text',
                                         name: 'responsiblePersonName',
@@ -414,13 +450,15 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                     },
                                 ]}
                                 callback={values => {
-                                    console.debug({ values });
+                                    // console.debug({ values });
 
                                     updateVendorProfile(values)
                                         .then(response => {
-                                            // console.debug({ response });
+                                            if (!response) throw { message: 'Server not working!' };
 
-                                            if (!response) throw new Error('Something went wrong!');
+                                            if (response.statusCode !== 200) throw { message: response.message };
+
+                                            showToast(response.message, 'success', { autoClose: 500 });
                                         })
                                         .catch(error => {
                                             console.error(error);
@@ -456,9 +494,13 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
 
                                     updateVendorProfileLogo(getFormData(values))
                                         .then(response => {
-                                            // console.debug({ response });
+                                            if (!response) throw { message: 'Server not working!' };
 
-                                            if (response && response.statusCode === 200) router.reload();
+                                            if (response.statusCode !== 200) throw { message: response.message };
+
+                                            showToast(response.message, 'success', { autoClose: 500 });
+
+                                            router.reload();
                                         })
                                         .catch(error => {
                                             console.error(error);
@@ -468,7 +510,7 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                 submitButtonText="Logo Update"
                                 enableReinitialize={false}
                             />
-                            <div className="mt-3" />
+                            {/* <div className="mt-3" />
                             <GenericFormGenerator
                                 fields={[
                                     {
@@ -505,8 +547,8 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                 submitButtonShow={true}
                                 submitButtonText="License Update"
                                 enableReinitialize={false}
-                            />
-                            <div className="mt-3" />
+                            /> */}
+                            {/* <div className="mt-3" />
                             <GenericFormGenerator
                                 fields={[
                                     {
@@ -543,8 +585,8 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                 submitButtonShow={true}
                                 submitButtonText="Responsible Person Image Update"
                                 enableReinitialize={false}
-                            />
-                            <div className="mt-3" />
+                            /> */}
+                            {/* <div className="mt-3" />
                             <GenericFormGenerator
                                 fields={[
                                     {
@@ -581,7 +623,7 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                 submitButtonShow={true}
                                 submitButtonText="Responsible Person NID Update"
                                 enableReinitialize={false}
-                            />
+                            /> */}
                         </Fieldset>
                     </div>
                     <div className="xl:col-5 lg:col-6 md:col-12 sm:col-12">
@@ -592,6 +634,48 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                 width="90"
                                 preview
                             />
+                            <div className="mt-3" />
+                            <GenericFormGenerator
+                                fields={[
+                                    {
+                                        type: 'file-select',
+                                        name: 'licenseImageUrl',
+                                        placeholder: 'Select license image file!',
+                                        title: 'To update license image, please choose a file from the option below and press update',
+                                        initialValue: null,
+                                        acceptType: 'image/*',
+                                        maxFileSize: 1048576,
+                                        validate: (values: any) => {
+                                            if (!values.licenseImageUrl) return 'Required!';
+
+                                            return null;
+                                        },
+                                    },
+                                ]}
+                                callback={values => {
+                                    // console.debug({ values });
+
+                                    const payload = getFormData(values);
+                                    // console.debug({ payload });
+
+                                    updateVendorProfileLicense(getFormData(values))
+                                        .then(response => {
+                                            if (!response) throw { message: 'Server not working!' };
+
+                                            if (response.statusCode !== 200) throw { message: response.message };
+
+                                            showToast(response.message, 'success', { autoClose: 500 });
+
+                                            router.reload();
+                                        })
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
+                                }}
+                                submitButtonShow={true}
+                                submitButtonText="License Update"
+                                enableReinitialize={false}
+                            />
                         </Fieldset>
                         <Fieldset legend="Responsible Person" className="mt-3">
                             <Image
@@ -600,6 +684,48 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                 width="90"
                                 preview
                             />
+                            <div className="mt-3" />
+                            <GenericFormGenerator
+                                fields={[
+                                    {
+                                        type: 'file-select',
+                                        name: 'responsiblePersonImageUrl',
+                                        placeholder: 'Select responsible person image file!',
+                                        title: 'To update responsible person image, please choose a file from the option below and press update',
+                                        initialValue: null,
+                                        acceptType: 'image/*',
+                                        maxFileSize: 1048576,
+                                        validate: (values: any) => {
+                                            if (!values.responsiblePersonImageUrl) return 'Required!';
+
+                                            return null;
+                                        },
+                                    },
+                                ]}
+                                callback={values => {
+                                    // console.debug({ values });
+
+                                    const payload = getFormData(values);
+                                    // console.debug({ payload });
+
+                                    updateVendorProfileRp(getFormData(values))
+                                        .then(response => {
+                                            if (!response) throw { message: 'Server not working!' };
+
+                                            if (response.statusCode !== 200) throw { message: response.message };
+
+                                            showToast(response.message, 'success', { autoClose: 500 });
+
+                                            router.reload();
+                                        })
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
+                                }}
+                                submitButtonShow={true}
+                                submitButtonText="Responsible Person Image Update"
+                                enableReinitialize={false}
+                            />
                         </Fieldset>
                         <Fieldset legend="Responsible Person NID" className="mt-3">
                             <Image
@@ -607,6 +733,48 @@ const IndexPage = ({ vendor }: { vendor: IVendor }) => {
                                 alt="Image"
                                 width="90"
                                 preview
+                            />
+                            <div className="mt-3" />
+                            <GenericFormGenerator
+                                fields={[
+                                    {
+                                        type: 'file-select',
+                                        name: 'responsiblePersonNIDImageUrl',
+                                        placeholder: 'Select responsible person NID image file!',
+                                        title: 'To update responsible person NID image, please choose a file from the option below and press update',
+                                        initialValue: null,
+                                        acceptType: 'image/*',
+                                        maxFileSize: 1048576,
+                                        validate: (values: any) => {
+                                            if (!values.responsiblePersonNIDImageUrl) return 'Required!';
+
+                                            return null;
+                                        },
+                                    },
+                                ]}
+                                callback={values => {
+                                    // console.debug({ values });
+
+                                    const payload = getFormData(values);
+                                    // console.debug({ payload });
+
+                                    updateVendorProfileRpNid(getFormData(values))
+                                        .then(response => {
+                                            if (!response) throw { message: 'Server not working!' };
+
+                                            if (response.statusCode !== 200) throw { message: response.message };
+
+                                            showToast(response.message, 'success', { autoClose: 500 });
+
+                                            router.reload();
+                                        })
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
+                                }}
+                                submitButtonShow={true}
+                                submitButtonText="Responsible Person NID Update"
+                                enableReinitialize={false}
                             />
                         </Fieldset>
                     </div>
