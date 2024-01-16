@@ -120,16 +120,20 @@ export default function GenericFormGenerator({
 
             setSubmitting(true);
 
-            const hiddenFields: any[] = [];
+            const hiddenFields: string[] = [];
 
             // Check false value not to submit in the form
-            _.mapKeys(values, (value, key) => {
+            values = _.mapValues(values, (value: any, key: string) => {
                 // console.debug({ value, key });
 
-                if (_.isUndefined(value)) hiddenFields.push(key);
-                else if (typeof value === 'string' && (_.isNull(value) || value === '')) hiddenFields.push(key);
-                else if (typeof value === 'number' && _.isNull(value)) hiddenFields.push(key);
+                if (_.isNaN(value)) _.find(fields, field => field.name === key)?.type === 'number' ? 0 : null;
+
+                if (_.isEqual(value, ''))
+                    return _.find(fields, field => field.name === key)?.type === 'number' ? 0 : null;
+
+                return value;
             });
+            // console.debug({ values });
 
             // Check information type value or not showing value not to submit in the form
             _.map(
@@ -186,8 +190,7 @@ export default function GenericFormGenerator({
             field.type === 'number' ||
             field.type === 'password' ||
             field.type === 'tel' ||
-            field.type === 'text' ||
-            field.type === 'time'
+            field.type === 'text'
         )
             return (
                 <InputTextField
