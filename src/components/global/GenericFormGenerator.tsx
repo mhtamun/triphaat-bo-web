@@ -124,7 +124,11 @@ export default function GenericFormGenerator({
 
             // Check false value not to submit in the form
             _.mapKeys(values, (value, key) => {
-                if (_.isUndefined(value) || _.isNull(value)) hiddenFields.push(key);
+                // console.debug({ value, key });
+
+                if (_.isUndefined(value)) hiddenFields.push(key);
+                else if (typeof value === 'string' && (_.isNull(value) || value === '')) hiddenFields.push(key);
+                else if (typeof value === 'number' && _.isNull(value)) hiddenFields.push(key);
             });
 
             // Check information type value or not showing value not to submit in the form
@@ -137,7 +141,6 @@ export default function GenericFormGenerator({
                     hiddenFields.push(field.name);
                 }
             );
-
             // console.debug({ hiddenFields });
 
             const filteredValues = _.omit(values, [...hiddenFields, ...nonEdibleFields]);
