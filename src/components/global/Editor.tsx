@@ -64,7 +64,7 @@ const EditorField = (props: {
                         id={name}
                         apiKey="enwgih463zy7tucf51q0rohglyrfuf0j63f3u5e8qupxnjir"
                         onInit={(evt, editor) => (editorRef.current = editor)}
-                        initialValue={JSON.parse(value)}
+                        initialValue={!value ? null : JSON.parse(value)}
                         onEditorChange={editor => {
                             // console.debug({ editor });
 
@@ -121,7 +121,7 @@ const EditorField = (props: {
                     overflow: 'scroll',
                     position: 'relative',
                 }}
-                dangerouslySetInnerHTML={{ __html: JSON.parse(value) }}
+                dangerouslySetInnerHTML={{ __html: !value ? null : JSON.parse(value) }}
             />
             {!errorMessage ? null : (
                 <small id={`${name}-help`} className="p-error">

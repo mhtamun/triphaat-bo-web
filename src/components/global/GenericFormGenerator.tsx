@@ -126,9 +126,9 @@ export default function GenericFormGenerator({
             values = _.mapValues(values, (value: any, key: string) => {
                 // console.debug({ value, key });
 
-                if (_.isNaN(value)) _.find(fields, field => field.name === key)?.type === 'number' ? 0 : null;
+                // if (_.isNaN(value)) _.find(fields, field => field.name === key)?.type === 'number' ? 0 : null;
 
-                if (_.isEqual(value, ''))
+                if (_.isEqual(value, '') || _.isNaN(value))
                     return _.find(fields, field => field.name === key)?.type === 'number' ? 0 : null;
 
                 return value;
