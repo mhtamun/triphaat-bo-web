@@ -41,7 +41,7 @@ const Page = () => {
                                 'password',
                                 'type',
                                 'otp',
-                                'otpAttempt',
+                                'otpAttemptCount',
                                 'roleId',
                                 'createdAt',
                                 'updatedAt',

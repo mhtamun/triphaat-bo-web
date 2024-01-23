@@ -62,7 +62,7 @@ const Page = ({ vendor }: { vendor: IVendor }) => {
                                         'id',
                                         'password',
                                         'otp',
-                                        'otpAttempt',
+                                        'otpAttemptCount',
                                         'roleId',
                                         'createdAt',
                                         'updatedAt',

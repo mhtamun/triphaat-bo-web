@@ -144,7 +144,7 @@ const Page = () => {
                                     'id',
                                     'password',
                                     'otp',
-                                    'otpAttempt',
+                                    'otpAttemptCount',
                                     'roleId',
                                     'createdAt',
                                     'updatedAt',
