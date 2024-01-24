@@ -47,6 +47,11 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                 },
                 {
                     icon: 'pi pi-fw pi-list',
+                    label: 'Category Management',
+                    to: '/categories',
+                },
+                {
+                    icon: 'pi pi-fw pi-list',
                     label: 'Slider Management',
                     to: '/sliders',
                 },
