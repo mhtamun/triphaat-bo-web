@@ -9,33 +9,32 @@ import * as _ from 'lodash';
 // application
 import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
-import { getLocations } from '../../apis';
-import { ILocation } from '../../types';
+import { getCategories } from '../../apis';
+import { ICategory } from '../../types';
 import { ISelectOption } from '../../components/global/Dropdown';
 import { getGeneralStatusOptions } from '../../utils';
-import { UrlBasedColumnItem } from '../../components';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Featured Location Management | Admin Panel | TripHaat', () => {
+    getAuthorized(context, 'Featured Category Management | Admin Panel | TripHaat', () => {
         return null;
     });
 
 const Page = () => {
     const router = useRouter();
 
-    const [locations, setLocations] = useState<ISelectOption[]>([]);
+    const [categories, setCategories] = useState<ISelectOption[]>([]);
 
     useEffect(() => {
-        getLocations()
+        getCategories()
             .then(response => {
                 if (!response) throw { message: 'Server not working!' };
 
                 if (response.statusCode !== 200) throw { message: response.message };
 
-                setLocations(
-                    _.map(response.data, (location: ILocation) => ({
-                        value: location.id,
-                        label: `${location.name}, ${location?.city?.name}`,
+                setCategories(
+                    _.map(response.data, (category: ICategory) => ({
+                        value: category.id,
+                        label: category.title,
                     }))
                 );
             })
@@ -49,15 +48,13 @@ const Page = () => {
             {useMemo(
                 () => (
                     <GenericViewGenerator
-                        name={'Featured Location'}
-                        title={'Featured Locations'}
-                        subtitle={'Manage featured-locations here!'}
+                        name={'Featured Category'}
+                        title={'Featured Categories'}
+                        subtitle={'Manage featured-categories here!'}
                         viewAll={{
-                            uri: `/api/v1/featured-locations`,
-                            ignoredColumns: ['_id', '__v', 'locationId', 'createdAt', 'updatedAt'],
-                            scopedColumns: {
-                                imageUrl: (item: any) => <UrlBasedColumnItem url={item.imageUrl} type="image" />,
-                            },
+                            uri: `/api/v1/featured-categories`,
+                            ignoredColumns: ['_id', '__v', 'categoryId', 'createdAt', 'updatedAt'],
+                            scopedColumns: {},
                             actionIdentifier: '_id',
                             onDataModify: data =>
                                 _.map(data, datum => ({
@@ -65,38 +62,26 @@ const Page = () => {
                                 })),
                         }}
                         addNew={{
-                            uri: `/api/v1/featured-locations`,
+                            uri: `/api/v1/featured-categories`,
                         }}
-                        // viewOne={{ uri: '/api/v1/featured-locations/{id}', identifier: '{id}' }}
-                        // editExisting={{ uri: '/api/v1/featured-locations/{id}', identifier: '{id}' }}
+                        // viewOne={{ uri: '/api/v1/featured-categories/{id}', identifier: '{id}' }}
+                        // editExisting={{ uri: '/api/v1/featured-categories/{id}', identifier: '{id}' }}
                         removeOne={{
-                            uri: '/api/v1/featured-locations/{id}',
+                            uri: '/api/v1/featured-categories/{id}',
                             identifier: '{id}',
                         }}
                         customActions={[]}
                         fields={[
                             {
                                 type: 'select-sync',
-                                name: 'locationId',
-                                placeholder: 'Select location',
-                                title: 'Location',
+                                name: 'categoryId',
+                                placeholder: 'Select category',
+                                title: 'Category',
                                 initialValue: null,
-                                options: locations,
+                                options: categories,
                                 isSearchable: true,
                                 validate(values) {
-                                    if (!values.locationId) return 'Required!';
-
-                                    return null;
-                                },
-                            },
-                            {
-                                type: 'text',
-                                name: 'imageUrl',
-                                placeholder: 'Select image',
-                                title: 'Image URL',
-                                initialValue: null,
-                                validate(values) {
-                                    if (!values.imageUrl) return 'Required!';
+                                    if (!values.categoryId) return 'Required!';
 
                                     return null;
                                 },
@@ -129,7 +114,7 @@ const Page = () => {
                         ]}
                     />
                 ),
-                [locations, locations]
+                [categories, categories]
             )}
         </Card>
     );

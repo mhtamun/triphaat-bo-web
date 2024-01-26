@@ -9,13 +9,14 @@ import _ from 'lodash';
 // application
 import { getAuthorized } from '../../../../../libs/auth';
 import GenericFormGenerator, { IField } from '../../../../../components/global/GenericFormGenerator';
-import { getLocations } from '../../../../../apis';
+import { getCategories, getLocations } from '../../../../../apis';
 import { getGeneralStatusOptions, getTripType } from '../../../../../utils';
 import { callPostApi } from '../../../../../libs/api';
 import handleResponseIfError from '../../../../../utils/responseHandler';
-import { ILocation } from '../../../../../types';
+import { ICategory, ILocation } from '../../../../../types';
 
 export const getTripFields = (
+    categories: ICategory[],
     locations: ILocation[],
     dateType: string,
     accommodationType: string,
@@ -23,6 +24,19 @@ export const getTripFields = (
     foodType: string,
     type: string
 ): IField[] => [
+    {
+        type: 'select-sync',
+        name: 'categoryId',
+        placeholder: 'Select a category',
+        title: 'Category',
+        initialValue: null,
+        options: _.map(categories, (category: ICategory) => ({
+            value: category.id,
+            label: category.title,
+        })),
+        isSearchable: true,
+        isClearable: true,
+    },
     {
         type: 'select-sync',
         name: 'locationId',
@@ -287,18 +301,20 @@ export const getTripFields = (
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Create A Trip | Trip Management', async cookies => {
+        const responseGetCategories = await getCategories(`${cookies.accessType} ${cookies.accessToken}`);
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
-        const responseError = handleResponseIfError(context, responseGetLocations);
+        const responseError = handleResponseIfError(context, responseGetCategories, responseGetLocations);
         if (responseError !== null) return responseError;
 
         return {
             isVendor: true,
+            categories: responseGetCategories.data,
             locations: responseGetLocations.data,
         };
     });
 
-const Page = ({ locations }: { locations: ILocation[] }) => {
+const Page = ({ categories, locations }: { categories: ICategory[]; locations: ILocation[] }) => {
     const router = useRouter();
 
     const types = getTripType(router);
@@ -310,6 +326,7 @@ const Page = ({ locations }: { locations: ILocation[] }) => {
                     !locations || _.size(locations) === 0 ? null : (
                         <GenericFormGenerator
                             fields={getTripFields(
+                                categories,
                                 locations,
                                 types.dateType,
                                 types.accommodationType,

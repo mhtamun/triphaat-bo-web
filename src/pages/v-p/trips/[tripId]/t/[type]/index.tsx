@@ -10,7 +10,7 @@ import _ from 'lodash';
 // application libraries
 import { getAuthorized } from '../../../../../../libs/auth';
 import GenericFormGenerator from '../../../../../../components/global/GenericFormGenerator';
-import { copyTrip, deactivateTrip, getLocations, getTripForVendor } from '../../../../../../apis';
+import { copyTrip, deactivateTrip, getCategories, getLocations, getTripForVendor } from '../../../../../../apis';
 import { callPutApi } from '../../../../../../libs/api';
 import { getTripFields } from '../../../t/[type]/create';
 import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
@@ -18,6 +18,8 @@ import WrapperComponent from '../../../../../../components/trips/WrapperComponen
 import { getTripType } from '../../../../../../utils';
 import { showToast } from '../../../../../../utils/toast';
 import { ModalConfirmation } from '../../../../../../components';
+import handleResponseIfError from '../../../../../../utils/responseHandler';
+import { ICategory } from '../../../../../../types';
 
 export interface ILocation {
     id: number;
@@ -37,34 +39,36 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Details | Trip Management', async cookies => {
         const tripId = context.query.tripId;
 
+        const responseGetCategories = await getCategories(`${cookies.accessType} ${cookies.accessToken}`);
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const responseGetTrip = await getTripForVendor(tripId, `${cookies.accessType} ${cookies.accessToken}`);
+        const responseGetTrip = await getTripForVendor(
+            tripId as string,
+            `${cookies.accessType} ${cookies.accessToken}`
+        );
 
-        if (
-            !responseGetLocations ||
-            responseGetLocations.statusCode !== 200 ||
-            !responseGetTrip ||
-            responseGetTrip.statusCode !== 200
-        ) {
-            return {
-                redirect: {
-                    destination: '/500',
-                    permanent: false,
-                },
-            };
-        }
+        const responseError = handleResponseIfError(context, responseGetCategories, responseGetLocations);
+        if (responseError !== null) return responseError;
 
         return {
             isVendor: true,
             tripId,
+            categories: responseGetCategories.data,
             locations: responseGetLocations.data,
             trip: responseGetTrip.data,
         };
     });
 
-const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocation[]; trip: any }) => {
+const Page = ({
+    tripId,
+    categories,
+    locations,
+    trip,
+}: {
+    tripId: string;
+    categories: ICategory[];
+    locations: ILocation[];
+    trip: any;
+}) => {
     const router = useRouter();
 
     const types = getTripType(router);
@@ -95,6 +99,7 @@ const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocatio
                                     ...trip,
                                 }}
                                 fields={getTripFields(
+                                    categories,
                                     locations,
                                     types.dateType,
                                     types.accommodationType,
