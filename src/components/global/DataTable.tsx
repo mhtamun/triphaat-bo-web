@@ -126,8 +126,8 @@ const DataTable = ({
                         header={item.label}
                         sortable={!_.isEqual(item.key, 'actions')}
                         headerStyle={item.headerStyle}
-                        frozen={item.frozen}
-                        alignFrozen="right"
+                        // frozen={item.frozen}
+                        // alignFrozen="right"
                         body={item.body}
                     ></Column>
                 );

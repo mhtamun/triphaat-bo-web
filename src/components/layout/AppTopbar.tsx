@@ -46,14 +46,14 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                 <i className="pi pi-bars" />
             </button>
 
-            {/* <button
+            <Button
                 ref={topbarmenubuttonRef}
                 type="button"
-                className="p-link layout-topbar-menu-button layout-topbar-button"
-                onClick={showProfileSidebar}
+                className="layout-topbar-menu-button layout-topbar-button"
+                onClick={toggleMenu}
             >
-                <i className="pi pi-ellipsis-v" />
-            </button> */}
+                <i className="pi pi-cog" />
+            </Button>
 
             <div
                 ref={topbarmenuRef}
@@ -62,6 +62,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                 })}
             >
                 <Menu
+                    className="mt-4"
                     ref={menu}
                     model={[
                         {
@@ -96,7 +97,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                     ]}
                     popup
                 />
-                <Button type="button" icon="pi pi-cog" onClick={toggleMenu} style={{ width: '50px' }} />
+                <Button type="button" icon="pi pi-cog" onClick={toggleMenu} />
             </div>
         </div>
     );

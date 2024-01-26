@@ -27,7 +27,7 @@ const NotFoundPage: Page = () => {
                         <h1 className="text-900 font-bold text-5xl mb-2">Not Found</h1>
                         <p className="text-600 mb-5">Requested resource is not available</p>
                         <img
-                            src="/demo/images/error/404-error.png"
+                            src="/images/404-error.png"
                             alt="Error 404"
                             className="mb-5"
                             width="200px"
