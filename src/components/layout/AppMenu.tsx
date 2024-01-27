@@ -47,23 +47,35 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                 },
                 {
                     icon: 'pi pi-fw pi-list',
+                    label: 'Category Management',
+                    to: '/categories',
+                },
+                {
+                    icon: 'pi pi-fw pi-list',
                     label: 'Slider Management',
                     to: '/sliders',
                 },
                 {
-                    icon: 'pi pi-fw pi-list',
-                    label: 'Featured Trip Management',
-                    to: '/featured-trips',
-                },
-                {
-                    icon: 'pi pi-fw pi-list',
-                    label: 'Featured Location Management',
-                    to: '/featured-locations',
-                },
-                {
-                    icon: 'pi pi-fw pi-list',
-                    label: 'Featured City Management',
-                    to: '/featured-cities',
+                    icon: 'pi pi-fw pi-star',
+                    label: 'Featured on Website',
+                    items: [
+                        {
+                            label: 'Featured City Management',
+                            to: '/featured-cities',
+                        },
+                        {
+                            label: 'Featured Location Management',
+                            to: '/featured-locations',
+                        },
+                        {
+                            label: 'Featured Category Management',
+                            to: '/featured-categories',
+                        },
+                        {
+                            label: 'Featured Trip Management',
+                            to: '/featured-trips',
+                        },
+                    ],
                 },
             ],
         },

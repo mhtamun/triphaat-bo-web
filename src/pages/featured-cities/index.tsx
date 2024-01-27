@@ -54,7 +54,7 @@ const Page = () => {
                         subtitle={'Manage featured-cities here!'}
                         viewAll={{
                             uri: `/api/v1/featured-cities`,
-                            ignoredColumns: ['_id', '__v', 'createdAt', 'updatedAt'],
+                            ignoredColumns: ['_id', '__v', 'cityId', 'createdAt', 'updatedAt'],
                             scopedColumns: {
                                 imageUrl: (item: any) => <UrlBasedColumnItem url={item.imageUrl} type="image" />,
                             },

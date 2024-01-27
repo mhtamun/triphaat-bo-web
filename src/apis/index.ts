@@ -139,6 +139,9 @@ export const getLocations = (authorization?: string | null) =>
 
 export const getCities = (authorization?: string | null) => callGetApi(apiBaseUrl + '/api/v1/cities', authorization);
 
+export const getCategories = (authorization?: string | null) =>
+    callGetApi(apiBaseUrl + '/api/v1/categories', authorization);
+
 export const getTripVariants = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/api/v1/trips/' + id + '/variants', authorization);
 

@@ -10,6 +10,7 @@ config.autoAddCss = false;
 // application libraries
 import type { Page } from '../types/types';
 import { LayoutProvider } from '../components/layout/context/layoutcontext';
+import AppConfig from '../components/layout/AppConfig';
 import Layout from '../components/layout/layout';
 
 // global styles configuration
@@ -38,6 +39,7 @@ export default function MyApp({ Component, pageProps }: Props) {
             <LayoutProvider>
                 <Layout title={pageProps.title ?? ''} isVendor={pageProps.isVendor}>
                     <Component {...pageProps} />
+                    <AppConfig />
                 </Layout>
             </LayoutProvider>
         );
