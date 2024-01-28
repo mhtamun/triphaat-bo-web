@@ -16,7 +16,7 @@ import { getSeverity, getUserStatusOptions } from '../../utils';
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'User Management | Admin Panel | TripHaat');
 
-export const getUserManagementFields = (roles: { id: number; name: string }[]): IField[] => [
+export const getUserManagementFields = (roles: { id: number; name: string }[], isVendor: boolean = false): IField[] => [
     {
         type: 'text',
         name: 'name',
@@ -96,7 +96,12 @@ export const getUserManagementFields = (roles: { id: number; name: string }[]): 
         placeholder: 'Select a status!',
         title: 'Status',
         initialValue: 'ACTIVE',
-        options: getUserStatusOptions(),
+        options: !isVendor
+            ? getUserStatusOptions()
+            : [
+                  { value: 'ACTIVE', label: 'ACTIVE' },
+                  { value: 'BLOCKED', label: 'BLOCKED' },
+              ],
         validate: (values: any) => {
             if (!values.status) return 'Status required!';
 
@@ -174,7 +179,7 @@ const Page = () => {
                                 uri: '/api/v1/users/{id}',
                                 identifier: '{id}',
                             }}
-                            fields={getUserManagementFields(roles)}
+                            fields={getUserManagementFields(roles).filter(field => field.name !== 'status')}
                             editFields={getUserManagementFields(roles)
                                 .filter(field => field.name !== 'password')
                                 .map(field => (field.name !== 'email' ? { ...field } : { ...field, isDisabled: true }))}

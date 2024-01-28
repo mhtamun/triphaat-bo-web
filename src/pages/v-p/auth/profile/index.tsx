@@ -43,7 +43,7 @@ const IndexPage = ({ user }: { user: any }) => {
                 <GenericFormGenerator
                     datum={user}
                     fields={getUserManagementFields([{ id: user.roleId, name: user.role.name }])
-                        .filter(field => field.name !== 'password')
+                        .filter(field => field.name !== 'password' && field.name !== 'status')
                         .map(field => ({ ...field, isDisabled: true }))}
                     callback={values => {
                         // console.debug({ values });

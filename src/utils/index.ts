@@ -5,6 +5,7 @@ export const getUserStatusOptions = () => [
     { value: 'PENDING', label: 'PENDING' },
     { value: 'ACTIVE', label: 'ACTIVE' },
     { value: 'BLOCKED', label: 'BLOCKED' },
+    { value: 'DELETED', label: 'DELETED' },
 ];
 
 export const getGeneralStatusOptions = () => [

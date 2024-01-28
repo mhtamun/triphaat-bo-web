@@ -92,7 +92,7 @@ const Page = ({ vendor }: { vendor: IVendor }) => {
                                     uri: `api/v1/vendors/${vendor.id}/users/{id}`,
                                     identifier: '{id}',
                                 }}
-                                fields={getUserManagementFields(roles)}
+                                fields={getUserManagementFields(roles).filter(field => field.name !== 'status')}
                                 editFields={getUserManagementFields(roles)
                                     .filter(field => field.name !== 'password')
                                     .map(field =>

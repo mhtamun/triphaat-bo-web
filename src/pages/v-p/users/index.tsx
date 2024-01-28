@@ -71,8 +71,8 @@ const Page = () => {
                             uri: '/vendor/api/v1/users/{id}',
                             identifier: '{id}',
                         }}
-                        fields={getUserManagementFields(roles)}
-                        editFields={getUserManagementFields(roles)
+                        fields={getUserManagementFields(roles, true).filter(field => field.name !== 'status')}
+                        editFields={getUserManagementFields(roles, true)
                             .filter(field => field.name !== 'password')
                             .map(field => (field.name !== 'email' ? { ...field } : { ...field, isDisabled: true }))}
                     />
