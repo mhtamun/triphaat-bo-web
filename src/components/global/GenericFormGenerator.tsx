@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FormikValues, useFormik } from 'formik';
-import _ from 'lodash';
+import _, { isArray } from 'lodash';
 import { Button } from 'primereact/button';
 import {
     InputTextField,
@@ -124,12 +124,19 @@ export default function GenericFormGenerator({
 
             // Check false value not to submit in the form
             values = _.mapValues(values, (value: any, key: string) => {
-                // console.debug({ value, key });
+                console.debug({ value, key });
 
-                // if (_.isNaN(value)) _.find(fields, field => field.name === key)?.type === 'number' ? 0 : null;
+                if (_.isUndefined(value) || _.isNull(value) || _.isEqual(value, '') || _.isNaN(value)) {
+                    if (_.find(fields, field => field.name === key)?.type === 'number') return 0;
 
-                if (_.isEqual(value, '') || _.isNaN(value))
-                    return _.find(fields, field => field.name === key)?.type === 'number' ? 0 : null;
+                    if (
+                        _.find(fields, field => field.name === key)?.type === 'multi-select-sync' ||
+                        _.find(fields, field => field.name === key)?.type === 'chips'
+                    )
+                        return [];
+
+                    return null;
+                }
 
                 return value;
             });
