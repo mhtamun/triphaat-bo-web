@@ -10,6 +10,7 @@ import { getAuthorized } from '../../libs/auth';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
 import { getGeneralStatusOptions } from '../../utils';
 import { IField } from '../../components/global/GenericFormGenerator';
+import { UrlBasedColumnItem } from '../../components';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Category Management | Admin Panel | TripHaat');
@@ -77,12 +78,7 @@ const Page = () => {
                     uri: `/api/v1/categories`,
                     ignoredColumns: ['id', 'createdAt', 'updatedAt'],
                     scopedColumns: {
-                        bannerImageUrl: (item: any) => (
-                            <>
-                                <span className="p-column-title">{item.title}</span>
-                                <img src={item.url} alt={item.bannerImageUrl} className="shadow-2" width="100" />
-                            </>
-                        ),
+                        bannerImageUrl: (item: any) => <UrlBasedColumnItem url={item.bannerImageUrl} />,
                         status: (item: any) => (
                             <>
                                 <Badge

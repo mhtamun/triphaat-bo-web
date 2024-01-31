@@ -56,7 +56,7 @@ const Page = () => {
                             uri: `/api/v1/featured-cities`,
                             ignoredColumns: ['_id', '__v', 'cityId', 'createdAt', 'updatedAt'],
                             scopedColumns: {
-                                imageUrl: (item: any) => <UrlBasedColumnItem url={item.imageUrl} type="image" />,
+                                imageUrl: (item: any) => <UrlBasedColumnItem url={item.imageUrl} />,
                             },
                             actionIdentifier: '_id',
                             onDataModify: data =>

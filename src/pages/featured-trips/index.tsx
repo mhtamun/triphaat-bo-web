@@ -84,7 +84,7 @@ const Page = () => {
                             uri: `/api/v1/featured-trips`,
                             ignoredColumns: ['_id', '__v', 'createdAt', 'updatedAt'],
                             scopedColumns: {
-                                imageUrl: (item: any) => <UrlBasedColumnItem url={item.imageUrl} type="image" />,
+                                imageUrl: (item: any) => <UrlBasedColumnItem url={item.imageUrl} />,
                             },
                             actionIdentifier: '_id',
                             onDataModify: data =>
