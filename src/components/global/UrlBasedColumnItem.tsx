@@ -13,7 +13,7 @@ const UrlBasedColumnItem = ({ url }: { url: string }) => {
         const extensions = [...imageExtensions, ...videoExtensions, ...docExtensions];
 
         for (let i = 0; i < _.size(extensions); i++) {
-            console.debug({ extension: extensions[i] });
+            // console.debug({ extension: extensions[i] });
 
             if (
                 !_.isUndefined(url) &&
@@ -22,7 +22,7 @@ const UrlBasedColumnItem = ({ url }: { url: string }) => {
                 _.includes(imageExtensions, extensions[i])
             ) {
                 return (
-                    <a href={url} target="_blank">
+                    <a href={url} target="_blank" rel="noreferrer">
                         <img src={url} width={100} />
                     </a>
                 );
@@ -33,7 +33,7 @@ const UrlBasedColumnItem = ({ url }: { url: string }) => {
                 videoExtensions.includes(extensions[i])
             ) {
                 return (
-                    <a href={url} target="_blank">
+                    <a href={url} target="_blank" rel="noreferrer">
                         <video src={url} width={100} />
                     </a>
                 );
@@ -41,29 +41,32 @@ const UrlBasedColumnItem = ({ url }: { url: string }) => {
         }
 
         return (
-            <a href={url} target="_blank">
+            <a href={url} target="_blank" rel="noreferrer">
                 {url}
             </a>
         );
     }, [url]);
 
-    return (
-        <div className="flex-auto">
-            {View()}
-            <br />
-            <Button
-                className="p-button-outlined align-items mt-3"
-                label="Copy Link"
-                size="small"
-                severity="help"
-                onClick={e => {
-                    e.preventDefault();
+    return useMemo(
+        () => (
+            <div className="flex-auto">
+                {View()}
+                <br />
+                <Button
+                    className="p-button-outlined align-items mt-3"
+                    label="Copy Link"
+                    size="small"
+                    severity="help"
+                    onClick={e => {
+                        e.preventDefault();
 
-                    copy(url);
-                }}
-                style={{ width: '100px' }}
-            />
-        </div>
+                        copy(url);
+                    }}
+                    style={{ width: '100px' }}
+                />
+            </div>
+        ),
+        []
     );
 };
 
