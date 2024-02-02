@@ -126,21 +126,59 @@ export default function GenericFormGenerator({
             values = _.mapValues(values, (value: any, key: string) => {
                 console.debug({ value, key });
 
-                if (_.isUndefined(value) || _.isNull(value) || _.isEqual(value, '') || _.isNaN(value)) {
-                    if (_.find(fields, field => field.name === key)?.type === 'number') return 0;
+                if (_.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
+                    hiddenFields.push(key);
 
-                    if (
-                        _.find(fields, field => field.name === key)?.type === 'multi-select-sync' ||
-                        _.find(fields, field => field.name === key)?.type === 'chips'
-                    )
+                    return null;
+                }
+
+                if (
+                    (_.isString(value) && _.isEqual(value, '')) ||
+                    (_.isNumber(value) && _.isEqual(value, 0)) ||
+                    (_.isArray(value) && _.size(value) === 0)
+                ) {
+                    const field = _.find(fields, field => field.name === key);
+
+                    if (!field) return null;
+
+                    // if (
+                    //     field.type === 'hidden' ||
+                    //     field.type === 'date' ||
+                    //     field.type === 'date' ||
+                    //     field.type === 'date-multiple' ||
+                    //     field.type === 'date-range' ||
+                    //     field.type === 'richtext' ||
+                    //     field.type === 'select-async' ||
+                    //     field.type === 'select-sync' ||
+                    //     field.type === 'file-select'
+                    // ) {
+                    //     return null;
+                    // }
+
+                    // if (
+                    //     field.type === 'email' ||
+                    //     field.type === 'password' ||
+                    //     field.type === 'tel' ||
+                    //     field.type === 'text' ||
+                    //     field.type === 'textarea'
+                    // ) {
+                    //     return '';
+                    // }
+
+                    if (field.type === 'number') {
+                        return 0;
+                    }
+
+                    if (field.type === 'multi-select-sync' || field.type === 'chips') {
                         return [];
+                    }
 
                     return null;
                 }
 
                 return value;
             });
-            // console.debug({ values });
+            console.debug({ values });
 
             // Check information type value or not showing value not to submit in the form
             _.map(

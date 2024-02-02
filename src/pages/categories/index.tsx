@@ -23,6 +23,11 @@ const Page = () => {
             placeholder: 'Enter title for this image!',
             title: 'Title',
             initialValue: null,
+            validate: (values: any) => {
+                if (!values.title) return 'Required!';
+
+                return null;
+            },
         },
         {
             type: 'text',

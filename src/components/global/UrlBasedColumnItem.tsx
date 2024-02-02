@@ -4,7 +4,7 @@ import copy from 'copy-to-clipboard';
 import _ from 'lodash';
 
 const UrlBasedColumnItem = ({ url }: { url: string }) => {
-    const View = useCallback(() => {
+    const getView = useCallback(() => {
         if (_.isUndefined(url) || _.isNull(url)) return null;
 
         const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
@@ -50,20 +50,22 @@ const UrlBasedColumnItem = ({ url }: { url: string }) => {
     return useMemo(
         () => (
             <div className="flex-auto">
-                {View()}
+                {_.isUndefined(url) || _.isNull(url) ? null : getView()}
                 <br />
-                <Button
-                    className="p-button-outlined align-items mt-3"
-                    label="Copy Link"
-                    size="small"
-                    severity="help"
-                    onClick={e => {
-                        e.preventDefault();
+                {_.isUndefined(url) || _.isNull(url) || _.isEqual(url, '') ? null : (
+                    <Button
+                        className="p-button-outlined align-items mt-3"
+                        label="Copy Link"
+                        size="small"
+                        severity="help"
+                        onClick={e => {
+                            e.preventDefault();
 
-                        copy(url);
-                    }}
-                    style={{ width: '100px' }}
-                />
+                            copy(url);
+                        }}
+                        style={{ width: '100px' }}
+                    />
+                )}
             </div>
         ),
         []
