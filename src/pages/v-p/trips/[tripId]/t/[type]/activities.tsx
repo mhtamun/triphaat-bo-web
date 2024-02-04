@@ -14,6 +14,7 @@ import { getTripForVendor } from '../../../../../../apis';
 import { getGeneralStatusOptions, isJSONString } from '../../../../../../utils';
 import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
+import { UrlBasedColumnItem } from '../../../../../../components';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Activities | Trip Management', async cookies => {
@@ -68,6 +69,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                             }}
                                         ></div>
                                     ),
+                                    imageUrl: (item: any) => <UrlBasedColumnItem url={item.imageUrl} />,
                                     status: (item: any) => (
                                         <Badge
                                             value={item.status}

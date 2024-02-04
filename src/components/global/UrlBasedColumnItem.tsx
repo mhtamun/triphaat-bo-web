@@ -3,6 +3,12 @@ import { Button } from 'primereact/button';
 import copy from 'copy-to-clipboard';
 import _ from 'lodash';
 
+const style = {
+    widtH: '100px',
+    height: 'auto',
+    overflow: 'auto',
+};
+
 const UrlBasedColumnItem = ({ url }: { url: string }) => {
     const getView = useCallback(() => {
         if (_.isUndefined(url) || _.isNull(url)) return null;
@@ -22,7 +28,7 @@ const UrlBasedColumnItem = ({ url }: { url: string }) => {
                 _.includes(imageExtensions, extensions[i])
             ) {
                 return (
-                    <a href={url} target="_blank" rel="noreferrer">
+                    <a href={url} target="_blank" rel="noreferrer" style={style}>
                         <img src={url} width={100} />
                     </a>
                 );
@@ -33,7 +39,7 @@ const UrlBasedColumnItem = ({ url }: { url: string }) => {
                 videoExtensions.includes(extensions[i])
             ) {
                 return (
-                    <a href={url} target="_blank" rel="noreferrer">
+                    <a href={url} target="_blank" rel="noreferrer" style={style}>
                         <video src={url} width={100} />
                     </a>
                 );
@@ -41,7 +47,7 @@ const UrlBasedColumnItem = ({ url }: { url: string }) => {
         }
 
         return (
-            <a href={url} target="_blank" rel="noreferrer">
+            <a href={url} target="_blank" rel="noreferrer" style={style}>
                 {url}
             </a>
         );

@@ -29,25 +29,26 @@ const DataTable = ({
     actions: IAction[];
     emptyListText?: string | null;
 }) => {
-    const columnHeads = [];
+    const columns = [];
 
     if (!_.isUndefined(data) && !_.isNull(data) && _.size(data) > 0) {
         _.map(_.keys(_.omit(data[0], [...(ignoredColumns ?? [])])), (key: string) => {
-            columnHeads.push({
+            columns.push({
                 key,
                 label: _.upperCase(key),
-                headerStyle: { minWidth: '10rem' },
+                // headerStyle: { minWidth: '50px', maxWidth: '200px' },
+                // style: { minWidth: '50px', maxWidth: '200px' },
                 frozen: false,
                 body: !scopedColumns ? undefined : scopedColumns[key],
             });
         });
 
         if (!_.isNull(actions) && _.size(actions) > 0) {
-            columnHeads.push({
+            columns.push({
                 key: 'actions',
                 label: 'ACTIONS',
-                headerStyle: { minWidth: 'auto' },
-                style: { width: 'auto' },
+                // headerStyle: { minWidth: '50px', maxWidth: '200px' },
+                // style: { minWidth: '50px', maxWidth: '200px' },
                 frozen: true,
                 body: undefined,
             });
@@ -69,7 +70,7 @@ const DataTable = ({
                             label={action.text ?? undefined}
                             icon={action.icon}
                             severity={action.color}
-                            className={index !== 0 ? 'ml-2' : ''}
+                            className={`${index !== 0 ? 'mt-2' : ''} w-full`}
                             rounded={!action.text}
                             onClick={e => {
                                 e.preventDefault();
@@ -118,14 +119,31 @@ const DataTable = ({
             scrollable={true}
             scrollHeight="100vh"
         >
-            {_.map(columnHeads, item => {
+            {_.map(columns, item => {
                 return (
                     <Column
                         key={item.key}
                         field={item.key}
                         header={item.label}
                         sortable={!_.isEqual(item.key, 'actions')}
-                        headerStyle={item.headerStyle}
+                        headerStyle={{
+                            maxWidth: item.key !== 'actions' ? '200px' : '120px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            // padding: '8px',
+                            // border: '1px solid #ddd',
+                            // backgroundColor: '#f2f2f2',
+                            // fontWeight: 'bold',
+                        }}
+                        style={{
+                            maxWidth: item.key !== 'actions' ? '200px' : '120px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'break-spaces',
+                            // padding: '8px',
+                            // border: '1px solid #ddd',
+                        }}
                         // frozen={item.frozen}
                         // alignFrozen="right"
                         body={item.body}
