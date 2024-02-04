@@ -386,3 +386,12 @@ export const getTripType = (router: NextRouter): ITripType => {
 
     return types;
 };
+
+export const isJSONString = (string: string) => {
+    try {
+        JSON.parse(string);
+        return true;
+    } catch (error) {
+        return false;
+    }
+};

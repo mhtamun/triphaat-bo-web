@@ -42,7 +42,19 @@ const EditorField = (props: {
         }
     }, []);
 
-    // console.debug({ value });
+    console.debug({ value });
+
+    let parsedValue: string | undefined = undefined;
+
+    try {
+        parsedValue = JSON.parse(value);
+
+        console.debug({ parsedValue });
+    } catch (e) {
+        console.error(e);
+
+        parsedValue = JSON.parse(JSON.stringify(`<p>${value}</p>`));
+    }
 
     return (
         <div className="field p-fluid">
@@ -64,7 +76,7 @@ const EditorField = (props: {
                         id={name}
                         apiKey="enwgih463zy7tucf51q0rohglyrfuf0j63f3u5e8qupxnjir"
                         onInit={(evt, editor) => (editorRef.current = editor)}
-                        initialValue={!value ? null : JSON.parse(value)}
+                        initialValue={parsedValue}
                         onEditorChange={editor => {
                             // console.debug({ editor });
 
@@ -113,16 +125,18 @@ const EditorField = (props: {
                     {title} (Preview)
                 </label>
             )}
-            <div
-                style={{
-                    padding: '11px',
-                    border: '2px solid #eee',
-                    borderRadius: '10px',
-                    overflow: 'scroll',
-                    position: 'relative',
-                }}
-                dangerouslySetInnerHTML={{ __html: !value ? null : JSON.parse(value) }}
-            />
+            {!parsedValue ? null : (
+                <div
+                    style={{
+                        padding: '11px',
+                        border: '2px solid #eee',
+                        borderRadius: '10px',
+                        overflow: 'scroll',
+                        position: 'relative',
+                    }}
+                    dangerouslySetInnerHTML={{ __html: parsedValue }}
+                />
+            )}
             {!errorMessage ? null : (
                 <small id={`${name}-help`} className="p-error">
                     {errorMessage}

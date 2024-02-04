@@ -11,7 +11,7 @@ import _ from 'lodash';
 import { getAuthorized } from '../../../../../../libs/auth';
 import GenericViewGenerator from '../../../../../../components/global/GenericViewGenerator';
 import { getTripForVendor } from '../../../../../../apis';
-import { getGeneralStatusOptions } from '../../../../../../utils';
+import { getGeneralStatusOptions, isJSONString } from '../../../../../../utils';
 import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
 
@@ -57,14 +57,23 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                 uri: `/api/v1/trips/${tripId}/activities`,
                                 ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
                                 scopedColumns: {
+                                    body: (item: any) => (
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: !item.body
+                                                    ? ''
+                                                    : !isJSONString(item.body)
+                                                    ? item.body
+                                                    : JSON.parse(item.body),
+                                            }}
+                                        ></div>
+                                    ),
                                     status: (item: any) => (
-                                        <>
-                                            <Badge
-                                                value={item.status}
-                                                size="large"
-                                                severity={item.status === 'INACTIVE' ? 'danger' : 'success'}
-                                            ></Badge>
-                                        </>
+                                        <Badge
+                                            value={item.status}
+                                            size="large"
+                                            severity={item.status === 'INACTIVE' ? 'danger' : 'success'}
+                                        ></Badge>
                                     ),
                                 },
                                 actionIdentifier: 'id',
@@ -117,7 +126,7 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
                                     },
                                 },
                                 {
-                                    type: 'textarea',
+                                    type: 'richtext',
                                     name: 'body',
                                     placeholder: 'Enter body for this activity!',
                                     title: 'Body (Description)',
