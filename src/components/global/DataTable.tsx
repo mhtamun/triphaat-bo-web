@@ -67,11 +67,11 @@ const DataTable = ({
                     {_.map(actions, (action: IAction, index: number) => (
                         <Button
                             key={index}
-                            label={action.text ?? undefined}
+                            label={!action.text ? undefined : action.text}
                             icon={action.icon}
                             severity={action.color}
-                            className={`${index !== 0 ? 'mt-2' : ''} w-full`}
-                            rounded={!action.text}
+                            className={`${index !== 0 ? 'mt-2' : ''} ${!action.text ? '' : 'w-full'}`}
+                            rounded={!action.text ? true : false}
                             onClick={e => {
                                 e.preventDefault();
 
@@ -127,7 +127,7 @@ const DataTable = ({
                         header={item.label}
                         sortable={!_.isEqual(item.key, 'actions')}
                         headerStyle={{
-                            maxWidth: item.key !== 'actions' ? '200px' : '120px',
+                            // maxWidth: item.key !== 'actions' ? '200px' : '120px',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
@@ -137,7 +137,7 @@ const DataTable = ({
                             // fontWeight: 'bold',
                         }}
                         style={{
-                            maxWidth: item.key !== 'actions' ? '200px' : '120px',
+                            // maxWidth: item.key !== 'actions' ? '200px' : '120px',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             whiteSpace: 'break-spaces',
