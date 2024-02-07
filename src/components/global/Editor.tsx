@@ -42,14 +42,14 @@ const EditorField = (props: {
         }
     }, []);
 
-    console.debug({ value });
+    // console.debug({ value });
 
     let parsedValue: string | undefined = undefined;
 
     try {
         parsedValue = JSON.parse(value);
 
-        console.debug({ parsedValue });
+        // console.debug({ parsedValue });
     } catch (e) {
         console.error(e);
 
