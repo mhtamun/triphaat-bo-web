@@ -20,7 +20,7 @@ import GenericFormGenerator from '../../../../../../../components/global/Generic
 import {
     getTripForVendor,
     getTripVariants,
-    initBooking,
+    initTripBooking,
     searchCustomersForVendor,
     lockBooking,
     getServiceDates,
@@ -62,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
         }
 
         // console.debug({
-        //     initBooking: responseInitBooking.data,
+        //     initTripBooking: responseInitBooking.data,
         // });
 
         return {
@@ -397,7 +397,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
                         }));
                         // console.debug({ roomSeats });
 
-                        initBooking({
+                        initTripBooking({
                             tripId: parseInt(tripId),
                             variantId: values.variantId,
                             pricePerPerson: parseFloat(values.pricePerPerson),

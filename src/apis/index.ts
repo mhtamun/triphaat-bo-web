@@ -52,7 +52,7 @@ export const getTotalBalancePaymentOfTripsForVendor = (authorization: string) =>
 export const getCurrentMonthBalancePaymentOfTripsForVendor = (authorization: string) =>
     callGetApi(apiBaseUrl + '/vendor/api/v1/trip-payments-balance-current-month', authorization);
 
-export const initBooking = (payload: {
+export const initTripBooking = (payload: {
     tripId: number;
     variantId: number;
     pricePerPerson: number;
