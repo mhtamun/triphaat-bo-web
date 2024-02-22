@@ -66,7 +66,6 @@ export default function GenericFormGenerator({
     enableReinitialize?: boolean;
 }) {
     // console.debug({ datum });
-
     // console.debug({ fields });
 
     const formik = useFormik({
@@ -76,9 +75,11 @@ export default function GenericFormGenerator({
             ? _.reduce(
                   fields,
                   (result, field, index) => {
+                      //   console.debug({ result, field, index });
+
                       const temp: any = result;
                       temp[field.name] =
-                          field.initialValue === null || field.initialValue === undefined ? null : field.initialValue;
+                          field.initialValue === undefined || field.initialValue === null ? null : field.initialValue;
 
                       return temp;
                   },
@@ -124,20 +125,23 @@ export default function GenericFormGenerator({
 
             // Check false value not to submit in the form
             values = _.mapValues(values, (value: any, key: string) => {
-                console.debug({ value, key });
+                // console.debug({ value, key });
+                console.debug({ datum });
 
                 if (_.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
-                    hiddenFields.push(key);
+                    if (_.isNull(datum) || _.isEmpty(datum)) hiddenFields.push(key); // This executes when create
 
                     return null;
                 }
 
                 if (
                     (_.isString(value) && _.isEqual(value, '')) ||
+                    (_.isString(value) && _.isEqual(value, '0')) ||
                     (_.isNumber(value) && _.isEqual(value, 0)) ||
                     (_.isArray(value) && _.size(value) === 0)
                 ) {
                     const field = _.find(fields, field => field.name === key);
+                    // console.debug({ value, key, field });
 
                     if (!field) return null;
 
@@ -178,7 +182,7 @@ export default function GenericFormGenerator({
 
                 return value;
             });
-            console.debug({ values });
+            // console.debug({ values });
 
             // Check information type value or not showing value not to submit in the form
             _.map(

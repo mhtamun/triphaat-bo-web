@@ -15,7 +15,7 @@ import { callPutApi } from '../../../../../../libs/api';
 import { getTripFields } from '../../../t/[type]/create';
 import TabViewComponent from '../../../../../../components/trips/TabViewComponent';
 import WrapperComponent from '../../../../../../components/trips/WrapperComponent';
-import { getTripType } from '../../../../../../utils';
+import { getTripGeneralTypeOptions, getTripType } from '../../../../../../utils';
 import { showToast } from '../../../../../../utils/toast';
 import { ModalConfirmation } from '../../../../../../components';
 import handleResponseIfError from '../../../../../../utils/responseHandler';
@@ -105,7 +105,8 @@ const Page = ({
                                     types.accommodationType,
                                     types.transportationType,
                                     types.foodType,
-                                    router.query.type as string
+                                    router.query.type as string,
+                                    getTripGeneralTypeOptions
                                 )}
                                 callback={data => {
                                     // console.debug({ data });

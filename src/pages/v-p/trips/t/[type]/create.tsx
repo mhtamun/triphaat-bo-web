@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { getAuthorized } from '../../../../../libs/auth';
 import GenericFormGenerator, { IField } from '../../../../../components/global/GenericFormGenerator';
 import { getCategories, getLocations } from '../../../../../apis';
-import { getGeneralStatusOptions, getTripType } from '../../../../../utils';
+import { getGeneralStatusOptions, getTripGeneralTypeOptions, getTripType } from '../../../../../utils';
 import { callPostApi } from '../../../../../libs/api';
 import handleResponseIfError from '../../../../../utils/responseHandler';
 import { ICategory, ILocation } from '../../../../../types';
@@ -22,8 +22,19 @@ export const getTripFields = (
     accommodationType: string,
     transportationType: string,
     foodType: string,
-    type: string
+    type: string,
+    generalTypes: { value: string; label: string }[]
 ): IField[] => [
+    {
+        type: 'select-sync',
+        name: 'generalType',
+        placeholder: 'Select a type in general',
+        title: 'General Type',
+        initialValue: null,
+        options: generalTypes,
+        isSearchable: true,
+        isClearable: true,
+    },
     {
         type: 'select-sync',
         name: 'categoryId',
@@ -87,6 +98,18 @@ export const getTripFields = (
         initialValue: transportationType,
         validate: (values: any) => {
             if (!values.transportationType) return 'Required!';
+
+            return null;
+        },
+    },
+    {
+        type: 'hidden',
+        name: 'foodType',
+        placeholder: '',
+        title: '',
+        initialValue: foodType,
+        validate: (values: any) => {
+            if (!values.foodType) return 'Required!';
 
             return null;
         },
@@ -332,7 +355,8 @@ const Page = ({ categories, locations }: { categories: ICategory[]; locations: I
                                 types.accommodationType,
                                 types.transportationType,
                                 types.foodType,
-                                router.query.type as string
+                                router.query.type as string,
+                                getTripGeneralTypeOptions
                             )}
                             callback={(data, resetForm) => {
                                 // console.debug({ data });
