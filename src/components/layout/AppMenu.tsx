@@ -75,6 +75,10 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                             label: 'Featured Trip Management',
                             to: '/featured-trips',
                         },
+                        {
+                            label: 'Featured Service Management',
+                            to: '/featured-services',
+                        },
                     ],
                 },
             ],
