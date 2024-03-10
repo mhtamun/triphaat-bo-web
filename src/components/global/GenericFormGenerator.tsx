@@ -125,7 +125,7 @@ export default function GenericFormGenerator({
 
             // Check false value not to submit in the form
             values = _.mapValues(values, (value: any, key: string) => {
-                // console.debug({ value, key });
+                console.debug({ value, key });
                 // console.debug({ datum });
 
                 if (_.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {

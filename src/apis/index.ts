@@ -35,6 +35,10 @@ export const getCityById = (id: string, authorization: string) =>
 export const searchTripsForSelectByLocationId = (locationId: number, authorization?: string | null) =>
     callGetApi(apiBaseUrl + `/api/v1/locations/${locationId}/trips-select`, authorization, true);
 
+export const getBlogTopics = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/blog-topics', authorization);
+
+export const getBlogTags = (authorization: string) => callGetApi(apiBaseUrl + '/api/v1/blog-tags', authorization);
+
 // VENDOR admin APIs
 
 export const vendorLogin = (payload: { email: string; password: string; type: string }) =>

@@ -81,6 +81,24 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                         },
                     ],
                 },
+                {
+                    icon: 'pi pi-fw pi-book',
+                    label: 'Blog Management',
+                    items: [
+                        {
+                            label: 'Blog Topics',
+                            to: '/blogs/topics',
+                        },
+                        {
+                            label: 'Blog Tags',
+                            to: '/blogs/tags',
+                        },
+                        {
+                            label: 'Blogs',
+                            to: '/blogs',
+                        },
+                    ],
+                },
             ],
         },
     ];
