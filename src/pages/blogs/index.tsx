@@ -55,6 +55,9 @@ const Page = ({ blogTopics, blogTags }: { blogTopics: any; blogTags: any }) => {
                             onDataModify: data =>
                                 _.map(data, datum => ({
                                     ...datum,
+                                    author: datum?.author?.user?.name,
+                                    topic: datum?.topic?.name,
+                                    tags: (datum?.tags as any[])?.map(tag => tag?.tag?.name)?.join(', '),
                                 })),
                         }}
                         addNew={{
