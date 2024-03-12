@@ -125,7 +125,17 @@ const EditorField = (props: {
                     {title} (Preview)
                 </label>
             )}
-            {!parsedValue ? null : (
+            {!parsedValue ? (
+                <div
+                    style={{
+                        padding: '11px',
+                        border: '2px solid #eee',
+                        borderRadius: '10px',
+                        overflow: 'scroll',
+                        position: 'relative',
+                    }}
+                />
+            ) : (
                 <div
                     style={{
                         padding: '11px',

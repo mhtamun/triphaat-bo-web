@@ -8,9 +8,10 @@ import _ from 'lodash';
 
 // application
 import { getAuthorized } from '../../libs/auth';
-import { getCityById, getBlogTags, getBlogTopics } from '../../apis';
+import { getBlogTags, getBlogTopics } from '../../apis';
 import GenericViewGenerator from '../../components/global/GenericViewGenerator';
 import { getGeneralStatusOptions } from '../../utils';
+import { UrlBasedColumnItem } from '../../components';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Blog Management | Admin Panel | TripHaat', async cookies => {
@@ -52,6 +53,10 @@ const Page = ({ blogTopics, blogTags }: { blogTopics: any; blogTags: any }) => {
                             uri: `/api/v1/blogs`,
                             ignoredColumns: ['id', 'content', 'createdAt', 'updatedAt'],
                             actionIdentifier: 'id',
+                            scopedColumns: {
+                                thumbnailUrl: (item: any) => <UrlBasedColumnItem url={item.thumbnailUrl} />,
+                                bannerUrl: (item: any) => <UrlBasedColumnItem url={item.bannerUrl} />,
+                            },
                             onDataModify: data =>
                                 _.map(data, datum => ({
                                     ...datum,
@@ -107,6 +112,20 @@ const Page = ({ blogTopics, blogTags }: { blogTopics: any; blogTags: any }) => {
                             },
                             {
                                 type: 'text',
+                                name: 'thumbnailUrl',
+                                placeholder: 'Submit a square size thumbnail image URL',
+                                title: 'Thumbnail',
+                                initialValue: null,
+                            },
+                            {
+                                type: 'text',
+                                name: 'bannerUrl',
+                                placeholder: 'Submit a banner size image URL',
+                                title: 'Banner (Featured Image)',
+                                initialValue: null,
+                            },
+                            {
+                                type: 'text',
                                 name: 'title',
                                 placeholder: 'Enter blog title!',
                                 title: 'Title',
@@ -120,7 +139,7 @@ const Page = ({ blogTopics, blogTags }: { blogTopics: any; blogTags: any }) => {
                             {
                                 type: 'richtext',
                                 name: 'content',
-                                placeholder: '',
+                                placeholder: 'Please enter blog body',
                                 title: 'Content',
                                 initialValue: null,
                                 validate: (values: any) => {
@@ -128,6 +147,13 @@ const Page = ({ blogTopics, blogTags }: { blogTopics: any; blogTags: any }) => {
 
                                     return null;
                                 },
+                            },
+                            {
+                                type: 'text',
+                                name: 'summary',
+                                placeholder: 'Submit a summary of the blog',
+                                title: 'Summary',
+                                initialValue: null,
                             },
                             {
                                 type: 'number',
