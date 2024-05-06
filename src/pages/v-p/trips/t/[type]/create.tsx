@@ -157,12 +157,12 @@ export const getTripFields = (
         title: 'Duration In Days',
         initialValue: null,
         show: () => {
-            if (type === '1100') return false;
+            if (type === '2260') return false;
 
             return true;
         },
         validate: (values: any) => {
-            if (!values.durationInDays) return 'Required!';
+            if (type === '0000' && !values.durationInDays) return 'Required!';
 
             return null;
         },
@@ -175,12 +175,12 @@ export const getTripFields = (
         title: 'Duration In Nights',
         initialValue: null,
         show: () => {
-            if (type === '1100') return false;
+            if (type === '2260') return false;
 
             return true;
         },
         validate: (values: any) => {
-            if (!values.durationInNights) return 'Required!';
+            if (type === '0000' && !values.durationInNights) return 'Required!';
 
             return null;
         },
@@ -193,12 +193,12 @@ export const getTripFields = (
         initialValue: null,
         minDate: new Date(),
         show: () => {
-            if (type === '1100') return false;
+            if (type === '1111' || type === '2260') return false;
 
             return true;
         },
         validate: (values: any) => {
-            if (!values.startDate) return 'Required!';
+            if (type === '0000' && !values.startDate) return 'Required!';
 
             return null;
         },
@@ -212,12 +212,12 @@ export const getTripFields = (
         initialValue: null,
         minDate: new Date(),
         show: () => {
-            if (type === '1100') return false;
+            if (type === '1111' || type === '2260') return false;
 
             return true;
         },
         validate: (values: any) => {
-            if (!values.endDate) return 'Required!';
+            if (type === '0000' && !values.endDate) return 'Required!';
 
             return null;
         },
@@ -229,12 +229,12 @@ export const getTripFields = (
         title: 'Expiration Date Of Booking',
         initialValue: null,
         show: () => {
-            if (type === '1100') return false;
+            if (type === '2260') return false;
 
             return true;
         },
         validate: (values: any) => {
-            if (!values.expiryDateOfBooking) return 'Required!';
+            if (type === '0000' && !values.expiryDateOfBooking) return 'Required!';
 
             return null;
         },
@@ -246,7 +246,7 @@ export const getTripFields = (
         title: 'Number of Seats (Maximum pax possible)',
         initialValue: null,
         validate: (values: any) => {
-            if (!values.numberOfSeats) return 'Required!';
+            if ((type === '0000' || type === '2260') && !values.numberOfSeats) return 'Required!';
 
             return null;
         },
@@ -259,9 +259,9 @@ export const getTripFields = (
         title: 'Number of Seats (Minimum pax required)',
         initialValue: null,
         validate: (values: any) => {
-            if (!values.minRequiredSeatsToRun) return 'Required!';
+            if ((type === '0000' || type === '2260') && !values.minRequiredSeatsToRun) return 'Required!';
 
-            if (values.numberOfSeats < values.minRequiredSeatsToRun)
+            if ((type === '0000' || type === '2260') && values.numberOfSeats < values.minRequiredSeatsToRun)
                 return "You can't input a value greater the maximum number of seats!";
 
             return null;
@@ -284,7 +284,7 @@ export const getTripFields = (
             },
         ],
         show: () => {
-            if (type === '1100') return false;
+            if (type === '2260') return false;
 
             return true;
         },

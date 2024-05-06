@@ -148,7 +148,7 @@ const Page = ({ tripId, trip, roomSeats }: { tripId: string; trip: any; roomSeat
                             initialValue: null,
                             validate: (values: any) => {
                                 if (
-                                    router.query.type === '1100' &&
+                                    router.query.type === '2260' &&
                                     (_.isUndefined(values.numberOfSeats) || _.isNull(values.numberOfSeats))
                                 )
                                     return 'Required!';

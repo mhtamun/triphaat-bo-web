@@ -185,7 +185,7 @@ const Page = ({ tripId, trip, variants }: { tripId: string; trip: any; variants:
     };
 
     useEffect(() => {
-        if (router.query.type === '1100') {
+        if (router.query.type === '2260') {
             getServiceDates(tripId)
                 .then(response => {
                     // console.debug({ response });
