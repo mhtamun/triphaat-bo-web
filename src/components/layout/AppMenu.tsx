@@ -139,8 +139,8 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
             label: 'Trips',
             items: [
                 { icon: 'pi pi-bars', label: 'Group Tours', to: '/v-p/trips/t/0000' },
-                { icon: 'pi pi-bars', label: 'Package Trips', to: '/v-p/trips/t/1111' },
                 { icon: 'pi pi-bars', label: 'Houseboats', to: '/v-p/trips/t/2260' },
+                { icon: 'pi pi-bars', label: 'Open Listing', to: '/v-p/trips/t/1111' },
             ],
         },
     ];

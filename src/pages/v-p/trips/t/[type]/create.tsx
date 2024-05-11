@@ -193,7 +193,7 @@ export const getTripFields = (
         initialValue: null,
         minDate: new Date(),
         show: () => {
-            if (type === '1111' || type === '2260') return false;
+            if (type === '2260') return false;
 
             return true;
         },
@@ -212,7 +212,7 @@ export const getTripFields = (
         initialValue: null,
         minDate: new Date(),
         show: () => {
-            if (type === '1111' || type === '2260') return false;
+            if (type === '2260') return false;
 
             return true;
         },

@@ -377,16 +377,16 @@ export const getTripType = (router: NextRouter): ITripType => {
         types.accommodationType = 'FIXED';
         types.transportationType = 'FIXED';
         types.foodType = 'FIXED';
-    } else if (router.query.type === '1111') {
-        types.dateType = 'UNFIXED';
-        types.accommodationType = 'UNFIXED';
-        types.transportationType = 'UNFIXED';
-        types.foodType = 'UNFIXED';
     } else if (router.query.type === '2260') {
         types.dateType = 'ON_DEMAND_SINGLE';
         types.accommodationType = 'ON_DEMAND_ROOM_SEAT';
         types.transportationType = 'SELF_MANAGED';
         types.foodType = 'FIXED';
+    } else if (router.query.type === '1111') {
+        types.dateType = 'UNFIXED';
+        types.accommodationType = 'UNFIXED';
+        types.transportationType = 'UNFIXED';
+        types.foodType = 'UNFIXED';
     }
 
     return types;

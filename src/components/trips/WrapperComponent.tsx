@@ -132,6 +132,12 @@ const WrapperComponent = ({
 
                         if (router.query.type === '0000' && item.label === 'Room Seat Setup') return false;
 
+                        if (router.query.type === '2260' && item.label === 'Expenses') return false;
+
+                        if (router.query.type === '2260' && item.label === 'Copy This Trip') return false;
+
+                        // Open listing
+
                         if (router.query.type === '1111' && item.label === 'Service Date Setup') return false;
 
                         if (router.query.type === '1111' && item.label === 'Room Seat Setup') return false;
@@ -139,10 +145,6 @@ const WrapperComponent = ({
                         if (router.query.type === '1111' && item.label === 'Expenses') return false;
 
                         if (router.query.type === '1111' && item.label === 'Copy This Trip') return false;
-
-                        if (router.query.type === '2260' && item.label === 'Expenses') return false;
-
-                        if (router.query.type === '2260' && item.label === 'Copy This Trip') return false;
 
                         return true;
                     })}
