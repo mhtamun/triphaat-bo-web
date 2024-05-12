@@ -39,10 +39,8 @@ export const getServerSideProps: GetServerSideProps = async context =>
         };
     });
 
-const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
-    const router = useRouter();
-
-    const fields: IField[] = [
+export const getImageFormFields = (tripId: string): IField[] => {
+    return [
         {
             type: 'hidden',
             name: 'tripId',
@@ -110,74 +108,77 @@ const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
             },
         },
     ];
+};
+
+export const ImageList = (tripId: string, fields: IField[]) => (
+    <GenericViewGenerator
+        name={'Image'}
+        title="Trip Images"
+        subtitle="Manage trip images here!"
+        viewAll={{
+            uri: `/api/v1/trips/${tripId}/images`,
+            ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
+            scopedColumns: {
+                url: (item: any) => (
+                    <>
+                        <span className="p-column-title">{item.title}</span>
+                        <img src={item.url} alt={item.title} className="shadow-2" width="100" />
+                    </>
+                ),
+                status: (item: any) => (
+                    <>
+                        <Badge
+                            value={item.status}
+                            size="large"
+                            severity={item.status === 'INACTIVE' ? 'danger' : 'success'}
+                        ></Badge>
+                    </>
+                ),
+            },
+            actionIdentifier: 'id',
+            onDataModify: data =>
+                _.map(data, datum => ({
+                    ...datum,
+                })),
+        }}
+        addNew={{
+            uri: `/api/v1/images`,
+            buttonText: 'Add Image',
+        }}
+        viewOne={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+        editExisting={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
+        removeOne={{
+            uri: '/api/v1/images/{id}',
+            identifier: '{id}',
+        }}
+        fields={fields}
+        editFields={[
+            {
+                type: 'textarea',
+                name: 'url',
+                placeholder: 'Insert an image URL',
+                title: 'Image Upload',
+                initialValue: null,
+                validate: (values: any) => {
+                    if (!values.url) return 'Required!';
+
+                    return null;
+                },
+            },
+            ..._.filter(fields, (field: IField) => field.name !== 'url'),
+        ]}
+    />
+);
+
+const Page = ({ tripId, trip }: { tripId: string; trip: any }) => {
+    const router = useRouter();
 
     return (
         <WrapperComponent tripId={tripId} title={trip?.name} router={router}>
             <TabViewComponent
                 router={router}
                 tripId={tripId}
-                content={useMemo(
-                    () => (
-                        <GenericViewGenerator
-                            name={'Image'}
-                            title="Trip Images"
-                            subtitle="Manage trip images here!"
-                            viewAll={{
-                                uri: `/api/v1/trips/${tripId}/images`,
-                                ignoredColumns: ['id', 'tripId', 'createdAt', 'updatedAt'],
-                                scopedColumns: {
-                                    url: (item: any) => (
-                                        <>
-                                            <span className="p-column-title">{item.title}</span>
-                                            <img src={item.url} alt={item.title} className="shadow-2" width="100" />
-                                        </>
-                                    ),
-                                    status: (item: any) => (
-                                        <>
-                                            <Badge
-                                                value={item.status}
-                                                size="large"
-                                                severity={item.status === 'INACTIVE' ? 'danger' : 'success'}
-                                            ></Badge>
-                                        </>
-                                    ),
-                                },
-                                actionIdentifier: 'id',
-                                onDataModify: data =>
-                                    _.map(data, datum => ({
-                                        ...datum,
-                                    })),
-                            }}
-                            addNew={{
-                                uri: `/api/v1/images`,
-                                buttonText: 'Add Image',
-                            }}
-                            viewOne={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
-                            editExisting={{ uri: '/api/v1/images/{id}', identifier: '{id}' }}
-                            removeOne={{
-                                uri: '/api/v1/images/{id}',
-                                identifier: '{id}',
-                            }}
-                            fields={fields}
-                            editFields={[
-                                {
-                                    type: 'textarea',
-                                    name: 'url',
-                                    placeholder: 'Insert an image URL',
-                                    title: 'Image Upload',
-                                    initialValue: null,
-                                    validate: (values: any) => {
-                                        if (!values.url) return 'Required!';
-
-                                        return null;
-                                    },
-                                },
-                                ..._.filter(fields, (field: IField) => field.name !== 'url'),
-                            ]}
-                        />
-                    ),
-                    [trip]
-                )}
+                content={useMemo(() => ImageList(tripId, getImageFormFields(tripId)), [trip])}
             />
         </WrapperComponent>
     );

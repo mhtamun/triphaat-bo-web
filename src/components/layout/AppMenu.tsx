@@ -99,6 +99,16 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                         },
                     ],
                 },
+                {
+                    icon: 'pi pi-fw pi-users',
+                    label: 'Client Section',
+                    items: [
+                        {
+                            label: 'Clients',
+                            to: '/clients',
+                        },
+                    ],
+                },
             ],
         },
     ];

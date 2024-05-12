@@ -117,7 +117,7 @@ export default function GenericFormGenerator({
         },
 
         onSubmit: (values: FormikValues, { setSubmitting }) => {
-            // console.debug({ values });
+            console.debug({ values });
 
             setSubmitting(true);
 
@@ -197,7 +197,7 @@ export default function GenericFormGenerator({
             // console.debug({ hiddenFields });
 
             const filteredValues = _.omit(values, [...hiddenFields, ...nonEdibleFields]);
-            // console.debug({ filteredValues });
+            console.debug({ filteredValues });
 
             setSubmitting(false);
 
