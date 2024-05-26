@@ -9,21 +9,20 @@ import _ from 'lodash';
 // application
 import { getAuthorized } from '../../../../../libs/auth';
 import GenericFormGenerator, { IField } from '../../../../../components/global/GenericFormGenerator';
-import { getCategories, getLocations } from '../../../../../apis';
+import { getLocations } from '../../../../../apis';
 import { getGeneralStatusOptions, getTripGeneralTypeOptions, getTripType } from '../../../../../utils';
 import { callPostApi } from '../../../../../libs/api';
 import handleResponseIfError from '../../../../../utils/responseHandler';
-import { ICategory, ILocation } from '../../../../../types';
+import { ILocation } from '../../../../../types';
 
 export const getTripFields = (
-    categories: ICategory[],
-    locations: ILocation[],
     dateType: string,
     accommodationType: string,
     transportationType: string,
     foodType: string,
     type: string,
-    generalTypes: { value: string; label: string }[]
+    generalTypes: { value: string; label: string }[],
+    locations: ILocation[]
 ): IField[] => [
     {
         type: 'select-sync',
@@ -34,19 +33,16 @@ export const getTripFields = (
         options: generalTypes,
         isSearchable: true,
         isClearable: true,
-    },
-    {
-        type: 'select-sync',
-        name: 'categoryId',
-        placeholder: 'Select a category',
-        title: 'Category',
-        initialValue: null,
-        options: _.map(categories, (category: ICategory) => ({
-            value: category.id,
-            label: category.title,
-        })),
-        isSearchable: true,
-        isClearable: true,
+        show: () => {
+            if (type === '1111') return true;
+
+            return false;
+        },
+        validate: (values: any) => {
+            if (type === '1111' && !values.generalType) return 'Required!';
+
+            return null;
+        },
     },
     {
         type: 'select-sync',
@@ -132,11 +128,6 @@ export const getTripFields = (
         placeholder: 'Enter small description for this trip!',
         title: 'Small Description',
         initialValue: null,
-        // validate: (values: any) => {
-        //     if (!values.smallDescription) return 'Required!';
-
-        //     return null;
-        // },
     },
     {
         type: 'richtext',
@@ -144,11 +135,6 @@ export const getTripFields = (
         placeholder: 'Enter big description for this trip!',
         title: 'Big Description',
         initialValue: null,
-        // validate: (values: any) => {
-        //     if (!values.bigDescription) return 'Required!';
-
-        //     return null;
-        // },
     },
     {
         type: 'number',
@@ -324,20 +310,18 @@ export const getTripFields = (
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Create A Trip | Trip Management', async cookies => {
-        const responseGetCategories = await getCategories(`${cookies.accessType} ${cookies.accessToken}`);
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
-        const responseError = handleResponseIfError(context, responseGetCategories, responseGetLocations);
+        const responseError = handleResponseIfError(context, responseGetLocations);
         if (responseError !== null) return responseError;
 
         return {
             isVendor: true,
-            categories: responseGetCategories.data,
             locations: responseGetLocations.data,
         };
     });
 
-const Page = ({ categories, locations }: { categories: ICategory[]; locations: ILocation[] }) => {
+const Page = ({ locations }: { locations: ILocation[] }) => {
     const router = useRouter();
 
     const types = getTripType(router);
@@ -349,14 +333,13 @@ const Page = ({ categories, locations }: { categories: ICategory[]; locations: I
                     !locations || _.size(locations) === 0 ? null : (
                         <GenericFormGenerator
                             fields={getTripFields(
-                                categories,
-                                locations,
                                 types.dateType,
                                 types.accommodationType,
                                 types.transportationType,
                                 types.foodType,
                                 router.query.type as string,
-                                getTripGeneralTypeOptions
+                                getTripGeneralTypeOptions,
+                                locations
                             )}
                             callback={(data, resetForm) => {
                                 // console.debug({ data });

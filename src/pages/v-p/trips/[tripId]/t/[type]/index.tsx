@@ -39,36 +39,24 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Details | Trip Management', async cookies => {
         const tripId = context.query.tripId;
 
-        const responseGetCategories = await getCategories(`${cookies.accessType} ${cookies.accessToken}`);
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
         const responseGetTrip = await getTripForVendor(
             tripId as string,
             `${cookies.accessType} ${cookies.accessToken}`
         );
 
-        const responseError = handleResponseIfError(context, responseGetCategories, responseGetLocations);
+        const responseError = handleResponseIfError(context, responseGetLocations);
         if (responseError !== null) return responseError;
 
         return {
             isVendor: true,
             tripId,
-            categories: responseGetCategories.data,
             locations: responseGetLocations.data,
             trip: responseGetTrip.data,
         };
     });
 
-const Page = ({
-    tripId,
-    categories,
-    locations,
-    trip,
-}: {
-    tripId: string;
-    categories: ICategory[];
-    locations: ILocation[];
-    trip: any;
-}) => {
+const Page = ({ tripId, locations, trip }: { tripId: string; locations: ILocation[]; trip: any }) => {
     const router = useRouter();
 
     const types = getTripType(router);
@@ -99,14 +87,13 @@ const Page = ({
                                     ...trip,
                                 }}
                                 fields={getTripFields(
-                                    categories,
-                                    locations,
                                     types.dateType,
                                     types.accommodationType,
                                     types.transportationType,
                                     types.foodType,
                                     router.query.type as string,
-                                    getTripGeneralTypeOptions
+                                    getTripGeneralTypeOptions,
+                                    locations
                                 )}
                                 callback={data => {
                                     // console.debug({ data });

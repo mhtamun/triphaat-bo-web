@@ -17,36 +17,36 @@ import { DATE_FORMAT, getFormattedDatetime } from '../../../../utils/date';
 
 export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Itineraries | Client Section', async cookies => {
-        const clientId = context.query.clientId as string;
+        const categoryId = context.query.categoryId as string;
 
         return {
             isVendor: false,
-            clientId: parseInt(clientId),
+            categoryId: parseInt(categoryId),
         };
     });
 
-const Page = ({ clientId }: { clientId: number }) => {
+const Page = ({ categoryId }: { categoryId: number }) => {
     const router = useRouter();
 
     return (
-        <Card title="Itineraries" subTitle="">
+        <Card title="Items" subTitle="">
             <Button
-                label={'Create New Itinerary'}
+                label={'Create New Item'}
                 icon="pi pi-plus"
                 severity="success"
                 className="mb-3"
                 onClick={e => {
                     e.preventDefault();
 
-                    router.push(`/clients/${router.query.clientId}/itineraries/create`);
+                    router.push(`/categories/${router.query.categoryId}/items/create`);
                 }}
             />
             {useMemo(
                 () => (
                     <GenericViewGenerator
-                        name={'Itinerary'}
+                        name={'Item'}
                         viewAll={{
-                            uri: `/api/v1/clients/${clientId}/trips`,
+                            uri: `/api/v1/categories/${categoryId}/trips`,
                             ignoredColumns: [
                                 'id',
                                 'vendorId',
@@ -98,7 +98,7 @@ const Page = ({ clientId }: { clientId: number }) => {
                                 text: '',
                                 tooltip: 'Enter Detail',
                                 callback: identifier => {
-                                    router.push(`/clients/${clientId}/itineraries/${identifier}`);
+                                    router.push(`/categories/${categoryId}/items/${identifier}`);
                                 },
                             },
                             {

@@ -2,7 +2,10 @@ import React, { useMemo } from 'react';
 
 // third-party
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { Card } from 'primereact/card';
 import { Badge } from 'primereact/badge';
+import { PrimeIcons } from 'primereact/api';
 import * as _ from 'lodash';
 
 // application
@@ -16,6 +19,8 @@ export const getServerSideProps: GetServerSideProps = async context =>
     getAuthorized(context, 'Category Management | Admin Panel | TripHaat');
 
 const Page = () => {
+    const router = useRouter();
+
     const fields: IField[] = [
         {
             type: 'text',
@@ -73,57 +78,79 @@ const Page = () => {
         },
     ];
 
-    return useMemo(
-        () => (
-            <GenericViewGenerator
-                name={'Category'}
-                title="Categories"
-                subtitle="Manage categories here!"
-                viewAll={{
-                    uri: `/api/v1/categories`,
-                    ignoredColumns: ['id', 'createdAt', 'updatedAt'],
-                    scopedColumns: {
-                        bannerImageUrl: (item: any) => <UrlBasedColumnItem url={item.bannerImageUrl} />,
-                        status: (item: any) => (
-                            <>
-                                <Badge
-                                    value={item.status}
-                                    size="large"
-                                    severity={item.status === 'INACTIVE' ? 'danger' : 'success'}
-                                ></Badge>
-                            </>
-                        ),
-                    },
-                    actionIdentifier: 'id',
-                    onDataModify: data =>
-                        _.map(data, datum => ({
-                            ...datum,
-                        })),
-                }}
-                addNew={{
-                    uri: `/api/v1/categories`,
-                    buttonText: 'Add Image',
-                }}
-                viewOne={{ uri: '/api/v1/categories/{id}', identifier: '{id}' }}
-                editExisting={{ uri: '/api/v1/categories/{id}', identifier: '{id}' }}
-                removeOne={{
-                    uri: '/api/v1/categories/{id}',
-                    identifier: '{id}',
-                }}
-                fields={fields}
-                editFields={[
-                    {
-                        type: 'textarea',
-                        name: 'bannerImageUrl',
-                        placeholder: 'Update new banner image URL',
-                        title: 'Banner Image URL',
-                        initialValue: null,
-                    },
-                    ..._.filter(fields, (field: IField) => field.name !== 'bannerImageFile'),
-                ]}
-            />
-        ),
-        []
+    return (
+        <Card>
+            {useMemo(
+                () => (
+                    <GenericViewGenerator
+                        name={'Category'}
+                        title="Categories"
+                        subtitle="Manage categories here!"
+                        viewAll={{
+                            uri: `/api/v1/categories`,
+                            ignoredColumns: ['id', 'createdAt', 'updatedAt'],
+                            scopedColumns: {
+                                bannerImageUrl: (item: any) => <UrlBasedColumnItem url={item.bannerImageUrl} />,
+                                status: (item: any) => (
+                                    <>
+                                        <Badge
+                                            value={item.status}
+                                            size="large"
+                                            severity={item.status === 'INACTIVE' ? 'danger' : 'success'}
+                                        ></Badge>
+                                    </>
+                                ),
+                            },
+                            actionIdentifier: 'id',
+                            onDataModify: data =>
+                                _.map(data, datum => ({
+                                    ...datum,
+                                })),
+                        }}
+                        addNew={{
+                            uri: `/api/v1/categories`,
+                            buttonText: 'Add Image',
+                        }}
+                        viewOne={{ uri: '/api/v1/categories/{id}', identifier: '{id}' }}
+                        editExisting={{ uri: '/api/v1/categories/{id}', identifier: '{id}' }}
+                        removeOne={{
+                            uri: '/api/v1/categories/{id}',
+                            identifier: '{id}',
+                        }}
+                        customActions={[
+                            {
+                                color: 'success',
+                                icon: PrimeIcons.LIST,
+                                text: 'Item List',
+                                callback: identifier => {
+                                    router.push(`/categories/${identifier}/items`);
+                                },
+                            },
+                            {
+                                color: 'success',
+                                icon: PrimeIcons.PLUS_CIRCLE,
+                                text: 'Item Create',
+                                callback: identifier => {
+                                    router.push(`/categories/${identifier}/items/create`);
+                                },
+                            },
+                        ]}
+                        fields={fields}
+                        editFields={[
+                            {
+                                type: 'textarea',
+                                name: 'bannerImageUrl',
+                                placeholder: 'Update new banner image URL',
+                                title: 'Banner Image URL',
+                                initialValue: null,
+                            },
+                            ..._.filter(fields, (field: IField) => field.name !== 'bannerImageFile'),
+                        ]}
+                    />
+                ),
+                []
+            )}
+        </Card>
     );
 };
 

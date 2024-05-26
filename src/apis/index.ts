@@ -35,6 +35,9 @@ export const getCityById = (id: string, authorization: string) =>
 export const searchTripsForSelectByLocationId = (locationId: number, authorization?: string | null) =>
     callGetApi(apiBaseUrl + `/api/v1/locations/${locationId}/trips-select`, authorization, true);
 
+export const getTripByIdAndCategoryId = (id: string, categoryId: string, authorization?: string | null) =>
+    callGetApi(apiBaseUrl + `/api/v1/categories/${categoryId}/trips/${id}`, authorization);
+
 export const getTripByIdAndClientId = (id: string, clientId: string, authorization?: string | null) =>
     callGetApi(apiBaseUrl + `/api/v1/clients/${clientId}/trips/${id}`, authorization);
 

@@ -8,17 +8,17 @@ import _ from 'lodash';
 
 // application
 import { getAuthorized } from '../../../../libs/auth';
-import GenericFormGenerator, { IField } from '../../../../components/global/GenericFormGenerator';
+import GenericFormGenerator from '../../../../components/global/GenericFormGenerator';
 import { getTripFields } from '../../../v-p/trips/t/[type]/create';
-import { getCategories, getLocations } from '../../../../apis';
-import { getTripGeneralTypeOptions, getTripType } from '../../../../utils';
+import { getLocations } from '../../../../apis';
+import { getTripGeneralTypeOptions } from '../../../../utils';
 import { callPostApi } from '../../../../libs/api';
 import handleResponseIfError from '../../../../utils/responseHandler';
-import { ICategory, ILocation } from '../../../../types';
+import { ILocation } from '../../../../types';
 
 export const getServerSideProps: GetServerSideProps = async context =>
-    getAuthorized(context, 'Create A Itinerary', async cookies => {
-        const clientId = context.query.clientId as string;
+    getAuthorized(context, 'Create A Service', async cookies => {
+        const categoryId = context.query.categoryId as string;
 
         const responseGetLocations = await getLocations(`${cookies.accessType} ${cookies.accessToken}`);
 
@@ -27,12 +27,12 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
         return {
             isVendor: false,
-            clientId: parseInt(clientId),
+            categoryId: parseInt(categoryId),
             locations: responseGetLocations.data,
         };
     });
 
-const Page = ({ clientId, locations }: { clientId: number; locations: ILocation[] }) => {
+const Page = ({ categoryId, locations }: { categoryId: number; locations: ILocation[] }) => {
     const router = useRouter();
     console.debug({ router });
 
@@ -44,7 +44,7 @@ const Page = ({ clientId, locations }: { clientId: number; locations: ILocation[
     };
 
     return (
-        <Card title="Create An Itinerary">
+        <Card title="Create An Item">
             {useMemo(
                 () =>
                     !locations || _.size(locations) === 0 ? null : (
@@ -61,7 +61,7 @@ const Page = ({ clientId, locations }: { clientId: number; locations: ILocation[
                             callback={(data, resetForm) => {
                                 console.debug({ data });
 
-                                callPostApi('/api/v1/trips', { ...data, clientId }, null, null, true)
+                                callPostApi('/api/v1/trips', { ...data, categoryId }, null, null, true)
                                     .then(response => {
                                         if (!response) {
                                             // showToast('error', 'Unsuccessful!', 'Server not working!');
@@ -72,7 +72,7 @@ const Page = ({ clientId, locations }: { clientId: number; locations: ILocation[
 
                                             // showToast('success', 'Success!', response.message);
 
-                                            router.push('/');
+                                            router.push(`/categories/${router.query.categoryId}/items`);
                                         }
                                     })
                                     .catch(error => {

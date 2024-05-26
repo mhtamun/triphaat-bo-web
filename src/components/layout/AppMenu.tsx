@@ -43,12 +43,16 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                 {
                     icon: 'pi pi-fw pi-map',
                     label: 'Location Management',
-                    to: '/locations/countries',
-                },
-                {
-                    icon: 'pi pi-fw pi-list',
-                    label: 'Category Management',
-                    to: '/categories',
+                    items: [
+                        {
+                            label: 'Countries',
+                            to: '/locations/countries',
+                        },
+                        {
+                            label: 'Locations',
+                            to: '/locations',
+                        },
+                    ],
                 },
                 {
                     icon: 'pi pi-fw pi-list',
@@ -56,9 +60,43 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     to: '/sliders',
                 },
                 {
+                    icon: 'pi pi-fw pi-list',
+                    label: 'Item Management',
+                    items: [
+                        {
+                            icon: 'pi pi-fw pi-th-large',
+                            label: 'Categories',
+                            to: '/categories',
+                        },
+                    ],
+                },
+                {
+                    icon: 'pi pi-fw pi-list',
+                    label: 'Itinerary Management',
+                    items: [
+                        {
+                            icon: 'pi pi-fw pi-users',
+                            label: 'Clients',
+                            to: '/clients',
+                        },
+                    ],
+                },
+                {
                     icon: 'pi pi-fw pi-star',
                     label: 'Featured on Website',
                     items: [
+                        {
+                            label: 'Featured Page Management',
+                            to: '/featured-pages',
+                        },
+                        {
+                            label: 'Featured Service Management',
+                            to: '/featured-services',
+                        },
+                        {
+                            label: 'Featured Country Management',
+                            to: '/featured-countries',
+                        },
                         {
                             label: 'Featured City Management',
                             to: '/featured-cities',
@@ -67,18 +105,10 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                             label: 'Featured Location Management',
                             to: '/featured-locations',
                         },
-                        {
-                            label: 'Featured Category Management',
-                            to: '/featured-categories',
-                        },
-                        {
-                            label: 'Featured Trip Management',
-                            to: '/featured-trips',
-                        },
-                        {
-                            label: 'Featured Service Management',
-                            to: '/featured-services',
-                        },
+                        // {
+                        //     label: 'Featured Trip Management',
+                        //     to: '/featured-trips',
+                        // },
                     ],
                 },
                 {
@@ -96,16 +126,6 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                         {
                             label: 'Blogs',
                             to: '/blogs',
-                        },
-                    ],
-                },
-                {
-                    icon: 'pi pi-fw pi-users',
-                    label: 'Client Section',
-                    items: [
-                        {
-                            label: 'Clients',
-                            to: '/clients',
                         },
                     ],
                 },
@@ -150,7 +170,6 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
             items: [
                 { icon: 'pi pi-bars', label: 'Group Tours', to: '/v-p/trips/t/0000' },
                 { icon: 'pi pi-bars', label: 'Houseboats', to: '/v-p/trips/t/2260' },
-                { icon: 'pi pi-bars', label: 'Open Listing', to: '/v-p/trips/t/1111' },
             ],
         },
     ];
