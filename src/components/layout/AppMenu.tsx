@@ -36,7 +36,7 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     to: '/folders',
                 },
                 {
-                    icon: 'pi pi-fw pi-th-large',
+                    icon: 'pi pi-fw pi-building',
                     label: 'Vendor Management',
                     to: '/vendors',
                 },
