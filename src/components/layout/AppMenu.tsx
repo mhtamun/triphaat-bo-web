@@ -86,8 +86,8 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                     label: 'Featured on Website',
                     items: [
                         {
-                            label: 'Featured Page Management',
-                            to: '/featured-pages',
+                            label: 'Featured Navigation Item Management',
+                            to: '/featured-nav-items',
                         },
                         {
                             label: 'Featured Service Management',
