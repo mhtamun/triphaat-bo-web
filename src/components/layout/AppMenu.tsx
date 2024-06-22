@@ -93,17 +93,21 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                             label: 'Featured Service Management',
                             to: '/featured-services',
                         },
-                        {
-                            label: 'Featured Country Management',
-                            to: '/featured-countries',
-                        },
-                        {
-                            label: 'Featured City Management',
-                            to: '/featured-cities',
-                        },
+                        // {
+                        //     label: 'Featured Country Management',
+                        //     to: '/featured-countries',
+                        // },
+                        // {
+                        //     label: 'Featured City Management',
+                        //     to: '/featured-cities',
+                        // },
                         {
                             label: 'Featured Location Management',
                             to: '/featured-locations',
+                        },
+                        {
+                            label: 'Featured Categorized Item Management',
+                            to: '/featured-categorized-items',
                         },
                         // {
                         //     label: 'Featured Trip Management',

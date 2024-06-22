@@ -35,6 +35,9 @@ export const getCityById = (id: string, authorization: string) =>
 export const searchTripsForSelectByLocationId = (locationId: number, authorization?: string | null) =>
     callGetApi(apiBaseUrl + `/api/v1/locations/${locationId}/trips-select`, authorization, true);
 
+export const searchTripsForSelectByCategoryId = (categoryId: number, authorization?: string | null) =>
+    callGetApi(apiBaseUrl + `/api/v1/categories/${categoryId}/trips-select`, authorization, true);
+
 export const getTripByIdAndCategoryId = (id: string, categoryId: string, authorization?: string | null) =>
     callGetApi(apiBaseUrl + `/api/v1/categories/${categoryId}/trips/${id}`, authorization);
 
@@ -147,10 +150,10 @@ export const deactivateTrip = (tripId: string, authorization?: string) =>
 export const getLocations = (authorization?: string | null) =>
     callGetApi(apiBaseUrl + '/api/v1/locations', authorization);
 
-export const getCities = (authorization?: string | null) => callGetApi(apiBaseUrl + '/api/v1/cities', authorization);
-
 export const getCategories = (authorization?: string | null) =>
     callGetApi(apiBaseUrl + '/api/v1/categories', authorization);
+
+export const getCities = (authorization?: string | null) => callGetApi(apiBaseUrl + '/api/v1/cities', authorization);
 
 export const getTripVariants = (id: string, authorization: string) =>
     callGetApi(apiBaseUrl + '/api/v1/trips/' + id + '/variants', authorization);
