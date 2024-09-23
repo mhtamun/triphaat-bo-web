@@ -109,7 +109,7 @@ const Page = () => {
                         }}
                         addNew={{
                             uri: `/api/v1/categories`,
-                            buttonText: 'Add Image',
+                            buttonText: 'Add Category',
                         }}
                         viewOne={{ uri: '/api/v1/categories/{id}', identifier: '{id}' }}
                         editExisting={{ uri: '/api/v1/categories/{id}', identifier: '{id}' }}
