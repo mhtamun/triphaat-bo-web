@@ -48,7 +48,7 @@ const Page = () => {
             title: 'Banner Image File',
             initialValue: null,
             acceptType: 'image/*',
-            maxFileSize: 1048576,
+            maxFileSize: 2097152,
         },
         {
             type: 'number',
