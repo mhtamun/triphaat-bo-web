@@ -50,7 +50,6 @@ const Page = ({ categoryId }: { categoryId: number }) => {
                             ignoredColumns: [
                                 'id',
                                 'vendorId',
-                                'locationId',
                                 'slug',
                                 'dateType',
                                 'dateTypeOther',
