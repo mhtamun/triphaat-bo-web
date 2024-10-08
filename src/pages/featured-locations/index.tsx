@@ -129,7 +129,7 @@ const Page = () => {
                         ]}
                     />
                 ),
-                [locations, locations]
+                [locations]
             )}
         </Card>
     );
