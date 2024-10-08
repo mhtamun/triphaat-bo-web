@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async context =>
 
 const Page = ({ categoryId, locations }: { categoryId: number; locations: ILocation[] }) => {
     const router = useRouter();
-    console.debug({ router });
+    // console.debug({ router });
 
     const types = {
         dateType: 'UNFIXED',
@@ -85,7 +85,14 @@ const Page = ({ categoryId, locations }: { categoryId: number; locations: ILocat
                             submitButtonText="Save"
                         />
                     ),
-                [locations]
+                [
+                    categoryId,
+                    locations,
+                    types.accommodationType,
+                    types.dateType,
+                    types.foodType,
+                    types.transportationType,
+                ]
             )}
         </Card>
     );

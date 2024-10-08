@@ -100,13 +100,6 @@ const Page = ({ categoryId }: { categoryId: number }) => {
                                     router.push(`/categories/${categoryId}/items/${identifier}`);
                                 },
                             },
-                            {
-                                color: 'info',
-                                icon: PrimeIcons.INFO,
-                                text: '',
-                                tooltip: 'Enter Preview',
-                                callback: identifier => {},
-                            },
                         ]}
                     />
                 ),
