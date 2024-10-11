@@ -26,7 +26,7 @@ const DataTable = ({
     ignoredColumns?: string[];
     scopedColumns?: any;
     actionIdentifier?: string;
-    actions: IAction[];
+    actions?: IAction[];
     emptyListText?: string | null;
 }) => {
     const columns = [];

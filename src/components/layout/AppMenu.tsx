@@ -133,6 +133,11 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                         },
                     ],
                 },
+                {
+                    icon: 'pi pi-fw pi-list',
+                    label: 'Contacts',
+                    to: '/contacts',
+                },
             ],
         },
     ];
