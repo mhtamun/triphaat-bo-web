@@ -29,7 +29,7 @@ const Page = () => {
                         subtitle={'Manage locations here!'}
                         viewAll={{
                             uri: `/api/v1/locations`,
-                            ignoredColumns: ['id', 'createdAt', 'updatedAt'],
+                            ignoredColumns: ['createdAt', 'updatedAt'],
                             actionIdentifier: 'id',
                             onDataModify: (data: any[]) =>
                                 _.map(data, datum => ({
