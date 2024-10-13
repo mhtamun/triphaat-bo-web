@@ -45,6 +45,24 @@ export const getTripFields = (
         },
     },
     {
+        type: 'text',
+        name: 'generalTypeOther',
+        placeholder: 'Enter general type (if other)',
+        title: 'General Type (if other)',
+        initialValue: null,
+        show: () => {
+            if (type === '1111') return true;
+
+            return false;
+        },
+        validate: (values: any) => {
+            if (type === '1111' && values.generalType === 'OTHER' && !values.generalTypeOther)
+                return 'Please specify what type of item is this you are trying to create?';
+
+            return null;
+        },
+    },
+    {
         type: 'select-sync',
         name: 'locationId',
         placeholder: 'Select a location for trip!',

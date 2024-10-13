@@ -152,21 +152,7 @@ export const ImageList = (tripId: string, fields: IField[]) => (
             identifier: '{id}',
         }}
         fields={fields}
-        editFields={[
-            {
-                type: 'textarea',
-                name: 'url',
-                placeholder: 'Insert an image URL',
-                title: 'Image Upload',
-                initialValue: null,
-                validate: (values: any) => {
-                    if (!values.url) return 'Required!';
-
-                    return null;
-                },
-            },
-            ..._.filter(fields, (field: IField) => field.name !== 'url'),
-        ]}
+        editFields={[..._.filter(fields, (field: IField) => field.name !== 'tripId' && field.name !== 'url')]}
     />
 );
 
