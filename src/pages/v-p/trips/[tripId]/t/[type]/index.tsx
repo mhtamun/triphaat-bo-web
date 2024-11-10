@@ -186,10 +186,22 @@ export default Page;
 
 import { VariantList } from './variants';
 import { ImageList, getImageFormFields } from './images';
+import { VideoList, getVideoFormFields } from './videos';
 import { HighlightList } from './highlights';
 import { ActivityList } from './activities';
 import { ItineraryList } from './itinerary';
 import { IncludeList } from './includes';
 import { FaqList } from './faqs';
 
-export { VariantList, ImageList, getImageFormFields, HighlightList, ActivityList, ItineraryList, IncludeList, FaqList };
+export {
+    VariantList,
+    ImageList,
+    getImageFormFields,
+    VideoList,
+    getVideoFormFields,
+    HighlightList,
+    ActivityList,
+    ItineraryList,
+    IncludeList,
+    FaqList,
+};

@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 // third-party
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { RedirectType, redirect } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Badge } from 'primereact/badge';

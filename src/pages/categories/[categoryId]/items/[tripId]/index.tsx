@@ -15,6 +15,8 @@ import {
     VariantList,
     ImageList,
     getImageFormFields,
+    VideoList,
+    getVideoFormFields,
     HighlightList,
     ActivityList,
     ItineraryList,
@@ -156,6 +158,10 @@ const Page = ({
                     {
                         title: 'Images (Mandatory)',
                         component: () => ImageList(tripId, getImageFormFields(tripId)),
+                    },
+                    {
+                        title: 'Videos',
+                        component: () => VideoList(tripId, getVideoFormFields(tripId)),
                     },
                     {
                         title: 'Highlights',
