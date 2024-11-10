@@ -102,12 +102,12 @@ const AppMenu = ({ isVendor }: { isVendor?: boolean }) => {
                         //     to: '/featured-cities',
                         // },
                         {
-                            label: 'Featured Location Management',
-                            to: '/featured-locations',
-                        },
-                        {
                             label: 'Featured Categorized Item Management',
                             to: '/featured-categorized-items',
+                        },
+                        {
+                            label: 'Featured Location Management',
+                            to: '/featured-locations',
                         },
                         // {
                         //     label: 'Featured Trip Management',

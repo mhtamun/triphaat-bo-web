@@ -67,8 +67,8 @@ const Page = () => {
                         addNew={{
                             uri: `/api/v1/featured-locations`,
                         }}
-                        // viewOne={{ uri: '/api/v1/featured-locations/{id}', identifier: '{id}' }}
-                        // editExisting={{ uri: '/api/v1/featured-locations/{id}', identifier: '{id}' }}
+                        viewOne={{ uri: '/api/v1/featured-locations/{id}', identifier: '{id}' }}
+                        editExisting={{ uri: '/api/v1/featured-locations/{id}', identifier: '{id}' }}
                         removeOne={{
                             uri: '/api/v1/featured-locations/{id}',
                             identifier: '{id}',
@@ -97,6 +97,18 @@ const Page = () => {
                                 initialValue: null,
                                 validate(values) {
                                     if (!values.imageUrl) return 'Required!';
+
+                                    return null;
+                                },
+                            },
+                            {
+                                type: 'text',
+                                name: 'href',
+                                placeholder: 'Enter a link!',
+                                title: 'Navigation Link',
+                                initialValue: null,
+                                validate(values) {
+                                    if (!values.href) return 'Required!';
 
                                     return null;
                                 },
